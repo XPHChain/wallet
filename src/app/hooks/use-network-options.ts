@@ -6,25 +6,36 @@ export const useNetworkOptions = (useTestNetworks?: boolean) => {
 	const { env } = useEnvironmentContext();
 
 	const networks: Networks.Network[] = useMemo(() => {
-		let networks = env.availableNetworks();
+		const networks = env.availableNetworks();
 
-		if (!useTestNetworks) {
-			networks = networks.filter((network: Networks.Network) => network.isLive());
+		if (useTestNetworks) {
+			return networks;
 		}
 
-		return networks;
+		return networks.filter((network: Networks.Network) => network.isLive());
 	}, [env, useTestNetworks]);
 
 	const networkOptions = useMemo(
 		() =>
-			networks.map((network) => ({
-				label: `${network.coinName()} ${network.name()}`,
-				value: network.id(),
-			})),
+			networks.map((network) => {
+				let label = network.coinName();
+
+				if (network.isTest()) {
+					label = `${label} ${network.name()}`;
+				}
+
+				return {
+					isTestNetwork: network.isTest(),
+					label,
+					value: network.id(),
+				};
+			}),
 		[networks],
 	);
 
-	const networkById = useCallback((id?: string) => networks.find((network) => network.id() === id), [networks]);
+	const networkById = useCallback((id?: string) => env.availableNetworks().find((network) => network.id() === id), [
+		env,
+	]);
 
 	return {
 		networkById,
