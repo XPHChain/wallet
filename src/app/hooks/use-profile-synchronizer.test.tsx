@@ -171,20 +171,13 @@ describe("useProfileSyncStatus", () => {
 
 describe("useProfileSynchronizer", () => {
 	beforeEach(async () => {
-		jest.useFakeTimers();
-
-		const profile = env.profiles().findById(getDefaultProfileId());
-		await env.profiles().restore(profile);
-		await profile.sync();
-
-		await syncDelegates(profile);
-
 		jest.spyOn(toasts, "success").mockImplementation();
 		jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
 	});
 
 	afterEach(() => {
 		jest.clearAllTimers();
+		jest.useRealTimers();
 	});
 
 	it("should clear last profile sync jobs", async () => {

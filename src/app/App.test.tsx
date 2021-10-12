@@ -88,11 +88,14 @@ describe("App", () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 		jest.useFakeTimers();
 
-		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
-
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
+		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, {
+			withProviders: false,
 		});
+
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
 		expect(history.location.pathname).toMatch("/");
 
@@ -149,6 +152,7 @@ describe("App", () => {
 
 		walletRestoreErrorMock.mockRestore();
 		walletSyncErrorMock.mockRestore();
+
 		jest.useRealTimers();
 	});
 
@@ -173,12 +177,14 @@ describe("App", () => {
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 		});
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
 
-			expect(container).toBeTruthy();
-			expect(asFragment()).toMatchSnapshot();
-		});
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
+
+		expect(container).toBeTruthy();
+		expect(asFragment()).toMatchSnapshot();
 	});
 
 	it("should render the offline screen if there is no internet connection", async () => {
@@ -247,16 +253,17 @@ describe("App", () => {
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 		});
 
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
-			expect(container).toBeTruthy();
+		expect(container).toBeTruthy();
 
-			expect(getByText("John Doe")).toBeInTheDocument();
-			expect(getByText("Jane Doe")).toBeInTheDocument();
+		expect(getByText("John Doe")).toBeInTheDocument();
+		expect(getByText("Jane Doe")).toBeInTheDocument();
 
-			expect(asFragment()).toMatchSnapshot();
-		});
+		expect(asFragment()).toMatchSnapshot();
 	});
 
 	it("should not migrate profiles", async () => {
@@ -281,9 +288,10 @@ describe("App", () => {
 
 		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
 
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-		});
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
 		expect(history.location.pathname).toMatch("/");
 
@@ -322,14 +330,21 @@ describe("App", () => {
 
 	it("should enter profile and show toast message for successfull sync", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
+
+		jest.clearAllMocks();
+		jest.restoreAllMocks();
 		jest.useFakeTimers();
+
 		const successToast = jest.spyOn(toasts, "success").mockImplementation();
+		const warningToast = jest.spyOn(toasts, "warning").mockImplementation();
+		const toastDismiss = jest.spyOn(toasts, "dismiss").mockImplementation();
 
 		const { getAllByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
 
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-		});
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
 		expect(history.location.pathname).toMatch("/");
 
@@ -351,7 +366,7 @@ describe("App", () => {
 			}),
 		);
 
-		env.profiles().persist(profile);
+		env.profiles().persist(selectedProfile);
 
 		await act(async () => {
 			fireEvent.click(getAllByTestId("Card")[0]);
@@ -360,11 +375,16 @@ describe("App", () => {
 		await act(async () => {
 			const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
 			await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
-			await waitFor(() => expect(successToast).toHaveBeenCalled());
+			// Started syncing
+			await waitFor(() => expect(warningToast).toHaveBeenCalled(), { timeout: 4000 });
+			await waitFor(() => expect(toastDismiss).toHaveBeenCalled(), { timeout: 4000 });
+			await waitFor(() => expect(successToast).toHaveBeenCalled(), { timeout: 4000 });
 		});
 
 		jest.useRealTimers();
 		successToast.mockRestore();
+		warningToast.mockRestore();
+		toastDismiss.mockRestore();
 	});
 
 	it("should enter profile", async () => {
@@ -372,9 +392,10 @@ describe("App", () => {
 
 		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
 
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-		});
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
 		await env.profiles().restore(passwordProtectedProfile, getDefaultPassword());
 
@@ -414,9 +435,10 @@ describe("App", () => {
 
 		const { getByText } = renderWithRouter(<App />, { withProviders: false });
 
-		await waitFor(() => {
-			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-		});
+		await waitFor(
+			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
+			{ timeout: 2000 },
+		);
 
 		expect(document.body).toHaveClass(`theme-${shouldUseDarkColors ? "dark" : "light"}`);
 	});
