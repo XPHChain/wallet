@@ -158,6 +158,14 @@ module.exports = {
 		"testing-library/prefer-user-event": "warn", // @TODO: set to error and fix
 		"testing-library/prefer-wait-for": "warn", // @TODO: set to error and fix
 		"testing-library/render-result-naming-convention": "warn", // @TODO: set to error and fix
+		"testing-library/no-container": "warn", // @TODO: set to error and fix
+		"testing-library/no-node-access": "warn", // @TODO: set to error and fix
+		"testing-library/no-promise-in-fire-event": "warn", // @TODO: set to error and fix
+		"testing-library/no-unnecessary-act": "warn", // @TODO: set to error and fix
+		"testing-library/no-wait-for-multiple-assertions": "warn", // @TODO: set to error and fix
+		"testing-library/no-wait-for-side-effects": "warn", // @TODO: set to error and fix
+		"testing-library/prefer-user-event": "warn", // @TODO: set to error and fix
+		"testing-library/render-result-naming-convention": "warn", // @TODO: set to error and fix
 		"unicorn/consistent-destructuring": "warn", // @TODO: set to error and fix resulting issues
 		"unicorn/consistent-function-scoping": "warn", // @TODO: set to error and fix resulting issues
 		"unicorn/error-message": "warn", // @TODO: set to error and fix resulting issues
