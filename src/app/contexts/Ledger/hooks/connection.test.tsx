@@ -318,151 +318,151 @@ describe("Use Ledger Connection", () => {
 			getPublicKeySpy.mockReset();
 		});
 
-		// 	it("should fail to connect if app version is less than minimum version", async () => {
-		// 		const { result } = renderHook(() => useTranslation());
-		// 		const { t } = result.current;
-		//
-		// 		const getPublicKeySpy = jest
-		// 			.spyOn(wallet.coin().ledger(), "getPublicKey")
-		// 			.mockResolvedValue(publicKeyPaths.values().next().value);
-		//
-		// 		const outdatedVersion = "1.0.1";
-		// 		const getVersionSpy = jest.spyOn(wallet.coin().ledger(), "getVersion").mockResolvedValue(outdatedVersion);
-		//
-		// 		render(<Component />);
-		//
-		// 		expect(screen.getByText("Connect")).toBeInTheDocument();
-		//
-		// 		act(() => {
-		// 			fireEvent.click(screen.getByText("Connect"));
-		// 		});
-		//
-		// 		expect(screen.getByText("Waiting Device")).toBeInTheDocument();
-		//
-		// 		await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
-		//
-		// 		await waitFor(() =>
-		// 			expect(
-		// 				screen.queryByText(
-		// 					t("WALLETS.MODAL_LEDGER_WALLET.UPDATE_ERROR", {
-		// 						coin: wallet.network().coin(),
-		// 						version: outdatedVersion,
-		// 					}),
-		// 				),
-		// 			).toBeInTheDocument(),
-		// 		);
-		//
-		// 		getPublicKeySpy.mockReset();
-		// 		getVersionSpy.mockReset();
-		// 	});
-		//
-		// 	it("should ignore the app version check for coins that are not in the minVersionList", async () => {
-		// 		nock.disableNetConnect();
-		//
-		// 		env.registerCoin("LSK", LSK);
-		//
-		// 		const profile = env.profiles().create("empty");
-		//
-		// 		const { wallet } = await profile.walletFactory().generate({
-		// 			coin: "LSK",
-		// 			network: "lsk.testnet",
-		// 		});
-		// 		await env.wallets().syncByProfile(profile);
-		//
-		// 		const getPublicKeySpy = jest
-		// 			.spyOn(wallet.coin().ledger(), "getPublicKey")
-		// 			.mockResolvedValue(publicKeyPaths.values().next().value);
-		//
-		// 		render(<Component userProfile={profile} userWallet={wallet} />);
-		//
-		// 		act(() => {
-		// 			fireEvent.click(screen.getByText("Connect"));
-		// 		});
-		//
-		// 		expect(screen.getByText("Waiting Device")).toBeInTheDocument();
-		//
-		// 		await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
-		// 		await waitFor(() => expect(screen.queryByText("Connected")).toBeInTheDocument());
-		//
-		// 		expect(getPublicKeySpy).toHaveBeenCalledTimes(1);
-		//
-		// 		getPublicKeySpy.mockRestore();
-		// 	});
-		// });
-		//
-		// describe("Ledger Connection with options by default", () => {
-		// 	const Component = () => {
-		// 		const {
-		// 			connect,
-		// 			isConnected,
-		// 			isAwaitingConnection,
-		// 			error,
-		// 			abortConnectionRetry,
-		// 			disconnect,
-		// 		} = useLedgerConnection(transport);
-		// 		const handleConnect = async () => {
-		// 			try {
-		// 				await connect(profile, wallet.coinId(), wallet.networkId());
-		// 			} catch {
-		// 				//
-		// 			}
-		// 		};
-		//
-		// 		return (
-		// 			<div>
-		// 				{error && <span>{error}</span>}
-		// 				{isAwaitingConnection && <span>Waiting Device</span>}
-		// 				{isConnected && <span>Connected</span>}
-		//
-		// 				<button onClick={abortConnectionRetry}>Abort</button>
-		// 				<button onClick={handleConnect}>Connect</button>
-		// 				<button onClick={() => disconnect(wallet.coin())}>Disconnect</button>
-		// 			</div>
-		// 		);
-		// 	};
-		//
-		// 	it("should succeed in connecting with options by default", async () => {
-		// 		let toastSpy: jest.SpyInstance;
-		//
-		// 		const getPublicKeySpy = jest
-		// 			.spyOn(wallet.coin().ledger(), "getPublicKey")
-		// 			.mockResolvedValue(publicKeyPaths.values().next().value);
-		//
-		// 		const unsubscribe = jest.fn();
-		// 		let observer: Observer<any>;
-		//
-		// 		const listenSpy = jest.spyOn(transport, "listen").mockImplementationOnce((obv) => {
-		// 			observer = obv;
-		// 			return { unsubscribe };
-		// 		});
-		//
-		// 		render(<Component />);
-		//
-		// 		act(() => {
-		// 			observer!.next({ descriptor: "", deviceModel: { productName: "Nano S" }, type: "add" });
-		// 		});
-		//
-		// 		toastSpy = jest.spyOn(toasts, "success").mockImplementationOnce();
-		// 		fireEvent.click(screen.getByText("Connect"));
-		//
-		// 		expect(screen.getByText("Waiting Device")).toBeInTheDocument();
-		//
-		// 		await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
-		// 		await waitFor(() => expect(screen.queryByText("Connected")).toBeInTheDocument());
-		//
-		// 		expect(toastSpy).toHaveBeenCalledWith("Nano S connected");
-		//
-		// 		toastSpy = jest.spyOn(toasts, "warning").mockImplementationOnce();
-		// 		fireEvent.click(screen.getByText("Disconnect"));
-		//
-		// 		await waitFor(() => expect(toastSpy).toHaveBeenCalledWith("Nano S disconnected"));
-		//
-		// 		expect(getPublicKeySpy).toHaveBeenCalledTimes(1);
-		//
-		// 		getPublicKeySpy.mockReset();
-		//
-		// 		listenSpy.mockReset();
-		// 		toastSpy.mockRestore();
-		// 	});
+		it("should fail to connect if app version is less than minimum version", async () => {
+			const { result } = renderHook(() => useTranslation());
+			const { t } = result.current;
+
+			const getPublicKeySpy = jest
+				.spyOn(wallet.coin().ledger(), "getPublicKey")
+				.mockResolvedValue(publicKeyPaths.values().next().value);
+
+			const outdatedVersion = "1.0.1";
+			const getVersionSpy = jest.spyOn(wallet.coin().ledger(), "getVersion").mockResolvedValue(outdatedVersion);
+
+			render(<Component />);
+
+			expect(screen.getByText("Connect")).toBeInTheDocument();
+
+			act(() => {
+				fireEvent.click(screen.getByText("Connect"));
+			});
+
+			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
+
+			await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
+
+			await waitFor(() =>
+				expect(
+					screen.queryByText(
+						t("WALLETS.MODAL_LEDGER_WALLET.UPDATE_ERROR", {
+							coin: wallet.network().coin(),
+							version: outdatedVersion,
+						}),
+					),
+				).toBeInTheDocument(),
+			);
+
+			getPublicKeySpy.mockReset();
+			getVersionSpy.mockReset();
+		});
+
+		it("should ignore the app version check for coins that are not in the minVersionList", async () => {
+			nock.disableNetConnect();
+
+			env.registerCoin("LSK", LSK);
+
+			const profile = env.profiles().create("empty");
+
+			const { wallet } = await profile.walletFactory().generate({
+				coin: "LSK",
+				network: "lsk.testnet",
+			});
+			await env.wallets().syncByProfile(profile);
+
+			const getPublicKeySpy = jest
+				.spyOn(wallet.coin().ledger(), "getPublicKey")
+				.mockResolvedValue(publicKeyPaths.values().next().value);
+
+			render(<Component userProfile={profile} userWallet={wallet} />);
+
+			act(() => {
+				fireEvent.click(screen.getByText("Connect"));
+			});
+
+			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
+
+			await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
+			await waitFor(() => expect(screen.queryByText("Connected")).toBeInTheDocument());
+
+			expect(getPublicKeySpy).toHaveBeenCalledTimes(1);
+
+			getPublicKeySpy.mockRestore();
+		});
+	});
+
+	describe("Ledger Connection with options by default", () => {
+		const Component = () => {
+			const {
+				connect,
+				isConnected,
+				isAwaitingConnection,
+				error,
+				abortConnectionRetry,
+				disconnect,
+			} = useLedgerConnection(transport);
+			const handleConnect = async () => {
+				try {
+					await connect(profile, wallet.coinId(), wallet.networkId());
+				} catch {
+					//
+				}
+			};
+
+			return (
+				<div>
+					{error && <span>{error}</span>}
+					{isAwaitingConnection && <span>Waiting Device</span>}
+					{isConnected && <span>Connected</span>}
+
+					<button onClick={abortConnectionRetry}>Abort</button>
+					<button onClick={handleConnect}>Connect</button>
+					<button onClick={() => disconnect(wallet.coin())}>Disconnect</button>
+				</div>
+			);
+		};
+
+		it("should succeed in connecting with options by default", async () => {
+			let toastSpy: jest.SpyInstance;
+
+			const getPublicKeySpy = jest
+				.spyOn(wallet.coin().ledger(), "getPublicKey")
+				.mockResolvedValue(publicKeyPaths.values().next().value);
+
+			const unsubscribe = jest.fn();
+			let observer: Observer<any>;
+
+			const listenSpy = jest.spyOn(transport, "listen").mockImplementationOnce((obv) => {
+				observer = obv;
+				return { unsubscribe };
+			});
+
+			render(<Component />);
+
+			act(() => {
+				observer!.next({ descriptor: "", deviceModel: { productName: "Nano S" }, type: "add" });
+			});
+
+			toastSpy = jest.spyOn(toasts, "success").mockImplementationOnce();
+			fireEvent.click(screen.getByText("Connect"));
+
+			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
+
+			await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
+			await waitFor(() => expect(screen.queryByText("Connected")).toBeInTheDocument());
+
+			expect(toastSpy).toHaveBeenCalledWith("Nano S connected");
+
+			toastSpy = jest.spyOn(toasts, "warning").mockImplementationOnce();
+			fireEvent.click(screen.getByText("Disconnect"));
+
+			await waitFor(() => expect(toastSpy).toHaveBeenCalledWith("Nano S disconnected"));
+
+			expect(getPublicKeySpy).toHaveBeenCalledTimes(1);
+
+			getPublicKeySpy.mockReset();
+
+			listenSpy.mockReset();
+			toastSpy.mockRestore();
+		});
 	});
 });
