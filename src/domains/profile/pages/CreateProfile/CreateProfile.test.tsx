@@ -258,13 +258,10 @@ describe("CreateProfile", () => {
 
 		act(() => getAllByTestId("Input")[0].focus());
 
+		// Upload avatar image
 		await act(async () => {
-			fireEvent.input(getAllByTestId("Input")[0], { target: { value: "t" } });
+			fireEvent.click(getByTestId("SelectProfileImage__upload-button"));
 		});
-
-		act(() => getAllByTestId("InputPassword")[0].focus());
-
-		expect(getByTestId("SelectProfileImage__avatar")).toBeTruthy();
 
 		act(() => getAllByTestId("Input")[0].focus());
 
@@ -274,19 +271,24 @@ describe("CreateProfile", () => {
 
 		act(() => getAllByTestId("InputPassword")[0].focus());
 
-		expect(getByTestId("SelectProfileImage__avatar")).toBeTruthy();
+		await waitFor(() => expect(getByTestId("SelectProfileImage__avatar")).toBeTruthy());
 
 		expect(asFragment()).toMatchSnapshot();
 
 		act(() => getAllByTestId("Input")[0].focus());
 
 		await act(async () => {
-			fireEvent.input(getAllByTestId("Input")[0], { target: { value: "" } });
+			fireEvent.change(getAllByTestId("Input")[0], { target: { value: "" } });
 		});
 
-		act(() => getAllByTestId("InputPassword")[0].focus());
+		await act(async () => {
+			fireEvent.click(getByTestId("SelectProfileImage__remove-button"));
+		});
 
-		expect(() => getByTestId("SelectProfileImage__avatar")).toThrow(/^Unable to find an element by/);
+		await waitFor(
+			() => expect(() => getByTestId("SelectProfileImage__avatar")).toThrow(/^Unable to find an element by/),
+			{ timeout: 4000 },
+		);
 
 		expect(asFragment()).toMatchSnapshot();
 	});
@@ -410,7 +412,9 @@ describe("CreateProfile", () => {
 			expect(toggle).not.toBeChecked();
 		}
 
-		expect(document.body).toHaveClass(`theme-${shouldUseDarkColors ? "dark" : "light"}`);
+		await waitFor(() => expect(document.body).toHaveClass(`theme-${shouldUseDarkColors ? "dark" : "light"}`), {
+			timeout: 4000,
+		});
 
 		shouldUseDarkColorsSpy.mockRestore();
 	});
