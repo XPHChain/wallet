@@ -331,15 +331,14 @@ describe("App", () => {
 	it("should enter profile and show toast message for successfull sync", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		jest.clearAllMocks();
-		jest.restoreAllMocks();
-		jest.useFakeTimers();
-
 		const successToast = jest.spyOn(toasts, "success").mockImplementation();
 		const warningToast = jest.spyOn(toasts, "warning").mockImplementation();
 		const toastDismiss = jest.spyOn(toasts, "dismiss").mockImplementation();
 
-		const { getAllByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
+		const { getAllByTestId, getByText, history } = renderWithRouter(<App />, {
+			withPluginProvider: false,
+			withProviders: true,
+		});
 
 		await waitFor(
 			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
@@ -358,30 +357,19 @@ describe("App", () => {
 			}),
 		);
 
-		selectedProfile.wallets().push(
-			await selectedProfile.walletFactory().fromAddress({
-				address: "AdVSe37niA3uFUPgCgMUH2tMsHF4LpLoiX",
-				coin: "ARK",
-				network: "ark.mainnet",
-			}),
-		);
-
 		env.profiles().persist(selectedProfile);
 
 		await act(async () => {
 			fireEvent.click(getAllByTestId("Card")[0]);
 		});
 
-		await act(async () => {
-			const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
-			await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
-			// Started syncing
-			await waitFor(() => expect(warningToast).toHaveBeenCalled(), { timeout: 4000 });
-			await waitFor(() => expect(toastDismiss).toHaveBeenCalled(), { timeout: 4000 });
-			await waitFor(() => expect(successToast).toHaveBeenCalled(), { timeout: 4000 });
-		});
+		const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
 
-		jest.useRealTimers();
+		await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
+		await waitFor(() => expect(warningToast).toHaveBeenCalled());
+		await waitFor(() => expect(toastDismiss).toHaveBeenCalled());
+		await waitFor(() => expect(successToast).toHaveBeenCalled());
+
 		successToast.mockRestore();
 		warningToast.mockRestore();
 		toastDismiss.mockRestore();

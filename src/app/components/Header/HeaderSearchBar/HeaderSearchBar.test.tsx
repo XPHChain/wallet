@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/require-await */
-import userEvent from "@testing-library/user-event";
 import React from "react";
 import { act, fireEvent, render, screen, waitFor } from "utils/testing-library";
 
@@ -21,7 +20,7 @@ describe("HeaderSearchBar", () => {
 		expect(screen.getByTestId("HeaderSearchBar__input")).toBeTruthy();
 	});
 
-	it("should limit search letters", () => {
+	it("should limit search letters", async () => {
 		render(<HeaderSearchBar maxLength={32} />);
 
 		fireEvent.click(screen.getByRole("button"));
@@ -33,10 +32,11 @@ describe("HeaderSearchBar", () => {
 		const text = "loong text";
 		const longText = text.repeat(100);
 
-		fireEvent.change(input, { target: { value: longText } });
-		userEvent.type(input, text + "!");
+		act(() => {
+			fireEvent.input(input, { target: { value: longText } });
+		});
 
-		expect(input.value).toBe(text.repeat(100));
+		await waitFor(() => expect(input.value).toBe(text.repeat(100)));
 		expect(input.value.length).toBe(1000);
 	});
 
