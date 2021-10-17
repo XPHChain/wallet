@@ -135,7 +135,7 @@ describe("DelegateVoteAmount", () => {
 		expect(asFragment()).toMatchSnapshot();
 	});
 
-	it("should focus on the input by clicking on ticker", () => {
+	it("should focus on the input by clicking on ticker", async () => {
 		render(
 			<Wrapper>
 				<DelegateVoteAmount
@@ -159,7 +159,7 @@ describe("DelegateVoteAmount", () => {
 
 		fireEvent.click(screen.getByTestId("DelegateVoteAmount__ticker"));
 
-		expect(amountField).toHaveClass("text-left");
+		await waitFor(() => expect(amountField).toHaveClass("text-left"), { timeout: 4000 });
 	});
 
 	describe("Validations", () => {
