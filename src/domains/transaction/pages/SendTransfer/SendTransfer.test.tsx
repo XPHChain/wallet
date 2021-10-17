@@ -689,7 +689,7 @@ describe("SendTransfer", () => {
 		// Change network
 		// Unselect
 		fireEvent.click(screen.getByTestId("NetworkIcon-ARK-ark.devnet"));
-		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toBeEmpty());
+		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toBeEmptyDOMElement());
 		// Select
 		fireEvent.click(screen.getByTestId("NetworkIcon-ARK-ark.devnet"));
 		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toHaveValue("ARK Devnet"));
@@ -701,7 +701,7 @@ describe("SendTransfer", () => {
 		await waitFor(() => expect(screen.getByTestId("SendTransfer__form-step")).toBeTruthy());
 
 		// Memo
-		expect(screen.getByTestId("Input__memo")).toBeEmpty();
+		expect(screen.getByTestId("Input__memo")).toBeEmptyDOMElement();
 
 		// Fee
 		expect(screen.getAllByRole("radio")[0]).not.toBeChecked();
@@ -1533,7 +1533,6 @@ describe("SendTransfer", () => {
 	});
 
 	it("should send a single transfer with a ledger wallet", async () => {
-		jest.useFakeTimers();
 		const isLedgerSpy = jest.spyOn(wallet, "isLedger").mockImplementation(() => true);
 		jest.spyOn(wallet.coin(), "__construct").mockImplementation();
 		const isNanoXMock = jest.spyOn(wallet.ledger(), "isNanoX").mockResolvedValue(true);
@@ -1631,13 +1630,7 @@ describe("SendTransfer", () => {
 		// Auto broadcast
 		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy());
 
-		getPublicKeySpy.mockRestore();
-		broadcastMock.mockRestore();
-		isLedgerSpy.mockRestore();
-		signTransactionSpy.mockRestore();
-		transactionMock.mockRestore();
-		mockWalletData.mockRestore();
-		isNanoXMock.mockRestore();
+		jest.restoreAllMocks();
 	});
 
 	it("should return to form step by cancelling fee warning", async () => {
@@ -2565,7 +2558,7 @@ describe("SendTransfer", () => {
 		fireEvent.click(within(screen.getByTestId("InputFee")).getByText(transactionTranslations.FEES.SLOW));
 		await waitFor(() => expect(screen.getAllByRole("radio")[0]).toBeChecked());
 
-		expect(screen.getAllByRole("radio")[0]).toHaveTextContent("0.00357");
+		await waitFor(() => expect(screen.getAllByRole("radio")[0]).toHaveTextContent("0.00357"));
 
 		// Step 2
 		await waitFor(() => expect(getByTestId("StepNavigation__continue-button")).not.toBeDisabled());

@@ -40,6 +40,15 @@ describe("useProfileTransactions", () => {
 			</EnvironmentProvider>
 		);
 
+		const mockDefaultTransactions = jest.spyOn(profile.transactionAggregate(), "all").mockImplementation(() => {
+			const { data } = require("tests/fixtures/coins/ark/devnet/transactions.json");
+			const response = {
+				hasMorePages: () => false,
+				items: () => data,
+			};
+			return Promise.resolve(response);
+		});
+
 		await act(async () => {
 			const { result } = renderHook(
 				() => useProfileTransactions({ profile, wallets: profile.wallets().values() }),
@@ -49,7 +58,7 @@ describe("useProfileTransactions", () => {
 			);
 
 			jest.advanceTimersByTime(30_000);
-			await waitFor(() => expect(result.current.transactions).toHaveLength(30));
+			await waitFor(() => expect(result.current.transactions).toHaveLength(15));
 		});
 
 		const mockTransactionsAggregate = jest.spyOn(profile.transactionAggregate(), "all").mockImplementation(() => {
@@ -98,7 +107,6 @@ describe("useProfileTransactions", () => {
 		});
 
 		mockEmptyTransactions.mockRestore();
-		jest.clearAllTimers();
 	});
 
 	it("#fetchTransactions", async () => {

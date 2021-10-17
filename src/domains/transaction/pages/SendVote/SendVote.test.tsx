@@ -896,6 +896,8 @@ describe("SendVote", () => {
 	});
 
 	it("should show error step and go back", async () => {
+		jest.useRealTimers();
+
 		const history = createMemoryHistory();
 		const voteURL = `/profiles/${fixtureProfileId}/wallets/${wallet.id()}/send-vote`;
 
@@ -955,7 +957,6 @@ describe("SendVote", () => {
 		await waitFor(() => expect(passwordInput).toHaveValue(passphrase));
 
 		const historyMock = jest.spyOn(history, "push").mockReturnValue();
-
 		await waitFor(() => expect(getByTestId("StepNavigation__send-button")).not.toBeDisabled());
 
 		fireEvent.click(getByTestId("StepNavigation__send-button"));
@@ -1168,6 +1169,8 @@ describe("SendVote", () => {
 	});
 
 	it("should send a vote transaction using encryption password", async () => {
+		jest.useRealTimers();
+
 		const actsWithMnemonicMock = jest.spyOn(wallet, "actsWithMnemonic").mockReturnValue(false);
 		const actsWithWifWithEncryptionMock = jest.spyOn(wallet, "actsWithWifWithEncryption").mockReturnValue(true);
 		const wifGetMock = jest.spyOn(wallet.signingKey(), "get").mockReturnValue(passphrase);
@@ -1251,9 +1254,7 @@ describe("SendVote", () => {
 			fireEvent.click(getByTestId("StepNavigation__send-button"));
 		});
 
-		act(() => jest.advanceTimersByTime(1000));
-
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy());
+		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy(), { timeout: 4000 });
 
 		signMock.mockRestore();
 		broadcastMock.mockRestore();

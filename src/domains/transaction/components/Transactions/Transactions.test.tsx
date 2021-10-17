@@ -80,13 +80,6 @@ describe("Transactions", () => {
 	beforeEach(async () => {
 		dashboardURL = `/profiles/${fixtureProfileId}/dashboard`;
 		history.push(dashboardURL);
-		jest.useFakeTimers();
-
-		await profile.sync();
-	});
-
-	afterEach(() => {
-		jest.clearAllTimers();
 	});
 
 	it("should render", async () => {
@@ -419,7 +412,6 @@ describe("Transactions", () => {
 		await waitFor(() => expect(within(getByTestId("TransactionTable")).getAllByTestId("TableRow")).toHaveLength(1));
 	});
 
-	//
 	it("should ignore tab change on loading state", async () => {
 		const { getByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/dashboard">
