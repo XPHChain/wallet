@@ -61,11 +61,13 @@ describe("useProfileTransactions", () => {
 			await waitFor(() => expect(result.current.transactions).toHaveLength(15));
 		});
 
+		const sent = await profile.transactionAggregate().all({ limit: 1 });
+		const items = sent.items();
+
 		const mockTransactionsAggregate = jest.spyOn(profile.transactionAggregate(), "all").mockImplementation(() => {
-			const { data } = require("tests/fixtures/coins/ark/devnet/transactions.json");
 			const response = {
 				hasMorePages: () => false,
-				items: () => data,
+				items: () => items,
 			};
 			return Promise.resolve(response);
 		});
@@ -223,10 +225,7 @@ describe("useProfileTransactions", () => {
 
 		const {
 			result: { current },
-		} = renderHook(
-			() => useProfileTransactions({ profile, showUnconfirmed: false, wallets: profile.wallets().values() }),
-			{ wrapper },
-		);
+		} = renderHook(() => useProfileTransactions({ profile, wallets: profile.wallets().values() }), { wrapper });
 
 		await act(async () => {
 			jest.runOnlyPendingTimers();

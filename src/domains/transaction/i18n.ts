@@ -152,8 +152,8 @@ export const translations: { [key: string]: any } = {
 		ADD_PARTICIPANT: "Add Participant",
 		AWAITING_CONFIRMATIONS: "Awaiting confirmations",
 		AWAITING_FINAL_SIGNATURE: "Awaiting final signature",
-		AWAITING_OTHER_SIGNATURE_COUNT: "Awaiting {{count}} other signature",
-		AWAITING_OTHER_SIGNATURE_COUNT_PLURAL: "Awaiting {{count}} other signatures",
+		AWAITING_OTHER_SIGNATURE_COUNT_one: "Awaiting {{count}} other signature",
+		AWAITING_OTHER_SIGNATURE_COUNT_other: "Awaiting {{count}} other signatures",
 		AWAITING_OUR_SIGNATURE: "Awaiting our signature",
 		ERROR: {
 			ADDRESS_ALREADY_ADDED: "The address is already in the list",
@@ -172,8 +172,8 @@ export const translations: { [key: string]: any } = {
 	},
 	NAME: "Name",
 	NETWORK: "Network",
-	NOT_CONFIRMED: "Not confirmed",
 	NOT_FOUND: "Unable to find transaction for [{{transactionId}}]",
+	NOT_YET_CONFIRMED: "Not yet confirmed",
 	OUTGOING: "Outgoing",
 	PAGE_DELEGATE_REGISTRATION: {
 		FORM_STEP: {
@@ -349,6 +349,5 @@ export const translations: { [key: string]: any } = {
 	VOTES_COUNT: "Votes ({{count}})",
 	WAITING: "Waiting",
 	WEBSITE: "Website",
-	WELL_CONFIRMED: "Well confirmed",
 	YOUR_ADDRESS: "Your address",
 };
