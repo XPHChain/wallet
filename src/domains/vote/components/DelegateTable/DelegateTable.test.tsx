@@ -52,6 +52,7 @@ describe("DelegateTable", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -69,6 +70,7 @@ describe("DelegateTable", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -91,6 +93,7 @@ describe("DelegateTable", () => {
 			const { container, asFragment } = render(
 				<DelegateTable
 					delegates={[]}
+					votes={[]}
 					isLoading={true}
 					voteDelegates={[]}
 					unvoteDelegates={[]}
@@ -107,27 +110,11 @@ describe("DelegateTable", () => {
 		});
 	});
 
-	it("should render pagination", () => {
-		const { container, asFragment } = render(
-			<DelegateTable
-				itemsPerPage={1}
-				delegates={delegates}
-				isLoading={false}
-				voteDelegates={[]}
-				unvoteDelegates={[]}
-				selectedWallet={wallet}
-				maxVotes={wallet.network().maximumVotesPerTransaction()}
-			/>,
-		);
-
-		expect(container).toBeTruthy();
-		expect(asFragment()).toMatchSnapshot();
-	});
-
 	it("should render with empty list", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={[]}
+				votes={[]}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -143,6 +130,7 @@ describe("DelegateTable", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -160,6 +148,7 @@ describe("DelegateTable", () => {
 		const { asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -172,7 +161,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
 
 		act(() => {
@@ -200,7 +189,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
 
 		act(() => {
@@ -228,7 +217,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 
 		act(() => {
@@ -265,7 +254,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 
 		act(() => {
@@ -306,7 +295,7 @@ describe("DelegateTable", () => {
 
 		fireEvent.input(amountField, { target: { value: 30 } });
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 
 		await waitFor(() => {
 			expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
@@ -318,7 +307,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 
 		act(() => {
@@ -342,7 +331,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 
 		act(() => {
@@ -379,7 +368,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectVoteButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
 
@@ -414,7 +403,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectVoteButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
 
@@ -448,7 +437,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButtons[2]);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("2");
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 		expect(asFragment()).toMatchSnapshot();
@@ -466,6 +455,7 @@ describe("DelegateTable", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				onContinue={onContinue}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
@@ -479,7 +469,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("DelegateTable__continue-button"));
@@ -487,6 +477,54 @@ describe("DelegateTable", () => {
 
 		expect(container).toBeTruthy();
 		expect(onContinue).toHaveBeenCalledWith([], voteDelegates);
+		expect(asFragment()).toMatchSnapshot();
+	});
+
+	it("should add resigned delegate to the unvote list", () => {
+		const resignedDelegates: Contracts.VoteRegistryItem[] = [
+			{
+				amount: 0,
+				wallet: delegates[1],
+			},
+		];
+		const unvoteDelegates: VoteDelegateProperties[] = [
+			{
+				amount: 0,
+				delegateAddress: delegates[1].address(),
+			},
+		];
+
+		const onContinue = jest.fn();
+		const { asFragment, rerender } = render(
+			<DelegateTable
+				delegates={delegates}
+				votes={[]}
+				resignedDelegateVotes={resignedDelegates}
+				voteDelegates={[]}
+				unvoteDelegates={[]}
+				onContinue={onContinue}
+				selectedWallet={wallet}
+				maxVotes={wallet.network().maximumVotesPerTransaction()}
+			/>,
+		);
+
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
+		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
+
+		rerender(
+			<DelegateTable
+				delegates={delegates}
+				votes={[]}
+				resignedDelegateVotes={resignedDelegates}
+				voteDelegates={[]}
+				unvoteDelegates={unvoteDelegates}
+				onContinue={onContinue}
+				selectedWallet={wallet}
+				maxVotes={wallet.network().maximumVotesPerTransaction()}
+			/>,
+		);
+
+		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 		expect(asFragment()).toMatchSnapshot();
 	});
 
@@ -502,6 +540,7 @@ describe("DelegateTable", () => {
 		const { container, asFragment } = render(
 			<DelegateTable
 				delegates={delegates}
+				votes={[]}
 				voteDelegates={voteDelegates}
 				unvoteDelegates={[]}
 				onContinue={onContinue}
@@ -510,7 +549,7 @@ describe("DelegateTable", () => {
 			/>,
 		);
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("DelegateTable__continue-button"));
@@ -534,6 +573,7 @@ describe("DelegateTable", () => {
 			<DelegateTable
 				delegates={delegates}
 				voteDelegates={[]}
+				votes={[]}
 				unvoteDelegates={unvoteDelegates}
 				onContinue={onContinue}
 				selectedWallet={wallet}
@@ -541,7 +581,7 @@ describe("DelegateTable", () => {
 			/>,
 		);
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("DelegateTable__continue-button"));
@@ -579,7 +619,7 @@ describe("DelegateTable", () => {
 			/>,
 		);
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 		expect(screen.getByTestId("DelegateTable__footer--unvote")).toHaveTextContent("1");
 		expect(screen.getByTestId("DelegateTable__footer--vote")).toHaveTextContent("1");
 
@@ -618,7 +658,7 @@ describe("DelegateTable", () => {
 			fireEvent.click(selectButton);
 		});
 
-		expect(screen.getByTestId("DelegateTable__footer")).toBeTruthy();
+		expect(screen.getByTestId("DelegateTable__footer")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("DelegateTable__continue-button"));
@@ -629,12 +669,13 @@ describe("DelegateTable", () => {
 		expect(asFragment()).toMatchSnapshot();
 	});
 
-	it("should navigate on next and previous pages", () => {
+	it("should navigate to the next and previous pages", () => {
+		const delegatesList = Array.from({ length: 52 }).fill(delegates[0]) as Contracts.IReadOnlyWallet[];
+
 		render(
 			<DelegateTable
-				delegates={delegates}
+				delegates={delegatesList}
 				votes={votes}
-				itemsPerPage={2}
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
@@ -642,19 +683,19 @@ describe("DelegateTable", () => {
 			/>,
 		);
 
-		expect(screen.getByTestId("DelegateRow__toggle-1")).toBeTruthy();
+		expect(screen.getByTestId("DelegateRow__toggle-1")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("Pagination__next"));
 		});
 
-		expect(screen.getByTestId("DelegateRow__toggle-0")).toBeTruthy();
+		expect(screen.getByTestId("DelegateRow__toggle-0")).toBeInTheDocument();
 
 		act(() => {
 			fireEvent.click(screen.getByTestId("Pagination__previous"));
 		});
 
-		expect(screen.getByTestId("DelegateRow__toggle-1")).toBeTruthy();
+		expect(screen.getByTestId("DelegateRow__toggle-1")).toBeInTheDocument();
 	});
 
 	it("should not show pagination", () => {
@@ -662,8 +703,6 @@ describe("DelegateTable", () => {
 			<DelegateTable
 				delegates={delegates}
 				votes={votes}
-				itemsPerPage={2}
-				isPaginationDisabled
 				voteDelegates={[]}
 				unvoteDelegates={[]}
 				selectedWallet={wallet}
