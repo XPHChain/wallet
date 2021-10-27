@@ -1164,7 +1164,7 @@ exports[`ImportWallet should render as ledger import 1`] = `
                       </label>
                       <div>
                         <div
-                          aria-expanded="true"
+                          aria-expanded="false"
                           aria-haspopup="listbox"
                           aria-owns="NetworkStep__network-menu"
                           data-testid="SelectNetwork"
@@ -1389,7 +1389,7 @@ exports[`ImportWallet should render network step 1`] = `
       </label>
       <div>
         <div
-          aria-expanded="true"
+          aria-expanded="false"
           aria-haspopup="listbox"
           aria-owns="NetworkStep__network-menu"
           data-testid="SelectNetwork"
