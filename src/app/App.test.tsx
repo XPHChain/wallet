@@ -70,11 +70,11 @@ describe("App", () => {
 	it("should render splash screen", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		const { container, asFragment, getByTestId } = renderWithRouter(<App />, {
+		const { container, asFragment, findByTestId } = renderWithRouter(<App />, {
 			withProviders: false,
 		});
 
-		await waitFor(() => expect(getByTestId("Splash__text")).toBeInTheDocument());
+		await findByTestId("Splash__text");
 
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 500));
@@ -88,7 +88,7 @@ describe("App", () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 		jest.useFakeTimers();
 
-		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, {
+		const { getAllByTestId, getByTestId, getByText, history, findByTestId } = renderWithRouter(<App />, {
 			withProviders: false,
 		});
 
@@ -139,7 +139,7 @@ describe("App", () => {
 
 			jest.runAllTimers();
 
-			await waitFor(() => expect(getByTestId("SyncErrorMessage__retry")).toBeInTheDocument(), { timeout: 4000 });
+			await findByTestId("SyncErrorMessage__retry");
 
 			profileSyncMock.mockRestore();
 			fireEvent.click(getByTestId("SyncErrorMessage__retry"));
@@ -357,7 +357,15 @@ describe("App", () => {
 			}),
 		);
 
-		env.profiles().persist(selectedProfile);
+		selectedProfile.wallets().push(
+			await selectedProfile.walletFactory().fromAddress({
+				address: "AdVSe37niA3uFUPgCgMUH2tMsHF4LpLoiX",
+				coin: "ARK",
+				network: "ark.mainnet",
+			}),
+		);
+
+		env.profiles().persist(profile);
 
 		await act(async () => {
 			fireEvent.click(getAllByTestId("Card")[0]);

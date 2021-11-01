@@ -185,7 +185,7 @@ describe("useProfileSynchronizer", () => {
 
 		jest.useFakeTimers();
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileSynced">test</div>
 			</Route>,
@@ -200,7 +200,7 @@ describe("useProfileSynchronizer", () => {
 			jest.runOnlyPendingTimers();
 		});
 
-		await waitFor(() => expect(getByTestId("ProfileSynced")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("ProfileSynced");
 
 		renderAct(() => {
 			history.push("/");
@@ -218,7 +218,7 @@ describe("useProfileSynchronizer", () => {
 		history.push("/");
 
 		jest.useFakeTimers();
-		const { getByTestId } = renderWithRouter(
+		const { findByTestId } = renderWithRouter(
 			<Route path="/">
 				<div data-testid="RenderedContent">test</div>
 			</Route>,
@@ -229,14 +229,14 @@ describe("useProfileSynchronizer", () => {
 			},
 		);
 
-		await waitFor(() => expect(getByTestId("RenderedContent")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("RenderedContent");
 		jest.runAllTimers();
 	});
 
 	it("should sync only valid profiles from url", async () => {
 		history.push("/profiles/invalidId/dashboard");
 
-		const { getByTestId } = renderWithRouter(
+		const { findByTestId } = renderWithRouter(
 			<Route path="/">
 				<div data-testid="RenderedContent">test</div>
 			</Route>,
@@ -247,7 +247,7 @@ describe("useProfileSynchronizer", () => {
 			},
 		);
 
-		await waitFor(() => expect(getByTestId("RenderedContent")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("RenderedContent");
 	});
 
 	it("should restore profile", async () => {
@@ -256,7 +256,7 @@ describe("useProfileSynchronizer", () => {
 
 		history.push(dashboardURL);
 
-		const { getByTestId } = renderWithRouter(
+		const { findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -267,7 +267,7 @@ describe("useProfileSynchronizer", () => {
 			},
 		);
 
-		await waitFor(() => expect(getByTestId("ProfileRestored")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("ProfileRestored");
 		process.env.TEST_PROFILES_RESTORE_STATUS = "restored";
 	});
 
@@ -306,7 +306,7 @@ describe("useProfileSynchronizer", () => {
 
 		history.push(dashboardURL);
 
-		const { getByTestId } = renderWithRouter(
+		const { findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -317,7 +317,7 @@ describe("useProfileSynchronizer", () => {
 			},
 		);
 
-		await waitFor(() => expect(getByTestId("ProfileRestored")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("ProfileRestored");
 		process.env.TEST_PROFILES_RESTORE_STATUS = "restored";
 	});
 
@@ -338,7 +338,7 @@ describe("useProfileSynchronizer", () => {
 				return <div data-testid="ProfileSynced">test</div>;
 			};
 
-			const { getByTestId } = renderWithRouter(
+			const { findByTestId } = renderWithRouter(
 				<Route path="/profiles/:profileId/dashboard">
 					<Component />
 				</Route>,
@@ -348,7 +348,7 @@ describe("useProfileSynchronizer", () => {
 				},
 			);
 
-			await waitFor(() => expect(getByTestId("ProfileSynced")).toBeInTheDocument(), { timeout: 4000 });
+			await findByTestId("ProfileSynced");
 		});
 
 		const profile = env.profiles().findById(getDefaultProfileId());
@@ -395,7 +395,7 @@ describe("useProfileSynchronizer", () => {
 			},
 		);
 
-		await waitFor(() => expect(screen.getByTestId("ResetSyncProfile")).toBeInTheDocument());
+		await screen.findByTestId("ResetSyncProfile");
 
 		await waitFor(() => expect(configuration.isProfileInitialSync).toEqual(false));
 
@@ -407,7 +407,7 @@ describe("useProfileSynchronizer", () => {
 	it("should sync profile", async () => {
 		history.push(dashboardURL);
 		await act(async () => {
-			const { getByTestId } = renderWithRouter(
+			const { findByTestId } = renderWithRouter(
 				<Route path="/profiles/:profileId/dashboard">
 					<div data-testid="ProfileSynced">test</div>
 				</Route>,
@@ -418,7 +418,7 @@ describe("useProfileSynchronizer", () => {
 				},
 			);
 
-			await waitFor(() => expect(getByTestId("ProfileSynced")).toBeInTheDocument(), { timeout: 4000 });
+			await findByTestId("ProfileSynced");
 		});
 	});
 });
@@ -607,7 +607,7 @@ describe("useProfileRestore", () => {
 			.spyOn(electron.remote.powerMonitor, "getSystemIdleTime")
 			.mockImplementation(() => 1000);
 
-		const { getByTestId } = renderWithRouter(
+		const { findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -620,7 +620,7 @@ describe("useProfileRestore", () => {
 
 		const historyMock = jest.spyOn(history, "push").mockReturnValue();
 
-		await waitFor(() => expect(getByTestId("ProfileRestored")).toBeInTheDocument(), { timeout: 4000 });
+		await findByTestId("ProfileRestored");
 
 		await waitFor(() => expect(historyMock).toHaveBeenCalled(), { timeout: 4000 });
 

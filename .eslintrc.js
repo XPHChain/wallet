@@ -141,7 +141,7 @@ module.exports = {
 		"testing-library/no-await-sync-events": "warn", // @TODO: set to error and fix
 		"testing-library/no-await-sync-query": "warn", // @TODO: set to error and fix
 		"testing-library/no-container": "warn", // @TODO: set to error and fix
-		"testing-library/no-debug": "warn", // @TODO: set to error and fix
+		"testing-library/no-debugging-utils": "error",
 		"testing-library/no-dom-import": "warn", // @TODO: set to error and fix
 		"testing-library/no-manual-cleanup": "warn", // @TODO: set to error and fix
 		"testing-library/no-node-access": "warn", // @TODO: set to error and fix
@@ -153,11 +153,11 @@ module.exports = {
 		"testing-library/no-wait-for-side-effects": "warn", // @TODO: set to error and fix
 		"testing-library/no-wait-for-snapshot": "warn", // @TODO: set to error and fix
 		"testing-library/prefer-explicit-assert": "warn", // @TODO: set to error and fix
-		"testing-library/prefer-find-by": "warn", // @TODO: set to error and fix
+		"testing-library/prefer-find-by": "error",
 		"testing-library/prefer-presence-queries": "warn", // @TODO: set to error and fix
 		"testing-library/prefer-screen-queries": "warn", // @TODO: set to error and fix
 		"testing-library/prefer-user-event": "warn", // @TODO: set to error and fix
-		"testing-library/prefer-wait-for": "warn", // @TODO: set to error and fix
+		"testing-library/prefer-wait-for": "error",
 		"testing-library/render-result-naming-convention": "warn", // @TODO: set to error and fix
 		"testing-library/no-container": "warn", // @TODO: set to error and fix
 		"testing-library/no-node-access": "warn", // @TODO: set to error and fix

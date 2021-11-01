@@ -145,7 +145,7 @@ describe("PluginManagerProvider", () => {
 
 		expect(invokeMock).toHaveBeenLastCalledWith("plugin:loader-fs.remove", "/plugins/example");
 
-		await waitFor(() => expect(screen.getByRole("button")).toBeTruthy());
+		await screen.findByRole("button");
 	});
 
 	it("should fetch packages", async () => {
@@ -247,6 +247,52 @@ describe("PluginManagerProvider", () => {
 		);
 
 		await waitFor(() => expect(manager.plugins().findById("test-plugin")).toBeTruthy());
+
+		ipcRendererSpy.mockRestore();
+	});
+
+	it("should download plugin from archive url", async () => {
+		const ipcRendererSpy = jest.spyOn(ipcRenderer, "invoke").mockImplementation((channel) => {
+			if (channel === "plugin:download") {
+				return "/plugins/test-plugin";
+			}
+		});
+
+		const Component = () => {
+			const { downloadPlugin } = usePluginManagerContext();
+			return (
+				<div>
+					<button
+						onClick={() =>
+							downloadPlugin({
+								archiveUrl:
+									"https://registry.npmjs.org/arkecosystem/test-plugin/-/test-plugin-1.0.0.tgz",
+								id: "test-plugin",
+							} as any)
+						}
+					>
+						Fetch
+					</button>
+				</div>
+			);
+		};
+
+		render(
+			<EnvironmentProvider env={env}>
+				<PluginManagerProvider manager={manager} services={[]}>
+					<Component />
+				</PluginManagerProvider>
+			</EnvironmentProvider>,
+		);
+
+		fireEvent.click(screen.getByText("Fetch"));
+
+		await waitFor(() =>
+			expect(ipcRendererSpy).toHaveBeenLastCalledWith("plugin:download", {
+				name: "test-plugin",
+				url: "https://registry.npmjs.org/arkecosystem/test-plugin/-/test-plugin-1.0.0.tgz",
+			}),
+		);
 
 		ipcRendererSpy.mockRestore();
 	});
@@ -491,7 +537,7 @@ describe("PluginManagerProvider", () => {
 
 		fireEvent.click(screen.getByText("Click"));
 
-		await waitFor(() => expect(screen.getByText("Update Available")).toBeInTheDocument());
+		await screen.findByText("Update Available");
 	});
 
 	it("should check if plugin update is available for plugin without minimum version", async () => {
@@ -532,7 +578,7 @@ describe("PluginManagerProvider", () => {
 
 		fireEvent.click(screen.getByText("Click"));
 
-		await waitFor(() => expect(screen.getByText("Update Available")).toBeInTheDocument());
+		await screen.findByText("Update Available");
 	});
 
 	it("should update plugin", async () => {
@@ -630,14 +676,15 @@ describe("PluginManagerProvider", () => {
 
 		fireEvent.click(screen.getByText("Fetch"));
 
-		await waitFor(() => expect(screen.getByText("Update Available")).toBeInTheDocument());
+		await screen.findByText("Update Available");
 
 		fireEvent.click(screen.getAllByText("Update")[0]);
 
 		await waitFor(() =>
 			expect(ipcRendererSpy).toHaveBeenCalledWith("plugin:download", {
 				name: "@dated/delegate-calculator-wallet-plugin",
-				url: "https://github.com/dated/delegate-calculator-wallet-plugin/archive/master.zip",
+				url:
+					"https://registry.npmjs.org/@dated/delegate-calculator-wallet-plugin/-/delegate-calculator-wallet-plugin-1.0.0.tgz",
 			}),
 		);
 
@@ -659,7 +706,7 @@ describe("PluginManagerProvider", () => {
 			jest.runOnlyPendingTimers();
 		});
 
-		await waitFor(() => expect(screen.getByText("Update Completed")).toBeInTheDocument());
+		await screen.findByText("Update Completed");
 
 		ipcRendererSpy.mockRestore();
 		onSpy.mockRestore();
@@ -733,7 +780,7 @@ describe("PluginManagerProvider", () => {
 
 		fireEvent.click(screen.getByText("Fetch"));
 
-		await waitFor(() => expect(screen.getByText("Update Available")).toBeInTheDocument());
+		await screen.findByText("Update Available");
 
 		fireEvent.click(screen.getAllByText("Update")[0]);
 
@@ -880,9 +927,9 @@ describe("PluginManagerProvider", () => {
 		expect(screen.getByText("Size N/A")).toBeInTheDocument();
 
 		fireEvent.click(screen.getByText("Fetch Plugins"));
-		await waitFor(() => expect(screen.getByText("Plugins 2")).toBeInTheDocument());
+		await screen.findByText("Plugins 2");
 
 		fireEvent.click(screen.getByText("Fetch Size"));
-		await waitFor(() => expect(screen.getByText("Size 122515")).toBeInTheDocument());
+		await screen.findByText("Size 122515");
 	});
 });

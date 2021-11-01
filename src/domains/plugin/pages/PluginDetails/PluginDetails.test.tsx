@@ -579,13 +579,14 @@ describe("PluginDetails", () => {
 
 		fireEvent.click(within(screen.getByTestId("plugin-details__header")).getByTestId("dropdown__toggle"));
 
-		await waitFor(() => expect(screen.getByText(commonTranslations.UPDATE)).toBeInTheDocument());
+		await screen.findByText(commonTranslations.UPDATE);
 		fireEvent.click(screen.getByText(commonTranslations.UPDATE));
 
 		await waitFor(() =>
 			expect(ipcRendererSpy).toHaveBeenLastCalledWith("plugin:download", {
 				name: "@dated/delegate-calculator-wallet-plugin",
-				url: "https://github.com/dated/delegate-calculator-wallet-plugin/archive/master.zip",
+				url:
+					"https://registry.npmjs.org/@dated/delegate-calculator-wallet-plugin/-/delegate-calculator-wallet-plugin-1.0.0.tgz",
 			}),
 		);
 

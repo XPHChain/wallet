@@ -299,7 +299,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -367,7 +367,7 @@ describe("SendVote", () => {
 
 		act(() => jest.runOnlyPendingTimers());
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy(), { timeout: 4000 });
+		await findByTestId("TransactionSuccessful");
 		await waitFor(() => expect(setInterval).toHaveBeenCalledTimes(1));
 
 		const historySpy = jest.spyOn(history, "push");
@@ -388,6 +388,145 @@ describe("SendVote", () => {
 		signVoteMock.mockRestore();
 		broadcastVoteMock.mockRestore();
 		transactionVoteMock.mockRestore();
+	});
+
+	it("should send a unvote & vote transaction and use split voting method", async () => {
+		const votesMock = jest.spyOn(wallet.voting(), "current").mockImplementation(() => [
+			{
+				amount: 10,
+				wallet: new ReadOnlyWallet({
+					address: delegateData[1].address,
+					explorerLink: "",
+					governanceIdentifier: "address",
+					isDelegate: true,
+					isResignedDelegate: false,
+					publicKey: delegateData[1].publicKey,
+					username: delegateData[1].username,
+				}),
+			},
+		]);
+		await wallet.synchroniser().votes();
+
+		const history = createMemoryHistory();
+		const voteURL = `/profiles/${fixtureProfileId}/wallets/${wallet.id()}/send-vote`;
+
+		const parameters = new URLSearchParams();
+
+		const unvotes: VoteDelegateProperties[] = [
+			{
+				amount: 10,
+				delegateAddress: delegateData[1].address,
+			},
+		];
+
+		appendParameters(parameters, "unvote", unvotes);
+
+		const votes: VoteDelegateProperties[] = [
+			{
+				amount: 10,
+				delegateAddress: delegateData[0].address,
+			},
+		];
+
+		appendParameters(parameters, "vote", votes);
+
+		history.push({
+			pathname: voteURL,
+			search: `?${parameters}`,
+		});
+
+		const { getByTestId, findByTestId } = renderWithRouter(
+			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
+				<LedgerProvider transport={transport}>
+					<SendVote />
+				</LedgerProvider>
+			</Route>,
+			{
+				history,
+				routes: [voteURL],
+			},
+		);
+
+		expect(getByTestId("SendVote__form-step")).toBeTruthy();
+
+		await waitFor(() => expect(getByTestId("SendVote__form-step")).toHaveTextContent(delegateData[0].username));
+
+		expect(screen.getAllByRole("radio")[1]).toBeChecked();
+
+		await waitFor(() => expect(getByTestId("StepNavigation__continue-button")).not.toBeDisabled());
+		fireEvent.click(getByTestId("StepNavigation__continue-button"));
+
+		// Review Step
+		expect(getByTestId("SendVote__review-step")).toBeTruthy();
+
+		fireEvent.click(getByTestId("StepNavigation__continue-button"));
+
+		// AuthenticationStep
+		expect(getByTestId("AuthenticationStep")).toBeTruthy();
+
+		const signUnvoteMock = jest
+			.spyOn(wallet.transaction(), "signVote")
+			.mockReturnValue(Promise.resolve(unvoteFixture.data.id));
+		const broadcastUnvoteMock = jest.spyOn(wallet.transaction(), "broadcast").mockResolvedValue({
+			accepted: [unvoteFixture.data.id],
+			errors: {},
+			rejected: [],
+		});
+		const transactionUnvoteMock = createVoteTransactionMock(wallet);
+
+		const signVoteMock = jest
+			.spyOn(wallet.transaction(), "signVote")
+			.mockReturnValue(Promise.resolve(voteFixture.data.id));
+		const broadcastVoteMock = jest.spyOn(wallet.transaction(), "broadcast").mockResolvedValue({
+			accepted: [voteFixture.data.id],
+			errors: {},
+			rejected: [],
+		});
+		const transactionVoteMock = createVoteTransactionMock(wallet);
+
+		const passwordInput = getByTestId("AuthenticationStep__mnemonic");
+		fireEvent.input(passwordInput, { target: { value: passphrase } });
+
+		expect(passwordInput).toHaveValue(passphrase);
+
+		await waitFor(() => expect(getByTestId("StepNavigation__send-button")).not.toBeDisabled());
+
+		const splitVotingMethodMock = jest.spyOn(wallet.network(), "votingMethod").mockReturnValue("split");
+
+		await act(async () => {
+			fireEvent.click(getByTestId("StepNavigation__send-button"));
+		});
+
+		act(() => jest.advanceTimersByTime(1000));
+
+		setTimeout(() => {
+			votesMock.mockRestore();
+		}, 3000);
+
+		act(() => jest.runOnlyPendingTimers());
+
+		await findByTestId("TransactionSuccessful");
+		await waitFor(() => expect(setInterval).toHaveBeenCalledTimes(2));
+
+		const historySpy = jest.spyOn(history, "push");
+
+		// Go back to wallet
+		act(() => {
+			fireEvent.click(getByTestId("StepNavigation__back-to-wallet-button"));
+		});
+
+		expect(historySpy).toHaveBeenCalledWith(`/profiles/${profile.id()}/wallets/${wallet.id()}`);
+
+		historySpy.mockRestore();
+
+		signUnvoteMock.mockRestore();
+		broadcastUnvoteMock.mockRestore();
+		transactionUnvoteMock.mockRestore();
+
+		signVoteMock.mockRestore();
+		broadcastVoteMock.mockRestore();
+		transactionVoteMock.mockRestore();
+		splitVotingMethodMock.mockRestore();
 	});
 
 	it.each(["with keyboard", "without keyboard"])("should send a vote transaction %s", async (inputMethod) => {
@@ -418,7 +557,7 @@ describe("SendVote", () => {
 			}),
 		);
 
-		const { container, getByTestId } = renderWithRouter(
+		const { container, getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<FormProvider {...form.current}>
 					<LedgerProvider transport={transport}>
@@ -488,7 +627,7 @@ describe("SendVote", () => {
 
 		act(() => jest.advanceTimersByTime(1000));
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy());
+		await findByTestId("TransactionSuccessful");
 		await waitFor(() => expect(container).toMatchSnapshot());
 
 		signMock.mockRestore();
@@ -516,7 +655,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId, getByText, getAllByTestId } = renderWithRouter(
+		const { getByTestId, getByText, getAllByTestId, findAllByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -553,7 +692,7 @@ describe("SendVote", () => {
 
 		expect(getByTestId("SendVote__review-step")).toBeTruthy();
 
-		await waitFor(() => expect(getAllByTestId("AmountCrypto")).toBeTruthy());
+		await findAllByTestId("AmountCrypto");
 
 		expect(getAllByTestId("AmountCrypto")[3]).toHaveTextContent("0.02");
 	});
@@ -655,7 +794,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { container, getByTestId } = renderWithRouter(
+		const { container, getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -705,7 +844,7 @@ describe("SendVote", () => {
 
 		act(() => jest.advanceTimersByTime(1000));
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy(), { timeout: 3000 });
+		await findByTestId("TransactionSuccessful");
 		await waitFor(() => expect(container).toMatchSnapshot());
 
 		signMock.mockRestore();
@@ -733,7 +872,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId, getByText } = renderWithRouter(
+		const { getByTestId, getByText, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -770,7 +909,7 @@ describe("SendVote", () => {
 
 		fireEvent.click(getByTestId("FeeWarning__cancel-button"));
 
-		await waitFor(() => expect(getByTestId("SendVote__form-step")).toBeTruthy());
+		await findByTestId("SendVote__form-step");
 	});
 
 	it("should proceed to authentication step by confirming fee warning", async () => {
@@ -793,7 +932,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId, getByText } = renderWithRouter(
+		const { getByTestId, getByText, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -830,7 +969,7 @@ describe("SendVote", () => {
 
 		fireEvent.click(getByTestId("FeeWarning__continue-button"));
 
-		await waitFor(() => expect(getByTestId("AuthenticationStep")).toBeTruthy());
+		await findByTestId("AuthenticationStep");
 	});
 
 	it("should show error if wrong mnemonic", async () => {
@@ -917,7 +1056,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { container, getByTestId } = renderWithRouter(
+		const { container, getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -941,12 +1080,12 @@ describe("SendVote", () => {
 		fireEvent.click(getByTestId("StepNavigation__continue-button"));
 
 		// Review Step
-		await waitFor(() => expect(getByTestId("SendVote__review-step")).toBeTruthy());
+		await findByTestId("SendVote__review-step");
 
 		fireEvent.click(getByTestId("StepNavigation__continue-button"));
 
 		// AuthenticationStep
-		await waitFor(() => expect(getByTestId("AuthenticationStep")).toBeTruthy());
+		await findByTestId("AuthenticationStep");
 
 		const broadcastMock = jest.spyOn(wallet.transaction(), "broadcast").mockImplementation(() => {
 			throw new Error("broadcast error");
@@ -960,7 +1099,7 @@ describe("SendVote", () => {
 		await waitFor(() => expect(getByTestId("StepNavigation__send-button")).not.toBeDisabled());
 
 		fireEvent.click(getByTestId("StepNavigation__send-button"));
-		await waitFor(() => expect(getByTestId("ErrorStep")).toBeInTheDocument());
+		await findByTestId("ErrorStep");
 
 		expect(getByTestId("ErrorStep__errorMessage")).toHaveTextContent("broadcast error");
 		expect(getByTestId("ErrorStep__wallet-button")).toBeInTheDocument();
@@ -999,7 +1138,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -1039,7 +1178,7 @@ describe("SendVote", () => {
 
 		act(() => jest.advanceTimersByTime(1000));
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy());
+		await findByTestId("TransactionSuccessful");
 
 		expect(signMock).toHaveBeenCalledWith(
 			expect.objectContaining({
@@ -1097,7 +1236,7 @@ describe("SendVote", () => {
 			search: `?${parameters}`,
 		});
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<LedgerProvider transport={transport}>
 					<SendVote />
@@ -1158,7 +1297,7 @@ describe("SendVote", () => {
 
 		act(() => jest.advanceTimersByTime(1000));
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy(), { timeout: 3000 });
+		await findByTestId("TransactionSuccessful");
 
 		getPublicKeySpy.mockRestore();
 		signTransactionSpy.mockRestore();
@@ -1202,7 +1341,7 @@ describe("SendVote", () => {
 			}),
 		);
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = renderWithRouter(
 			<Route path="/profiles/:profileId/wallets/:walletId/send-vote">
 				<FormProvider {...form.current}>
 					<LedgerProvider transport={transport}>
@@ -1254,7 +1393,7 @@ describe("SendVote", () => {
 			fireEvent.click(getByTestId("StepNavigation__send-button"));
 		});
 
-		await waitFor(() => expect(getByTestId("TransactionSuccessful")).toBeTruthy(), { timeout: 4000 });
+		await findByTestId("TransactionSuccessful", undefined, { timeout: 4000 });
 
 		signMock.mockRestore();
 		broadcastMock.mockRestore();

@@ -141,7 +141,7 @@ describe("LedgerTabs", () => {
 
 		const { container, history } = renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("SelectNetwork")).toBeInTheDocument());
+		await screen.findByTestId("SelectNetwork");
 		await waitFor(() => expect(nextSelector()).toBeDisabled());
 		await waitFor(() => expect(backSelector()).toBeEnabled());
 
@@ -161,10 +161,12 @@ describe("LedgerTabs", () => {
 
 		userEvent.click(nextSelector());
 
-		await waitFor(() => expect(screen.getByTestId("LedgerConnectionStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerConnectionStep");
+		// eslint-disable-next-line
 		await waitFor(
 			() =>
 				expect(
+					// eslint-disable-next-line
 					screen.queryByText(t("WALLETS.MODAL_LEDGER_WALLET.GENERIC_CONNECTION_ERROR")),
 				).toBeInTheDocument(),
 			{ timeout: 10_000 },
@@ -172,7 +174,7 @@ describe("LedgerTabs", () => {
 
 		userEvent.click(backSelector());
 
-		await waitFor(() => expect(screen.getByTestId("SelectNetwork")).toBeInTheDocument());
+		await screen.findByTestId("SelectNetwork");
 		await waitFor(() => expect(nextSelector()).toBeEnabled());
 
 		getPublicKeySpy.mockReset();
@@ -206,10 +208,10 @@ describe("LedgerTabs", () => {
 
 		renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("LedgerConnectionStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerConnectionStep");
 
 		// Auto redirect to next step
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep");
 		await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(6), { timeout: 3000 });
 
 		await waitFor(() => expect(screen.getAllByRole("checkbox")).toHaveLength(2));
@@ -245,14 +247,14 @@ describe("LedgerTabs", () => {
 
 		renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("LedgerConnectionStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerConnectionStep");
 
 		// Auto redirect to next step
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep");
 
 		userEvent.click(backSelector());
 
-		await waitFor(() => expect(screen.getByTestId("SelectNetwork")).toBeInTheDocument());
+		await screen.findByTestId("SelectNetwork");
 		await waitFor(() => expect(nextSelector()).toBeEnabled());
 
 		getPublicKeySpy.mockReset();
@@ -286,7 +288,7 @@ describe("LedgerTabs", () => {
 
 		const { history } = renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep");
 		await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(2), { timeout: 3000 });
 
 		expect(profile.wallets().values()).toHaveLength(2);
@@ -295,7 +297,7 @@ describe("LedgerTabs", () => {
 
 		userEvent.click(nextSelector());
 
-		await waitFor(() => expect(screen.getByTestId("LedgerImportStep")).toBeInTheDocument(), { timeout: 10_000 });
+		await screen.findByTestId("LedgerImportStep");
 
 		// Import wallets before entering the last step
 		expect(profile.wallets().values()).toHaveLength(3);
@@ -357,7 +359,7 @@ describe("LedgerTabs", () => {
 
 		const { history } = renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep");
 		await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(3), { timeout: 3000 });
 
 		const walletsCountBefore = profile.wallets().count();
@@ -368,7 +370,7 @@ describe("LedgerTabs", () => {
 
 		userEvent.keyboard("{enter}");
 
-		await waitFor(() => expect(screen.getByTestId("LedgerImportStep")).toBeInTheDocument(), { timeout: 15_000 });
+		await screen.findByTestId("LedgerImportStep");
 
 		expect(profile.wallets().count()).toBe(walletsCountBefore + 2);
 
@@ -413,24 +415,24 @@ describe("LedgerTabs", () => {
 
 		const { container } = renderWithRouter(<Component />, { routes: [`/profiles/${profile.id()}`] });
 
-		await waitFor(() => expect(screen.getByTestId("LedgerConnectionStep")).toBeInTheDocument());
+		await screen.findByTestId("LedgerConnectionStep");
 
 		// Auto redirect to next step
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep")).toBeInTheDocument());
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep__error")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep");
+		await screen.findByTestId("LedgerScanStep__error");
 
 		userEvent.click(screen.getByTestId("Paginator__retry-button"));
 
 		await waitFor(() => expect(screen.queryAllByTestId("LedgerScanStep__amount-skeleton")).toHaveLength(0), {
 			interval: 5,
 		});
-		await waitFor(() => expect(screen.getByTestId("LedgerScanStep__error")).toBeInTheDocument());
+		await screen.findByTestId("LedgerScanStep__error");
 
 		expect(container).toMatchSnapshot();
 
 		userEvent.click(backSelector());
 
-		await waitFor(() => expect(screen.getByTestId("SelectNetwork")).toBeInTheDocument());
+		await screen.findByTestId("SelectNetwork");
 
 		getPublicKeySpy.mockReset();
 	});
