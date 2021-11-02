@@ -5,7 +5,7 @@ import { InputPassword } from "app/components/Input";
 import { useValidation } from "app/hooks";
 import React, { useEffect } from "react";
 import { useFormContext } from "react-hook-form";
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 
 export const EncryptPasswordStep = () => {
 	const { t } = useTranslation();
@@ -21,30 +21,20 @@ export const EncryptPasswordStep = () => {
 
 	return (
 		<section data-testid="EncryptPassword">
-			<Header
-				title={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.TITLE")}
-				titleSuffix={
-					<span className="text-theme-secondary-500 dark:text-theme-secondary-800">
-						{t("COMMON.OPTIONAL")}
-					</span>
-				}
-			/>
+			<Header title={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.TITLE")} />
 
 			<Alert className="mt-6" variant="warning">
-				{t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.WARNING")}
+				<Trans i18nKey="WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.WARNING" />
 			</Alert>
 
 			<div className="pt-6 space-y-6">
 				<FormField name="encryptionPassword">
-					<FormLabel label={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.PASSWORD_LABEL")} optional />
+					<FormLabel label={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.PASSWORD_LABEL")} />
 					<InputPassword ref={register(password.password())} />
 				</FormField>
 
 				<FormField name="confirmEncryptionPassword">
-					<FormLabel
-						label={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.CONFIRM_PASSWORD_LABEL")}
-						optional={!encryptionPassword}
-					/>
+					<FormLabel label={t("WALLETS.PAGE_IMPORT_WALLET.ENCRYPT_PASSWORD_STEP.CONFIRM_PASSWORD_LABEL")} />
 					<InputPassword ref={register(password.confirmPassword(encryptionPassword))} />
 				</FormField>
 			</div>
