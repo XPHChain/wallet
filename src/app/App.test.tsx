@@ -80,7 +80,7 @@ describe("App", () => {
 			await new Promise((resolve) => setTimeout(resolve, 500));
 		});
 
-		expect(container).toBeTruthy();
+		expect(container).toBeInTheDocument();
 		expect(asFragment()).toMatchSnapshot();
 	});
 
@@ -163,7 +163,7 @@ describe("App", () => {
 
 		await waitFor(() => expect(() => getByTestId("Splash__text")).toThrow(/^Unable to find an element by/));
 
-		expect(container).toBeTruthy();
+		expect(container).toBeInTheDocument();
 		expect(asFragment()).toMatchSnapshot();
 	});
 
@@ -177,14 +177,12 @@ describe("App", () => {
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 2000));
 		});
+		await waitFor(() => {
+			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
 
-		await waitFor(
-			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
-			{ timeout: 2000 },
-		);
-
-		expect(container).toBeTruthy();
-		expect(asFragment()).toMatchSnapshot();
+			expect(container).toBeInTheDocument();
+			expect(asFragment()).toMatchSnapshot();
+		});
 	});
 
 	it("should render the offline screen if there is no internet connection", async () => {
@@ -201,7 +199,7 @@ describe("App", () => {
 		});
 
 		await waitFor(() => {
-			expect(container).toBeTruthy();
+			expect(container).toBeInTheDocument();
 
 			expect(getByTestId("Offline__text")).toHaveTextContent(errorTranslations.OFFLINE.TITLE);
 			expect(getByTestId("Offline__text")).toHaveTextContent(errorTranslations.OFFLINE.DESCRIPTION);
@@ -230,7 +228,7 @@ describe("App", () => {
 		const { container, asFragment, getByTestId } = rendered;
 
 		await waitFor(() => {
-			expect(container).toBeTruthy();
+			expect(container).toBeInTheDocument();
 
 			expect(getByTestId("ApplicationError__text")).toHaveTextContent(errorTranslations.APPLICATION.TITLE);
 			expect(getByTestId("ApplicationError__text")).toHaveTextContent(errorTranslations.APPLICATION.DESCRIPTION);
@@ -258,7 +256,7 @@ describe("App", () => {
 			{ timeout: 2000 },
 		);
 
-		expect(container).toBeTruthy();
+			expect(container).toBeInTheDocument();
 
 		expect(getByText("John Doe")).toBeInTheDocument();
 		expect(getByText("Jane Doe")).toBeInTheDocument();
