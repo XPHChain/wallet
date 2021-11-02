@@ -11,7 +11,7 @@ import {
 	fireEvent,
 	getDefaultProfileId,
 	MNEMONICS,
-	renderWithRouter,
+	render,
 	syncDelegates,
 	useDefaultNetMocks,
 	waitFor,
@@ -83,7 +83,7 @@ describe("Transactions", () => {
 	});
 
 	it("should render", async () => {
-		const { asFragment, getByTestId } = renderWithRouter(
+		const { asFragment, getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} />
 			</Route>,
@@ -102,7 +102,7 @@ describe("Transactions", () => {
 	});
 
 	it("should render with custom title", async () => {
-		const { asFragment, getByTestId } = renderWithRouter(
+		const { asFragment, getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} title={<h1>Test</h1>} />
 			</Route>,
@@ -121,7 +121,7 @@ describe("Transactions", () => {
 	});
 
 	it("should render hidden", async () => {
-		const { asFragment } = renderWithRouter(
+		const { asFragment } = render(
 			<Route path="/profiles/:profileId/dashboard" isVisible={false}>
 				<Transactions profile={profile} wallets={profile.wallets().values()} isVisible={false} />
 			</Route>,
@@ -135,7 +135,7 @@ describe("Transactions", () => {
 	});
 
 	it("should filter by type", async () => {
-		const { getByRole, getByTestId, findByTestId } = renderWithRouter(
+		const { getByRole, getByTestId, findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} />
 			</Route>,
@@ -176,7 +176,7 @@ describe("Transactions", () => {
 			}),
 		);
 
-		const { getByRole, getByTestId, findByTestId } = renderWithRouter(
+		const { getByRole, getByTestId, findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={emptyProfile} wallets={emptyProfile.wallets().values()} />
 			</Route>,
@@ -216,7 +216,7 @@ describe("Transactions", () => {
 			}),
 		);
 
-		const { getByRole, getByTestId, findByTestId } = renderWithRouter(
+		const { getByRole, getByTestId, findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={emptyProfile} wallets={emptyProfile.wallets().values()} />
 			</Route>,
@@ -246,7 +246,7 @@ describe("Transactions", () => {
 		await env.profiles().restore(profile);
 		await profile.sync();
 
-		const { asFragment, getByTestId } = renderWithRouter(
+		const { asFragment, getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} />
 			</Route>,
@@ -282,7 +282,7 @@ describe("Transactions", () => {
 		await env.profiles().restore(profile);
 		await profile.sync();
 
-		const { asFragment, getByTestId } = renderWithRouter(
+		const { asFragment, getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} isLoading={false} wallets={profile.wallets().values()} />
 			</Route>,
@@ -317,7 +317,7 @@ describe("Transactions", () => {
 		await env.profiles().restore(profile);
 		await profile.sync();
 
-		const { asFragment, getByTestId, queryByTestId } = renderWithRouter(
+		const { asFragment, getByTestId, queryByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} isLoading={false} wallets={profile.wallets().values()} />
 			</Route>,
@@ -339,7 +339,7 @@ describe("Transactions", () => {
 		await env.profiles().restore(profile);
 		await profile.sync();
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions isLoading={true} profile={profile} wallets={profile.wallets().values()} />
 			</Route>,
@@ -379,7 +379,7 @@ describe("Transactions", () => {
 				meta,
 			}));
 
-		const { getAllByTestId, getByTestId } = renderWithRouter(
+		const { getAllByTestId, getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} isLoading={false} wallets={profile.wallets().values()} />
 			</Route>,
@@ -398,7 +398,7 @@ describe("Transactions", () => {
 	});
 
 	it("should filter by mode", async () => {
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} />
 			</Route>,
@@ -418,7 +418,7 @@ describe("Transactions", () => {
 	});
 
 	it("should ignore tab change on loading state", async () => {
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={profile} wallets={profile.wallets().values()} isLoading={true} />
 			</Route>,
@@ -442,7 +442,7 @@ describe("Transactions", () => {
 		const emptyProfileURL = `/profiles/${emptyProfile.id()}/dashboard`;
 
 		history.push(emptyProfileURL);
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions profile={emptyProfile} wallets={[]} />
 			</Route>,
@@ -456,7 +456,7 @@ describe("Transactions", () => {
 	});
 
 	it("should update wallet filters", async () => {
-		const { asFragment, findByTestId } = renderWithRouter(
+		const { asFragment, findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Transactions isUpdatingWallet={true} profile={profile} wallets={[]} />
 			</Route>,

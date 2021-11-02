@@ -14,7 +14,7 @@ import {
 	getDefaultProfileId,
 	MNEMONICS,
 	pluginManager,
-	renderWithRouter,
+	render,
 	screen,
 	syncDelegates,
 	waitFor,
@@ -185,7 +185,7 @@ describe("useProfileSynchronizer", () => {
 
 		jest.useFakeTimers();
 
-		const { getByTestId, findByTestId } = renderWithRouter(
+		const { getByTestId, findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileSynced">test</div>
 			</Route>,
@@ -218,7 +218,7 @@ describe("useProfileSynchronizer", () => {
 		history.push("/");
 
 		jest.useFakeTimers();
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/">
 				<div data-testid="RenderedContent">test</div>
 			</Route>,
@@ -236,7 +236,7 @@ describe("useProfileSynchronizer", () => {
 	it("should sync only valid profiles from url", async () => {
 		history.push("/profiles/invalidId/dashboard");
 
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/">
 				<div data-testid="RenderedContent">test</div>
 			</Route>,
@@ -256,7 +256,7 @@ describe("useProfileSynchronizer", () => {
 
 		history.push(dashboardURL);
 
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -284,7 +284,7 @@ describe("useProfileSynchronizer", () => {
 			throw new Error("password not found");
 		});
 
-		const { getByTestId } = renderWithRouter(
+		const { getByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="Content">test</div>
 			</Route>,
@@ -306,7 +306,7 @@ describe("useProfileSynchronizer", () => {
 
 		history.push(dashboardURL);
 
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -338,7 +338,7 @@ describe("useProfileSynchronizer", () => {
 				return <div data-testid="ProfileSynced">test</div>;
 			};
 
-			const { findByTestId } = renderWithRouter(
+			const { findByTestId } = render(
 				<Route path="/profiles/:profileId/dashboard">
 					<Component />
 				</Route>,
@@ -384,7 +384,7 @@ describe("useProfileSynchronizer", () => {
 			return <button data-testid="ResetSyncProfile" onClick={() => syncProfileWallets(true)} />;
 		};
 
-		renderWithRouter(
+		render(
 			<Route path="/profiles/:profileId/dashboard">
 				<Component />
 			</Route>,
@@ -407,7 +407,7 @@ describe("useProfileSynchronizer", () => {
 	it("should sync profile", async () => {
 		history.push(dashboardURL);
 		await act(async () => {
-			const { findByTestId } = renderWithRouter(
+			const { findByTestId } = render(
 				<Route path="/profiles/:profileId/dashboard">
 					<div data-testid="ProfileSynced">test</div>
 				</Route>,
@@ -607,7 +607,7 @@ describe("useProfileRestore", () => {
 			.spyOn(electron.remote.powerMonitor, "getSystemIdleTime")
 			.mockImplementation(() => 1000);
 
-		const { findByTestId } = renderWithRouter(
+		const { findByTestId } = render(
 			<Route path="/profiles/:profileId/dashboard">
 				<div data-testid="ProfileRestored">test</div>
 			</Route>,
@@ -657,7 +657,7 @@ describe("useProfileRestore", () => {
 		});
 
 		await act(async () => {
-			renderWithRouter(
+			render(
 				<Route path="/profiles/:profileId/dashboard">
 					<div data-testid="ProfileSynced">test</div>
 				</Route>,

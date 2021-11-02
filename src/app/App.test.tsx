@@ -16,8 +16,8 @@ import {
 	getDefaultProfileId,
 	getPasswordProtectedProfileId,
 	MNEMONICS,
+	render,
 	RenderResult,
-	renderWithRouter,
 	useDefaultNetMocks,
 	waitFor,
 } from "utils/testing-library";
@@ -70,7 +70,7 @@ describe("App", () => {
 	it("should render splash screen", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		const { container, asFragment, findByTestId } = renderWithRouter(<App />, {
+		const { container, asFragment, findByTestId } = render(<App />, {
 			withProviders: false,
 		});
 
@@ -88,7 +88,7 @@ describe("App", () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 		jest.useFakeTimers();
 
-		const { getAllByTestId, getByTestId, getByText, history, findByTestId } = renderWithRouter(<App />, {
+		const { getAllByTestId, getByTestId, getByText, history, findByTestId } = render(<App />, {
 			withProviders: false,
 		});
 
@@ -159,7 +159,7 @@ describe("App", () => {
 	it("should close splash screen if not e2e", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		const { container, asFragment, getByTestId } = renderWithRouter(<App />, { withProviders: false });
+		const { container, asFragment, getByTestId } = render(<App />, { withProviders: false });
 
 		await waitFor(() => expect(() => getByTestId("Splash__text")).toThrow(/^Unable to find an element by/));
 
@@ -170,7 +170,7 @@ describe("App", () => {
 	it("should render welcome screen after splash screen", async () => {
 		process.env.REACT_APP_IS_E2E = "1";
 
-		const { container, asFragment, getByText, getByTestId } = renderWithRouter(<App />, { withProviders: false });
+		const { container, asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
@@ -190,7 +190,7 @@ describe("App", () => {
 
 		jest.spyOn(window.navigator, "onLine", "get").mockReturnValueOnce(false);
 
-		const { container, asFragment, getByTestId } = renderWithRouter(<App />, { withProviders: false });
+		const { container, asFragment, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
@@ -220,7 +220,7 @@ describe("App", () => {
 		let rendered: RenderResult;
 
 		await act(async () => {
-			rendered = renderWithRouter(<App />, { withProviders: false });
+			rendered = render(<App />, { withProviders: false });
 		});
 
 		expect(environmentSpy).toHaveBeenCalled();
@@ -243,7 +243,7 @@ describe("App", () => {
 	it("should render mock", async () => {
 		process.env.REACT_APP_IS_E2E = "1";
 
-		const { container, asFragment, getByText, getByTestId } = renderWithRouter(<App />, { withProviders: false });
+		const { container, asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
@@ -256,7 +256,7 @@ describe("App", () => {
 			{ timeout: 2000 },
 		);
 
-			expect(container).toBeInTheDocument();
+		expect(container).toBeInTheDocument();
 
 		expect(getByText("John Doe")).toBeInTheDocument();
 		expect(getByText("Jane Doe")).toBeInTheDocument();
@@ -267,7 +267,7 @@ describe("App", () => {
 	it("should not migrate profiles", async () => {
 		process.env.REACT_APP_IS_E2E = undefined;
 
-		const { asFragment, getByText, getByTestId } = renderWithRouter(<App />, { withProviders: false });
+		const { asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
@@ -284,7 +284,7 @@ describe("App", () => {
 	it("should redirect to root if profile restoration error occurs", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
+		const { getAllByTestId, getByTestId, getByText, history } = render(<App />, { withProviders: false });
 
 		await waitFor(
 			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
@@ -328,14 +328,13 @@ describe("App", () => {
 
 	it("should enter profile and show toast message for successfull sync", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
-
 		const successToast = jest.spyOn(toasts, "success").mockImplementation();
 		const warningToast = jest.spyOn(toasts, "warning").mockImplementation();
 		const toastDismiss = jest.spyOn(toasts, "dismiss").mockImplementation();
 
-		const { getAllByTestId, getByText, history } = renderWithRouter(<App />, {
-			withPluginProvider: false,
+		const { getAllByTestId, getByText, history } = render(<App />, {
 			withProviders: true,
+			withPluginProvider: false,
 		});
 
 		await waitFor(
@@ -384,7 +383,7 @@ describe("App", () => {
 	it("should enter profile", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		const { getAllByTestId, getByTestId, getByText, history } = renderWithRouter(<App />, { withProviders: false });
+		const { getAllByTestId, getByTestId, getByText, history } = render(<App />, { withProviders: false });
 
 		await waitFor(
 			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
@@ -427,7 +426,7 @@ describe("App", () => {
 		jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
 		jest.spyOn(utils, "shouldUseDarkColors").mockReturnValue(shouldUseDarkColors);
 
-		const { getByText } = renderWithRouter(<App />, { withProviders: false });
+		const { getByText } = render(<App />, { withProviders: false });
 
 		await waitFor(
 			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),

@@ -7,7 +7,7 @@ import {
 	fireEvent,
 	getDefaultPassword,
 	getPasswordProtectedProfileId,
-	renderWithRouter,
+	render,
 	waitFor,
 } from "utils/testing-library";
 
@@ -31,7 +31,7 @@ describe("SignIn", () => {
 	});
 
 	it("should not render if not open", () => {
-		const { asFragment, getByTestId } = renderWithRouter(<SignIn profile={profile} isOpen={false} />);
+		const { asFragment, getByTestId } = render(<SignIn profile={profile} isOpen={false} />);
 
 		expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/);
 		expect(asFragment()).toMatchSnapshot();
@@ -41,7 +41,7 @@ describe("SignIn", () => {
 		let renderContext: any;
 
 		await act(async () => {
-			renderContext = renderWithRouter(<SignIn isOpen={true} profile={profile} />);
+			renderContext = render(<SignIn isOpen={true} profile={profile} />);
 		});
 
 		const { asFragment, getByTestId } = renderContext;
@@ -54,7 +54,7 @@ describe("SignIn", () => {
 	it("should cancel sign in", async () => {
 		const onCancel = jest.fn();
 
-		const { getByTestId } = renderWithRouter(<SignIn isOpen={true} profile={profile} onCancel={onCancel} />);
+		const { getByTestId } = render(<SignIn isOpen={true} profile={profile} onCancel={onCancel} />);
 
 		act(() => {
 			fireEvent.click(getByTestId("SignIn__cancel-button"));
@@ -68,9 +68,7 @@ describe("SignIn", () => {
 	it("should call onSuccess callback", async () => {
 		const onSuccess = jest.fn();
 
-		const { findByTestId, getByTestId } = renderWithRouter(
-			<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />,
-		);
+		const { findByTestId, getByTestId } = render(<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />);
 
 		await act(async () => {
 			fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: getDefaultPassword() } });
@@ -91,9 +89,7 @@ describe("SignIn", () => {
 	it("should set an error if the password is invalid", async () => {
 		const onSuccess = jest.fn();
 
-		const { findByTestId, getByTestId } = renderWithRouter(
-			<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />,
-		);
+		const { findByTestId, getByTestId } = render(<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />);
 
 		await act(async () => {
 			fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: "wrong password" } });
@@ -119,7 +115,7 @@ describe("SignIn", () => {
 		let renderContext: any;
 
 		await act(async () => {
-			renderContext = renderWithRouter(<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />);
+			renderContext = render(<SignIn isOpen={true} profile={profile} onSuccess={onSuccess} />);
 		});
 
 		const { findByTestId, getByTestId } = renderContext;
