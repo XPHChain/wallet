@@ -1,5 +1,5 @@
 // @ts-ignore
-import { createTransportReplayer, RecordStore } from "@ledgerhq/hw-transport-mocker";
+import { TransportReplayer } from "@ledgerhq/hw-transport-mocker/lib/openTransportReplayer";
 import { Contracts, Environment } from "@payvo/profiles";
 import { ARK } from "@payvo/sdk-ark";
 import { render, RenderResult } from "@testing-library/react";
@@ -127,7 +127,8 @@ export const getDefaultProfileId = () => Object.keys(fixtureData.profiles)[0];
 export const getPasswordProtectedProfileId = () => Object.keys(fixtureData.profiles)[1];
 export const getDefaultWalletId = () => Object.keys(Object.values(fixtureData.profiles)[0].wallets)[0];
 export const getDefaultWalletMnemonic = () => "master dizzy era math peanut crew run manage better flame tree prevent";
-export const getDefaultLedgerTransport = () => createTransportReplayer(RecordStore.fromString(""));
+export const getDefaultLedgerTransport = () => TransportReplayer;
+
 
 //@ts-ignore
 export const getDefaultPassword = () => TestingPasswords?.profiles[getPasswordProtectedProfileId()]?.password;

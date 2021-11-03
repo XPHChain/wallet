@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
-import Transport, { Observer } from "@ledgerhq/hw-transport";
-import { createTransportReplayer, RecordStore } from "@ledgerhq/hw-transport-mocker";
+import { Observer } from "@ledgerhq/hw-transport";
 import { Contracts } from "@payvo/profiles";
 import { LedgerProvider } from "app/contexts/Ledger/Ledger";
 import { toasts } from "app/services";
@@ -9,7 +8,7 @@ import { translations as walletTranslations } from "domains/wallet/i18n";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Route } from "react-router-dom";
-import { act, env, fireEvent, getDefaultProfileId, MNEMONICS, render, screen, waitFor } from "utils/testing-library";
+import { act, env, fireEvent, getDefaultLedgerTransport, getDefaultProfileId, MNEMONICS, render, screen, waitFor } from "utils/testing-library";
 
 import { SignedStep } from "./SignedStep";
 import { SignMessage } from "./SignMessage";
@@ -21,9 +20,8 @@ let profile: Contracts.IProfile;
 let wallet: Contracts.IReadWriteWallet;
 let secondWallet: Contracts.IReadWriteWallet;
 
+const transport = getDefaultLedgerTransport();
 const mnemonic = MNEMONICS[0];
-
-let transport: typeof Transport;
 
 describe("SignMessage", () => {
 	beforeAll(async () => {
@@ -49,8 +47,6 @@ describe("SignMessage", () => {
 
 	beforeEach(() => {
 		jest.useFakeTimers();
-
-		transport = createTransportReplayer(RecordStore.fromString(""));
 	});
 
 	afterEach(() => {

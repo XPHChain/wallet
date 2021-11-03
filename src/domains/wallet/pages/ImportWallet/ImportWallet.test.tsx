@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/require-await */
-import Transport from "@ledgerhq/hw-transport";
-import { createTransportReplayer, RecordStore } from "@ledgerhq/hw-transport-mocker";
 import { Contracts, Wallet } from "@payvo/profiles";
 import { act, renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
@@ -21,7 +19,7 @@ import { assertNetwork } from "utils/assertions";
 import {
 	act as utilsAct,
 	env,
-	fireEvent,
+	fireEvent, getDefaultLedgerTransport,
 	getDefaultProfileId,
 	MNEMONICS,
 	render,
@@ -1085,8 +1083,7 @@ describe("ImportWallet", () => {
 	});
 
 	it("should render as ledger import", async () => {
-		const transport: typeof Transport = createTransportReplayer(RecordStore.fromString(""));
-		jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe: jest.fn() }));
+		const transport = getDefaultLedgerTransport();
 
 		const history = createMemoryHistory();
 

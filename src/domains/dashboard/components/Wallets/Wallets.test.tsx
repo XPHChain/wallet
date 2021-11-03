@@ -1,5 +1,3 @@
-import Transport from "@ledgerhq/hw-transport";
-import { createTransportReplayer, RecordStore } from "@ledgerhq/hw-transport-mocker";
 import { Contracts } from "@payvo/profiles";
 import { LSK } from "@payvo/sdk-lsk";
 import { LedgerProvider } from "app/contexts/Ledger/Ledger";
@@ -14,7 +12,7 @@ import { Route } from "react-router-dom";
 import {
 	act,
 	env,
-	fireEvent,
+	fireEvent, getDefaultLedgerTransport,
 	getDefaultProfileId,
 	render,
 	screen,
@@ -31,8 +29,6 @@ const dashboardURL = `/profiles/${getDefaultProfileId()}/dashboard`;
 let profile: Contracts.IProfile;
 let emptyProfile: Contracts.IProfile;
 let wallets: Contracts.IReadWriteWallet[];
-
-const transport: typeof Transport = createTransportReplayer(RecordStore.fromString(""));
 
 describe("Wallets", () => {
 	beforeAll(async () => {
@@ -306,6 +302,7 @@ describe("Wallets", () => {
 	});
 
 	it("should open and close ledger import modal", async () => {
+		const transport = getDefaultLedgerTransport();
 		const unsubscribe = jest.fn();
 		const listenSpy = jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe }));
 
