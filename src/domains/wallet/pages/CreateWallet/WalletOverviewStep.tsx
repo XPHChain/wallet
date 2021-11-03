@@ -52,7 +52,7 @@ export const WalletOverviewStep = () => {
 		}
 	};
 
-	const handleEncryptionToggle = (event: React.ChangeEvent<HTMLInputElement>) => {
+	const handleToggleEncryption = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setValue("useEncryption", event.target.checked);
 	};
 
@@ -109,7 +109,7 @@ export const WalletOverviewStep = () => {
 							<Toggle
 								data-testid="CreateWallet__encryption-toggle"
 								defaultChecked={getValues("useEncryption")}
-								onChange={handleEncryptionToggle}
+								onChange={handleToggleEncryption}
 							/>
 						</span>
 					</div>
