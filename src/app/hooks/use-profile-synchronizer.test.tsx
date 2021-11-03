@@ -598,6 +598,7 @@ describe("useProfileRestore", () => {
 		jest.useFakeTimers();
 		process.env.TEST_PROFILES_RESTORE_STATUS = undefined;
 		process.env.REACT_APP_IS_E2E = undefined;
+
 		const profile = env.profiles().findById(getDefaultProfileId());
 		profile.status().reset();
 
@@ -620,7 +621,7 @@ describe("useProfileRestore", () => {
 
 		const historyMock = jest.spyOn(history, "push").mockReturnValue();
 
-		await findByTestId("ProfileRestored");
+		await findByTestId("ProfileRestored", undefined, { timeout: 4000 });
 
 		await waitFor(() => expect(historyMock).toHaveBeenCalled(), { timeout: 4000 });
 

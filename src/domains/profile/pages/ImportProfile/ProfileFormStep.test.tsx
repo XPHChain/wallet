@@ -268,7 +268,7 @@ describe("Import Profile - Profile Form Step", () => {
 			fireEvent.input(getAllByTestId("Input")[0], { target: { value: "t" } });
 		});
 
-		act(() => getAllByTestId("InputPassword")[0].focus());
+		fireEvent.blur(getAllByTestId("Input")[0]);
 
 		expect(getByTestId("SelectProfileImage__avatar-identicon")).toBeInTheDocument();
 

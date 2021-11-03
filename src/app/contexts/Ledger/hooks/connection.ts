@@ -98,7 +98,6 @@ export const useLedgerConnection = (transport: typeof LedgerTransportNodeHID) =>
 				const slip44 = instance.config().get<number>("network.constants.slip44");
 
 				const connectFunction: retry.RetryFunction<void> = async (bail, attempts) => {
-					console.log("connectFunction", abortRetryReference.current, attempts);
 					if (abortRetryReference.current && attempts > 1) {
 						bail(new Error(t("WALLETS.MODAL_LEDGER_WALLET.GENERIC_CONNECTION_ERROR")));
 					}

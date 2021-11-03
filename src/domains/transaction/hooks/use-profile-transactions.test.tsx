@@ -41,11 +41,13 @@ describe("useProfileTransactions", () => {
 			</EnvironmentProvider>
 		);
 
+		const all = await profile.transactionAggregate().all({});
+		const items = all.items();
+
 		const mockDefaultTransactions = jest.spyOn(profile.transactionAggregate(), "all").mockImplementation(() => {
-			const { data } = require("tests/fixtures/coins/ark/devnet/transactions.json");
 			const response = {
 				hasMorePages: () => false,
-				items: () => data,
+				items: () => items,
 			};
 			return Promise.resolve(response);
 		});
@@ -59,11 +61,10 @@ describe("useProfileTransactions", () => {
 			);
 
 			jest.advanceTimersByTime(30_000);
-			await waitFor(() => expect(result.current.transactions).toHaveLength(15));
+			await waitFor(() => expect(result.current.transactions).toHaveLength(30));
 		});
 
-		const sent = await profile.transactionAggregate().all({ limit: 1 });
-		const items = sent.items();
+		mockDefaultTransactions.mockRestore();
 
 		const mockTransactionsAggregate = jest.spyOn(profile.transactionAggregate(), "all").mockImplementation(() => {
 			const response = {
@@ -110,6 +111,7 @@ describe("useProfileTransactions", () => {
 		});
 
 		mockEmptyTransactions.mockRestore();
+		jest.clearAllTimers();
 	});
 
 	it("#fetchTransactions", async () => {

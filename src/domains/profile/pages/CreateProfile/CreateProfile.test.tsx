@@ -232,7 +232,7 @@ describe("CreateProfile", () => {
 		fireEvent.input(screen.getAllByTestId("Input")[0], { target: { value: "t" } });
 		await waitFor(() => expect(screen.getAllByTestId("Input")[0]).toHaveValue("t"));
 
-		act(() => screen.getAllByTestId("InputPassword")[0].focus());
+		fireEvent.blur(screen.getAllByTestId("Input")[0]);
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-identicon")).toBeInTheDocument();
 
@@ -241,7 +241,7 @@ describe("CreateProfile", () => {
 		fireEvent.input(screen.getAllByTestId("Input")[0], { target: { value: "test profile" } });
 		await waitFor(() => expect(screen.getAllByTestId("Input")[0]).toHaveValue("test profile"));
 
-		act(() => screen.getAllByTestId("InputPassword")[0].focus());
+		fireEvent.blur(screen.getAllByTestId("Input")[0]);
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-identicon")).toBeInTheDocument();
 
@@ -252,7 +252,7 @@ describe("CreateProfile", () => {
 		fireEvent.input(screen.getAllByTestId("Input")[0], { target: { value: "" } });
 		await waitFor(() => expect(screen.getAllByTestId("Input")[0]).toHaveValue(""));
 
-		act(() => screen.getAllByTestId("InputPassword")[0].focus());
+		fireEvent.blur(screen.getAllByTestId("Input")[0]);
 
 		expect(() => screen.getByTestId("SelectProfileImage__avatar-identicon")).toThrow(
 			/^Unable to find an element by/,
@@ -332,10 +332,6 @@ describe("CreateProfile", () => {
 		fireEvent.input(screen.getAllByTestId("Input")[0], { target: { value: "test profile 5" } });
 
 		await waitFor(() => expect(screen.getByTestId("CreateProfile__submit-button")).toBeEnabled());
-
-		fireEvent.click(screen.getByTestId("CreateProfile__submit-button"));
-
-		fireEvent.click(screen.getByTestId("CreateProfile__submit-button"));
 
 		fireEvent.click(screen.getByTestId("CreateProfile__submit-button"));
 
