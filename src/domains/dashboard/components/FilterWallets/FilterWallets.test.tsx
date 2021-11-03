@@ -1,12 +1,19 @@
 import { Contracts } from "@payvo/profiles";
-import { act } from "@testing-library/react-hooks";
+import { FilterOption } from "app/components/FilterNetwork";
 import React from "react";
-import { env, fireEvent, getDefaultProfileId, render } from "testing-library";
+import { env, fireEvent, getDefaultProfileId, render } from "utils/testing-library";
 
+import { DashboardConfiguration } from "../../pages";
 import { FilterWallets } from "./FilterWallets";
 
 let profile: Contracts.IProfile;
 let networkOptions: FilterOption[];
+
+const defaultConfiguration: DashboardConfiguration = {
+	selectedNetworkIds: [],
+	viewType: "grid",
+	walletsDisplayType: "all",
+};
 
 describe("FilterWallets", () => {
 	beforeAll(() => {
@@ -29,13 +36,15 @@ describe("FilterWallets", () => {
 	});
 
 	it("should render", () => {
-		const { container } = render(<FilterWallets />);
+		const { container } = render(<FilterWallets defaultConfiguration={defaultConfiguration} />);
 
 		expect(container).toMatchSnapshot();
 	});
 
 	it("should render with networks selection", () => {
-		const { container } = render(<FilterWallets networks={networkOptions} useTestNetworks />);
+		const { container } = render(
+			<FilterWallets networks={networkOptions} useTestNetworks defaultConfiguration={defaultConfiguration} />,
+		);
 
 		expect(container).toMatchSnapshot();
 	});
@@ -43,11 +52,16 @@ describe("FilterWallets", () => {
 	it("should emit onChange for network selection", () => {
 		const onChange = jest.fn();
 
-		const { getByTestId } = render(<FilterWallets networks={networkOptions} onChange={onChange} useTestNetworks />);
+		const { getByTestId } = render(
+			<FilterWallets
+				networks={networkOptions}
+				onChange={onChange}
+				useTestNetworks
+				defaultConfiguration={defaultConfiguration}
+			/>,
+		);
 
-		act(() => {
-			fireEvent.click(getByTestId(`NetworkOption__${networkOptions[0].network.id()}`));
-		});
+		fireEvent.click(getByTestId(`NetworkOption__${networkOptions[0].network.id()}`));
 
 		expect(onChange).toBeCalledWith("selectedNetworkIds", [networkOptions[0].network.id()]);
 	});
@@ -55,15 +69,13 @@ describe("FilterWallets", () => {
 	it("should emit onChange for wallets display type change", () => {
 		const onChange = jest.fn();
 
-		const { getByTestId } = render(<FilterWallets networks={networkOptions} onChange={onChange} />);
+		const { getByTestId } = render(
+			<FilterWallets networks={networkOptions} onChange={onChange} defaultConfiguration={defaultConfiguration} />,
+		);
 
-		act(() => {
-			fireEvent.click(getByTestId("filter-wallets__wallets"));
-		});
+		fireEvent.click(getByTestId("filter-wallets__wallets"));
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--0"));
 
 		expect(onChange).toBeCalled();
 	});
@@ -71,15 +83,13 @@ describe("FilterWallets", () => {
 	it("should not emit onChange for wallet display type change", () => {
 		const onChange = jest.fn();
 
-		const { getByTestId } = render(<FilterWallets networks={networkOptions} />);
+		const { getByTestId } = render(
+			<FilterWallets networks={networkOptions} defaultConfiguration={defaultConfiguration} />,
+		);
 
-		act(() => {
-			fireEvent.click(getByTestId("filter-wallets__wallets"));
-		});
+		fireEvent.click(getByTestId("filter-wallets__wallets"));
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--0"));
 
 		expect(onChange).not.toBeCalled();
 	});
