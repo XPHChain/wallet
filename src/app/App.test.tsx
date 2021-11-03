@@ -17,7 +17,6 @@ import {
 	getPasswordProtectedProfileId,
 	MNEMONICS,
 	render,
-	RenderResult,
 	useDefaultNetMocks,
 	waitFor,
 } from "utils/testing-library";
@@ -129,26 +128,26 @@ describe("App", () => {
 			throw new Error("sync test");
 		});
 
-		await act(async () => {
-			fireEvent.click(getAllByTestId("Card")[0]);
+		fireEvent.click(getAllByTestId("Card")[0]);
+
+		const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
+		await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
+
+		act(() => {
+			jest.runAllTimers();
 		});
 
-		await act(async () => {
-			const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
-			await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
+		await findByTestId("SyncErrorMessage__retry");
 
+		profileSyncMock.mockRestore();
+		fireEvent.click(getByTestId("SyncErrorMessage__retry"));
+
+		act(() => {
 			jest.runAllTimers();
-
-			await findByTestId("SyncErrorMessage__retry");
-
-			profileSyncMock.mockRestore();
-			fireEvent.click(getByTestId("SyncErrorMessage__retry"));
-
-			jest.runAllTimers();
-
-			await waitFor(() => expect(() => getByTestId("SyncErrorMessage__retry")).toThrow());
-			await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
 		});
+
+		await waitFor(() => expect(() => getByTestId("SyncErrorMessage__retry")).toThrow());
+		await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
 
 		walletRestoreErrorMock.mockRestore();
 		walletSyncErrorMock.mockRestore();
@@ -170,19 +169,15 @@ describe("App", () => {
 	it("should render welcome screen after splash screen", async () => {
 		process.env.REACT_APP_IS_E2E = "1";
 
-		const { container, asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
+		const { asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-		});
 		await waitFor(() => {
 			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-
-			expect(container).toBeInTheDocument();
-			expect(asFragment()).toMatchSnapshot();
 		});
+
+		expect(asFragment()).toMatchSnapshot();
 	});
 
 	it("should render the offline screen if there is no internet connection", async () => {
@@ -190,22 +185,16 @@ describe("App", () => {
 
 		jest.spyOn(window.navigator, "onLine", "get").mockReturnValueOnce(false);
 
-		const { container, asFragment, getByTestId } = render(<App />, { withProviders: false });
+		const { asFragment, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-		});
-
 		await waitFor(() => {
-			expect(container).toBeInTheDocument();
-
 			expect(getByTestId("Offline__text")).toHaveTextContent(errorTranslations.OFFLINE.TITLE);
-			expect(getByTestId("Offline__text")).toHaveTextContent(errorTranslations.OFFLINE.DESCRIPTION);
-
-			expect(asFragment()).toMatchSnapshot();
 		});
+
+		expect(getByTestId("Offline__text")).toHaveTextContent(errorTranslations.OFFLINE.DESCRIPTION);
+		expect(asFragment()).toMatchSnapshot();
 	});
 
 	it("should render application error if the app fails to boot", async () => {
@@ -217,24 +206,16 @@ describe("App", () => {
 
 		process.env.REACT_APP_IS_UNIT = "1";
 
-		let rendered: RenderResult;
+		const { asFragment, getByTestId } = render(<App />, { withProviders: false });
 
-		await act(async () => {
-			rendered = render(<App />, { withProviders: false });
-		});
-
-		expect(environmentSpy).toHaveBeenCalled();
-
-		const { container, asFragment, getByTestId } = rendered;
+		await waitFor(() => expect(environmentSpy).toHaveBeenCalled());
 
 		await waitFor(() => {
-			expect(container).toBeInTheDocument();
-
 			expect(getByTestId("ApplicationError__text")).toHaveTextContent(errorTranslations.APPLICATION.TITLE);
-			expect(getByTestId("ApplicationError__text")).toHaveTextContent(errorTranslations.APPLICATION.DESCRIPTION);
-
-			expect(asFragment()).toMatchSnapshot();
 		});
+
+		expect(getByTestId("ApplicationError__text")).toHaveTextContent(errorTranslations.APPLICATION.DESCRIPTION);
+		expect(asFragment()).toMatchSnapshot();
 
 		consoleSpy.mockRestore();
 		environmentSpy.mockRestore();
@@ -243,20 +224,13 @@ describe("App", () => {
 	it("should render mock", async () => {
 		process.env.REACT_APP_IS_E2E = "1";
 
-		const { container, asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
+		const { asFragment, getByText, getByTestId } = render(<App />, { withProviders: false });
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
+		await waitFor(() => {
+			expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
 		});
-
-		await waitFor(
-			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
-			{ timeout: 2000 },
-		);
-
-		expect(container).toBeInTheDocument();
 
 		expect(getByText("John Doe")).toBeInTheDocument();
 		expect(getByText("Jane Doe")).toBeInTheDocument();
@@ -271,14 +245,11 @@ describe("App", () => {
 
 		expect(getByTestId("Splash__text")).toBeInTheDocument();
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-		});
-
 		await waitFor(() => {
 			expect(getByText(profileTranslations.PAGE_WELCOME.WITHOUT_PROFILES.TITLE)).toBeInTheDocument();
-			expect(asFragment()).toMatchSnapshot();
 		});
+
+		expect(asFragment()).toMatchSnapshot();
 	});
 
 	it("should redirect to root if profile restoration error occurs", async () => {
@@ -293,17 +264,13 @@ describe("App", () => {
 
 		expect(history.location.pathname).toMatch("/");
 
-		await act(async () => {
-			fireEvent.click(getAllByTestId("Card")[1]);
-		});
+		fireEvent.click(getAllByTestId("Card")[1]);
 
 		await waitFor(() => {
 			expect(getByTestId("SignIn__input--password")).toBeInTheDocument();
 		});
 
-		await act(async () => {
-			fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: "password" } });
-		});
+		fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: "password" } });
 
 		await waitFor(() => {
 			expect(getByTestId("SignIn__input--password")).toHaveValue("password");
@@ -314,19 +281,21 @@ describe("App", () => {
 			throw new Error("password not found");
 		});
 
-		await act(async () => {
-			fireEvent.click(getByTestId("SignIn__submit-button"));
-		});
+		const profilePasswordSetMock = jest.spyOn(env.profiles().last().password(), "set").mockImplementation();
 
+		fireEvent.click(getByTestId("SignIn__submit-button"));
+
+		await waitFor(() => expect(profilePasswordSetMock).toHaveBeenCalled());
 		await waitFor(() => expect(memoryPasswordMock).toHaveBeenCalled());
 		await waitFor(() => expect(history.location.pathname).toMatch("/"), { timeout: 4000 });
 
 		memoryPasswordMock.mockRestore();
 		verifyPasswordMock.mockRestore();
+		profilePasswordSetMock.mockRestore();
 		jest.restoreAllMocks();
 	});
 
-	it("should enter profile and show toast message for successfull sync", async () => {
+	it("should enter profile and show toast message for successful sync", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 		const successToast = jest.spyOn(toasts, "success").mockImplementation();
 		const warningToast = jest.spyOn(toasts, "warning").mockImplementation();
@@ -364,9 +333,7 @@ describe("App", () => {
 
 		env.profiles().persist(profile);
 
-		await act(async () => {
-			fireEvent.click(getAllByTestId("Card")[0]);
-		});
+		fireEvent.click(getAllByTestId("Card")[0]);
 
 		const profileDashboardUrl = `/profiles/${profile.id()}/dashboard`;
 
@@ -394,17 +361,13 @@ describe("App", () => {
 
 		expect(history.location.pathname).toMatch("/");
 
-		await act(async () => {
-			fireEvent.click(getAllByTestId("Card")[1]);
-		});
+		fireEvent.click(getAllByTestId("Card")[1]);
 
 		await waitFor(() => {
 			expect(getByTestId("SignIn__input--password")).toBeInTheDocument();
 		});
 
-		await act(async () => {
-			fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: "password" } });
-		});
+		fireEvent.input(getByTestId("SignIn__input--password"), { target: { value: "password" } });
 
 		await waitFor(() => {
 			expect(getByTestId("SignIn__input--password")).toHaveValue("password");
@@ -412,21 +375,21 @@ describe("App", () => {
 
 		jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
 
-		await act(async () => {
-			fireEvent.click(getByTestId("SignIn__submit-button"));
-		});
+		fireEvent.click(getByTestId("SignIn__submit-button"));
 
 		const profileDashboardUrl = `/profiles/${passwordProtectedProfile.id()}/dashboard`;
 		await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
 	});
 
-	it.each([false, true])("should set the theme based on system preferences", async (shouldUseDarkColors) => {
-		process.env.REACT_APP_IS_UNIT = "1";
+	it.each([false, true])(
+		"should set the theme based on system preferences (dark = %s)",
+		async (shouldUseDarkColors) => {
+			process.env.REACT_APP_IS_UNIT = "1";
 
-		jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
-		jest.spyOn(utils, "shouldUseDarkColors").mockReturnValue(shouldUseDarkColors);
+			const toastSpy = jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
+			const utilsSpy = jest.spyOn(utils, "shouldUseDarkColors").mockReturnValue(shouldUseDarkColors);
 
-		const { getByText } = render(<App />, { withProviders: false });
+			const { getByText } = render(<App />, { withProviders: false });
 
 		await waitFor(
 			() => expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument(),
