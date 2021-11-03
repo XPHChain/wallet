@@ -99,7 +99,7 @@ describe("CreateWallet", () => {
 
 		fireEvent.click(continueButton);
 
-		await waitFor(() => expect(profile.wallets().values().length).toBe(0));
+		await waitFor(() => expect(profile.wallets().values()).toHaveLength(0));
 
 		await screen.findByTestId("CreateWallet__WalletOverviewStep");
 
@@ -130,13 +130,13 @@ describe("CreateWallet", () => {
 		}
 		await waitFor(() => expect(continueButton).toBeEnabled());
 
-		expect(profile.wallets().values().length).toBe(0);
+		expect(profile.wallets().values()).toHaveLength(0);
 
 		fireEvent.click(continueButton);
 
 		await screen.findByTestId("CreateWallet__SuccessStep");
 
-		expect(profile.wallets().values().length).toBe(1);
+		expect(profile.wallets().values()).toHaveLength(1);
 
 		fireEvent.click(screen.getByTestId("CreateWallet__edit-alias"));
 
@@ -215,7 +215,7 @@ describe("CreateWallet", () => {
 
 		fireEvent.click(continueButton);
 
-		await waitFor(() => expect(profile.wallets().values().length).toBe(0));
+		await waitFor(() => expect(profile.wallets().values()).toHaveLength(0));
 
 		await screen.findByTestId("CreateWallet__WalletOverviewStep");
 
@@ -227,11 +227,11 @@ describe("CreateWallet", () => {
 
 		const steps = within(screen.getByTestId("Form")).getAllByRole("list")[0];
 
-		expect(within(steps).getAllByRole("listitem").length).toBe(4);
+		expect(within(steps).getAllByRole("listitem")).toHaveLength(4);
 
 		fireEvent.click(screen.getByTestId("CreateWallet__encryption-toggle"));
 
-		expect(within(steps).getAllByRole("listitem").length).toBe(5);
+		expect(within(steps).getAllByRole("listitem")).toHaveLength(5);
 
 		fireEvent.click(continueButton);
 		await screen.findByTestId("CreateWallet__ConfirmPassphraseStep");
@@ -280,7 +280,7 @@ describe("CreateWallet", () => {
 
 		await screen.findByTestId("CreateWallet__SuccessStep");
 
-		expect(profile.wallets().values().length).toBe(1);
+		expect(profile.wallets().values()).toHaveLength(1);
 
 		fireEvent.click(screen.getByTestId("CreateWallet__finish-button"));
 
@@ -314,7 +314,7 @@ describe("CreateWallet", () => {
 		await screen.findByTestId("NetworkStep");
 
 		history.push("/");
-		await waitFor(() => expect(profile.wallets().values().length).toBe(0));
+		await waitFor(() => expect(profile.wallets().values()).toHaveLength(0));
 
 		expect(asFragment()).toMatchSnapshot();
 	});
@@ -359,7 +359,7 @@ describe("CreateWallet", () => {
 
 		history.push("/");
 
-		await waitFor(() => expect(profile.wallets().values().length).toBe(0));
+		await waitFor(() => expect(profile.wallets().values()).toHaveLength(0));
 
 		expect(asFragment()).toMatchSnapshot();
 	});
