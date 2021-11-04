@@ -8,13 +8,13 @@ describe("useScroll", () => {
 	beforeEach(() => {
 		eventMap = {};
 
-		window.addEventListener = jest.fn((eventName, callback) => {
+		jest.spyOn(window, "addEventListener").mockImplementation((eventName, callback) => {
 			eventMap[eventName] = callback;
 		});
 	});
 
 	afterEach(() => {
-		window.removeEventListener = jest.fn((eventName) => {
+		jest.spyOn(window, "removeEventListener").mockImplementation((eventName) => {
 			delete eventMap[eventName];
 		});
 	});
@@ -26,6 +26,6 @@ describe("useScroll", () => {
 			eventMap.scroll();
 		});
 
-		expect(result.current.valueOf()).toEqual(0);
+		expect(result.current.valueOf()).toBe(0);
 	});
 });

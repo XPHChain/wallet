@@ -73,7 +73,7 @@ describe("Dropdown", () => {
 
 		fireEvent.click(firstOption);
 
-		expect(onSelect).toBeCalledWith({ label: "Option 1", value: "1" });
+		expect(onSelect).toHaveBeenCalledWith({ label: "Option 1", value: "1" });
 	});
 
 	it("should select option with enter key", () => {
@@ -91,7 +91,7 @@ describe("Dropdown", () => {
 
 		fireEvent.keyDown(firstOption, { code: 13, key: "Enter" });
 
-		expect(onSelect).toBeCalledWith({ label: "Option 1", value: "1" });
+		expect(onSelect).toHaveBeenCalledWith({ label: "Option 1", value: "1" });
 	});
 
 	it("should select option with space key", () => {
@@ -109,11 +109,11 @@ describe("Dropdown", () => {
 
 		fireEvent.keyDown(firstOption, { key: " ", keyCode: 32 });
 
-		expect(onSelect).toBeCalledWith({ label: "Option 1", value: "1" });
+		expect(onSelect).toHaveBeenCalledWith({ label: "Option 1", value: "1" });
 	});
 
 	it("should ignore triggering onSelect callback if not exists", () => {
-		const { getByTestId, container } = render(<Dropdown options={options} />);
+		const { getByTestId } = render(<Dropdown options={options} />);
 		const toggle = getByTestId("dropdown__toggle");
 
 		fireEvent.click(toggle);
@@ -126,12 +126,12 @@ describe("Dropdown", () => {
 
 		fireEvent.click(firstOption);
 
-		expect(container.querySelectorAll("ul").length).toEqual(0);
+		expect(screen.queryAllByRole("listbox")).toHaveLength(0);
 	});
 
 	it("should close dropdown content when click outside", () => {
 		const onSelect = () => ({});
-		const { getByTestId, container } = render(
+		const { getByTestId } = render(
 			<div>
 				<div data-testid="dropdown__outside" className="mt-16">
 					outside elememt to be clicked
@@ -157,11 +157,11 @@ describe("Dropdown", () => {
 
 		fireEvent.mouseDown(outsideElement);
 
-		expect(container.querySelectorAll("ul").length).toEqual(0);
+		expect(screen.queryAllByRole("listbox")).toHaveLength(0);
 	});
 
 	it("should close dropdown with escape key", () => {
-		const { getByTestId, container } = render(<Dropdown options={options} />);
+		const { getByTestId } = render(<Dropdown options={options} />);
 		const toggle = getByTestId("dropdown__toggle");
 
 		fireEvent.click(toggle);
@@ -170,7 +170,7 @@ describe("Dropdown", () => {
 
 		fireEvent.keyDown(toggle, { key: "Escape", keyCode: 27 });
 
-		expect(container.querySelectorAll("ul").length).toEqual(0);
+		expect(screen.queryAllByRole("listbox")).toHaveLength(0);
 	});
 
 	it("should render with custom toggle content as react element", () => {
@@ -337,7 +337,7 @@ describe("Dropdown ClickOutside Hook", () => {
 
 		fireEvent.mouseDown(element);
 
-		expect(callback).not.toBeCalled();
+		expect(callback).not.toHaveBeenCalled();
 	});
 
 	it("should call callback if clicked outside target element", () => {
@@ -349,7 +349,7 @@ describe("Dropdown ClickOutside Hook", () => {
 
 		fireEvent.mouseDown(document);
 
-		expect(callback).toBeCalled();
+		expect(callback).toHaveBeenCalled();
 	});
 
 	it("should do nothing if callback is not provided", () => {
@@ -454,7 +454,7 @@ describe("Dropdown positioning", () => {
 
 		fireEvent.click(toggle);
 
-		expect(getBoundingClientRectSpy).toBeCalledTimes(0);
+		expect(getBoundingClientRectSpy).toHaveBeenCalledTimes(0);
 
 		getBoundingClientRectSpy.mockRestore();
 		documentClientHeightSpy.mockRestore();
