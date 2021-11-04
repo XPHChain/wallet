@@ -391,7 +391,7 @@ describe("SignMessage", () => {
 		fireEvent.click(screen.getByTestId("SignMessage__submit-button"));
 
 		act(() => {
-			observer.next({ descriptor: "", type: "add", deviceModel: { id: "nanoX" } });
+			observer.next({ descriptor: "", deviceModel: { id: "nanoX" }, type: "add" });
 		});
 
 		await waitFor(() => expect(getPublicKeyMock).toHaveBeenCalled());
@@ -443,7 +443,7 @@ describe("SignMessage", () => {
 		await waitFor(() => expect(screen.getByTestId("SignMessage__submit-button")).toBeEnabled());
 
 		act(() => {
-			observer.next({ descriptor: "", type: "add", deviceModel: { id: "nanoX" } });
+			observer.next({ descriptor: "", deviceModel: { id: "nanoX" }, type: "add" });
 		});
 
 		fireEvent.click(screen.getByTestId("SignMessage__submit-button"));

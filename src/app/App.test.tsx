@@ -289,8 +289,8 @@ describe("App", () => {
 		const toastDismiss = jest.spyOn(toasts, "dismiss").mockImplementation();
 
 		const { getAllByTestId, findByText, history } = render(<App />, {
-			withProviders: true,
 			withPluginProvider: false,
+			withProviders: true,
 		});
 
 		await findByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE, undefined, { timeout: 2000 });

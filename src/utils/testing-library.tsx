@@ -144,13 +144,13 @@ export const ledgerObserverSpy = () => {
 
 	return {
 		mockTransportListen,
-		unsubscribe,
 		observer: {
-			error: (e: any) => observer.error(e),
 			complete: () => observer.complete(),
+			error: (e: any) => observer.error(e),
 			next: (property: { descriptor: string; deviceModel: { id: string }; type: string }) =>
 				observer.error(property),
 		},
+		unsubscribe,
 	};
 };
 

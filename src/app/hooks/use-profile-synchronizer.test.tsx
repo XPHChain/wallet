@@ -16,7 +16,6 @@ import {
 	pluginManager,
 	render,
 	screen,
-	syncDelegates,
 	waitFor,
 } from "utils/testing-library";
 
