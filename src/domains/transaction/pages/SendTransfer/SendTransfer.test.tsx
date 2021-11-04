@@ -1594,21 +1594,19 @@ describe("SendTransfer", () => {
 	});
 
 	it("should send a single transfer with a ledger wallet", async () => {
-		const isLedgerSpy = jest.spyOn(wallet, "isLedger").mockImplementation(() => true);
+		jest.spyOn(wallet, "isLedger").mockImplementation(() => true);
 		jest.spyOn(wallet.coin(), "__construct").mockImplementation();
-		const isNanoXMock = jest.spyOn(wallet.ledger(), "isNanoX").mockResolvedValue(true);
+		jest.spyOn(wallet.ledger(), "isNanoX").mockResolvedValue(true);
 
-		const getPublicKeySpy = jest
-			.spyOn(wallet.coin().ledger(), "getPublicKey")
-			.mockResolvedValue("0335a27397927bfa1704116814474d39c2b933aabb990e7226389f022886e48deb");
+		jest.spyOn(wallet.coin().ledger(), "getPublicKey").mockResolvedValue(
+			"0335a27397927bfa1704116814474d39c2b933aabb990e7226389f022886e48deb",
+		);
 
-		const signTransactionSpy = jest
-			.spyOn(wallet.transaction(), "signTransfer")
-			.mockReturnValue(Promise.resolve(transactionFixture.data.id));
+		jest.spyOn(wallet.transaction(), "signTransfer").mockReturnValue(Promise.resolve(transactionFixture.data.id));
 
-		const transactionMock = createTransactionMock(wallet);
+		createTransactionMock(wallet);
 
-		const broadcastMock = jest.spyOn(wallet.transaction(), "broadcast").mockResolvedValue({
+		jest.spyOn(wallet.transaction(), "broadcast").mockResolvedValue({
 			accepted: [transactionFixture.data.id],
 			errors: {},
 			rejected: [],
@@ -1666,7 +1664,7 @@ describe("SendTransfer", () => {
 		const balance = wallet.balance();
 		const derivationPath = "m/44'/1'/1'/0/0";
 
-		const mockWalletData = jest.spyOn(wallet.data(), "get").mockImplementation((key) => {
+		jest.spyOn(wallet.data(), "get").mockImplementation((key) => {
 			if (key == Contracts.WalletData.Address) {
 				return address;
 			}
