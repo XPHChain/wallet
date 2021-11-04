@@ -15,6 +15,7 @@ import React, { FC, useCallback, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { NavLink, useHistory } from "react-router-dom";
 import tw, { css, styled } from "twin.macro";
+import { assertProfile, assertString } from "utils/assertions";
 import { openExternal } from "utils/electron-utils";
 
 import { DropdownOption } from "../Dropdown";
@@ -73,9 +74,10 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 	const navigationMenu = useMemo<NavigationBarMenuItem[]>(() => getNavigationMenu(t), [t]);
 
 	const renderMenu = () => {
-		if (!profile?.id()) {
-			return null;
+		if (!profile) {
+			return undefined;
 		}
+
 		return navigationMenu.map((menuItem, index) => (
 			<li key={index} className="flex">
 				<NavLink
@@ -89,9 +91,16 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 			</li>
 		));
 	};
+
 	const userInitials = useMemo(() => {
-		const name = profile?.settings().get(Contracts.ProfileSetting.Name);
-		return name ? (name as string).slice(0, 2).toUpperCase() : undefined;
+		if (!profile) {
+			return undefined;
+		}
+
+		const name = profile.settings().get(Contracts.ProfileSetting.Name);
+		assertString(name);
+
+		return name.slice(0, 2).toUpperCase();
 	}, [profile]);
 
 	const profileWalletsCount = profile?.wallets().count();
@@ -148,7 +157,7 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 								size="icon"
 								variant="transparent"
 								onClick={() => {
-									const sendTransferPath = `/profiles/${profile?.id()}/send-transfer`;
+									const sendTransferPath = `/profiles/${profile.id()}/send-transfer`;
 
 									// add query param reset = 1 if already on send transfer page
 									/* istanbul ignore next: tested in e2e */
@@ -195,12 +204,13 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 						}
 
 						if (action?.value === "sign-out") {
-							profile?.status().reset();
+							assertProfile(profile);
+							profile.status().reset();
 
 							setTheme("system");
 						}
 
-						return history.push(action.mountPath(profile?.id()));
+						return history.push(action.mountPath(profile.id()));
 					}}
 				/>
 			</div>
