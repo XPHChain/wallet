@@ -150,7 +150,6 @@ export const GeneralSettings: React.FC = () => {
 			label: t("SETTINGS.GENERAL.SECURITY.SCREENSHOT_PROTECTION.TITLE"),
 			labelAddon: (
 				<Toggle
-					disabled={true}
 					ref={register()}
 					name="screenshotProtection"
 					defaultChecked={getDefaultValues().screenshotProtection}

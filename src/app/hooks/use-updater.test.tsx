@@ -101,7 +101,7 @@ describe("useUpdater hook", () => {
 			result.current.notifyForUpdates();
 		});
 
-		expect(toastSpy).toHaveBeenCalledWith(commonTranslations.FAILED_UPDATE_CHECK);
+		await waitFor(() => expect(toastSpy).toHaveBeenCalledWith(commonTranslations.FAILED_UPDATE_CHECK));
 
 		toastSpy.mockRestore();
 	});

@@ -1,3 +1,4 @@
+import Transport from "@ledgerhq/hw-transport";
 import { Contracts } from "@payvo/profiles";
 import { renderHook } from "@testing-library/react-hooks";
 import { EnvironmentProvider, minVersionList } from "app/contexts";
@@ -13,11 +14,10 @@ import { LedgerConnectionStep } from "./LedgerConnectionStep";
 
 const history = createMemoryHistory();
 
-const transport = getDefaultLedgerTransport();
-
 describe("LedgerConnectionStep", () => {
 	let profile: Contracts.IProfile;
 	let wallet: Contracts.IReadWriteWallet;
+	let transport: typeof Transport;
 	let getVersionSpy: jest.SpyInstance;
 
 	beforeEach(async () => {
@@ -29,6 +29,9 @@ describe("LedgerConnectionStep", () => {
 		getVersionSpy = jest
 			.spyOn(wallet.coin().ledger(), "getVersion")
 			.mockResolvedValue(minVersionList[wallet.network().coin()]);
+
+		transport = getDefaultLedgerTransport();
+		jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe: jest.fn() }));
 
 		jest.useFakeTimers();
 		jest.spyOn(wallet.coin(), "__construct").mockImplementation();

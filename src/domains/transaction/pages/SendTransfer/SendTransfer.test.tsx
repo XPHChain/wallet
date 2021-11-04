@@ -733,7 +733,7 @@ describe("SendTransfer", () => {
 		// Change network
 		// Unselect
 		fireEvent.click(screen.getByTestId("NetworkIcon-ARK-ark.devnet"));
-		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toBeEmpty());
+		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toHaveValue(""));
 		// Select
 		fireEvent.click(screen.getByTestId("NetworkIcon-ARK-ark.devnet"));
 		await waitFor(() => expect(screen.getByTestId("SelectNetworkInput__input")).toHaveValue("ARK Devnet"));
@@ -745,7 +745,7 @@ describe("SendTransfer", () => {
 		await screen.findByTestId("SendTransfer__form-step");
 
 		// Memo
-		expect(screen.getByTestId("Input__memo")).toBeEmpty();
+		expect(screen.getByTestId("Input__memo")).toHaveValue("");
 
 		// Fee
 		expect(screen.getAllByRole("radio")[0]).not.toBeChecked();

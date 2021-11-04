@@ -1,3 +1,4 @@
+import Transport from "@ledgerhq/hw-transport";
 import { Contracts } from "@payvo/profiles";
 import { renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
@@ -14,11 +15,10 @@ import { LedgerTabs } from "./LedgerTabs";
 
 jest.setTimeout(20_000);
 
-const transport = getDefaultLedgerTransport();
-
 describe("LedgerTabs", () => {
 	let profile: Contracts.IProfile;
 	let wallet: Contracts.IReadWriteWallet;
+	let transport: typeof Transport;
 	let publicKeyPaths = new Map();
 	let onClickEditWalletName: jest.Mock;
 	let getVersionSpy: jest.SpyInstance;
@@ -68,6 +68,9 @@ describe("LedgerTabs", () => {
 		await wallet.synchroniser().identity();
 
 		onClickEditWalletName = jest.fn();
+
+		transport = getDefaultLedgerTransport();
+		jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe: jest.fn() }));
 
 		publicKeyPaths = new Map([
 			["m/44'/1'/0'/0/0", "027716e659220085e41389efc7cf6a05f7f7c659cf3db9126caabce6cda9156582"],

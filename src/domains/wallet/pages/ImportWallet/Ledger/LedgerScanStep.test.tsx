@@ -1,3 +1,4 @@
+import Transport from "@ledgerhq/hw-transport";
 import { Contracts } from "@payvo/profiles";
 import userEvent from "@testing-library/user-event";
 import { LedgerProvider } from "app/contexts/Ledger/Ledger";
@@ -10,11 +11,10 @@ import { LedgerScanStep } from "./LedgerScanStep";
 
 jest.setTimeout(10_000);
 
-const transport = getDefaultLedgerTransport();
-
 describe("LedgerScanStep", () => {
 	let profile: Contracts.IProfile;
 	let wallet: Contracts.IReadWriteWallet;
+	let transport: typeof Transport;
 	let publicKeyPaths = new Map();
 
 	beforeAll(() => {
@@ -56,6 +56,9 @@ describe("LedgerScanStep", () => {
 
 		wallet = profile.wallets().first();
 		await wallet.synchroniser().identity();
+
+		transport = getDefaultLedgerTransport();
+		jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe: jest.fn() }));
 
 		publicKeyPaths = new Map([
 			["m/44'/1'/0'/0/0", "027716e659220085e41389efc7cf6a05f7f7c659cf3db9126caabce6cda9156582"],

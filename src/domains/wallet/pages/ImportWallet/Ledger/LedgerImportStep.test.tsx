@@ -1,3 +1,4 @@
+import Transport from "@ledgerhq/hw-transport";
 import { Contracts } from "@payvo/profiles";
 import userEvent from "@testing-library/user-event";
 import { LedgerData } from "app/contexts";
@@ -9,10 +10,9 @@ import { env, getDefaultLedgerTransport, getDefaultProfileId, render, screen, wa
 
 import { LedgerImportStep } from "./LedgerImportStep";
 
-const transport = getDefaultLedgerTransport();
-
 describe("LedgerImportStep", () => {
 	let profile: Contracts.IProfile;
+	let transport: typeof Transport;
 
 	const derivationPath = "m/44'/1'/0'/0/3";
 
@@ -41,6 +41,9 @@ describe("LedgerImportStep", () => {
 				}),
 			);
 		}
+
+		transport = getDefaultLedgerTransport();
+		jest.spyOn(transport, "listen").mockImplementationOnce(() => ({ unsubscribe: jest.fn() }));
 
 		jest.useFakeTimers();
 	});

@@ -336,6 +336,29 @@ describe("App", () => {
 		successToast.mockRestore();
 	});
 
+	it.each([false, true])(
+		"should set the theme based on system preferences (dark = %s)",
+		async (shouldUseDarkColors) => {
+			process.env.REACT_APP_IS_UNIT = "1";
+
+			const toastSpy = jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
+			const utilsSpy = jest.spyOn(utils, "shouldUseDarkColors").mockReturnValue(shouldUseDarkColors);
+
+			const { getByText } = render(<App />, { withProviders: false });
+
+			await waitFor(() => {
+				expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
+			});
+
+			await waitFor(() => {
+				expect(document.body).toHaveClass(`theme-${shouldUseDarkColors ? "dark" : "light"}`);
+			});
+
+			toastSpy.mockRestore();
+			utilsSpy.mockRestore();
+		},
+	);
+
 	it("should enter profile", async () => {
 		process.env.REACT_APP_IS_UNIT = "1";
 
@@ -368,27 +391,4 @@ describe("App", () => {
 		const profileDashboardUrl = `/profiles/${passwordProtectedProfile.id()}/dashboard`;
 		await waitFor(() => expect(history.location.pathname).toMatch(profileDashboardUrl));
 	});
-
-	it.each([false, true])(
-		"should set the theme based on system preferences (dark = %s)",
-		async (shouldUseDarkColors) => {
-			process.env.REACT_APP_IS_UNIT = "1";
-
-			const toastSpy = jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
-			const utilsSpy = jest.spyOn(utils, "shouldUseDarkColors").mockReturnValue(shouldUseDarkColors);
-
-			const { getByText } = render(<App />, { withProviders: false });
-
-			await waitFor(() => {
-				expect(getByText(profileTranslations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
-			});
-
-			await waitFor(() => {
-				expect(document.body).toHaveClass(`theme-${shouldUseDarkColors ? "dark" : "light"}`);
-			});
-
-			toastSpy.mockRestore();
-			utilsSpy.mockRestore();
-		},
-	);
 });

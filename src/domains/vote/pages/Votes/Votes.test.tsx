@@ -88,6 +88,7 @@ describe("Votes", () => {
 		await env.profiles().restore(profile);
 		await syncDelegates(profile);
 		await wallet.synchroniser().votes();
+		await profile.sync();
 	});
 
 	it("should render", async () => {
@@ -134,8 +135,6 @@ describe("Votes", () => {
 	});
 
 	it("should toggle network selection from network filters", async () => {
-		await profile.sync();
-
 		const route = `/profiles/${profile.id()}/votes`;
 		const routePath = "/profiles/:profileId/votes";
 		const { asFragment, container } = renderPage(route, routePath);
@@ -195,8 +194,6 @@ describe("Votes", () => {
 	});
 
 	it("should select starred option in the wallets display type", async () => {
-		await profile.sync();
-
 		const route = `/profiles/${profile.id()}/votes`;
 		const routePath = "/profiles/:profileId/votes";
 		const { asFragment, container } = renderPage(route, routePath);
@@ -227,8 +224,6 @@ describe("Votes", () => {
 	});
 
 	it("should select ledger option in the wallets display type", async () => {
-		await profile.sync();
-
 		const route = `/profiles/${profile.id()}/votes`;
 		const routePath = "/profiles/:profileId/votes";
 		const { asFragment, container } = renderPage(route, routePath);
