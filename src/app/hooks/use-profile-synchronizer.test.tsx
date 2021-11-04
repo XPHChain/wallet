@@ -366,7 +366,7 @@ describe("useProfileSynchronizer", () => {
 		});
 
 		await waitFor(() => expect(configuration.profileIsSyncingWallets).toEqual(false));
-		await waitFor(() => expect(profileErroredNetworks.length).toEqual(1));
+		await waitFor(() => expect(profileErroredNetworks).toHaveLength(1));
 
 		mockWalletSyncStatus.mockRestore();
 	});

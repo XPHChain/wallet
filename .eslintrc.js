@@ -95,9 +95,19 @@ module.exports = {
 		"import/no-useless-path-segments": "error",
 		"import/no-webpack-loader-syntax": "error",
 		"import/order": "warn",
+		"jest/consistent-test-it": "error",
+		"jest/no-alias-methods": "error",
 		"jest/no-conditional-expect": "off",
 		"jest/no-done-callback": "off",
 		"jest/no-identical-title": "error",
+		"jest/prefer-spy-on": "error",
+		"jest/prefer-to-have-length": "error",
+		"jest/prefer-expect-resolves": "error",
+		"jest/no-test-return-statement": "error",
+		"jest/max-nested-describe": "error",
+		"jest/prefer-hooks-on-top": "error",
+		"jest/prefer-to-contain": "error",
+		"jest/prefer-todo": "error",
 		"jest/valid-expect": "off",
 		"jest/valid-expect-in-promise": "off",
 		"max-lines": ["warn", { max: 300, skipBlankLines: true, skipComments: true }],
@@ -141,7 +151,7 @@ module.exports = {
 		"testing-library/consistent-data-testid": "off", // @TODO: https://github.com/testing-library/eslint-plugin-testing-library/blob/main/docs/rules/consistent-data-testid.md
 		"testing-library/no-await-sync-events": "warn", // @TODO: set to error and fix
 		"testing-library/no-await-sync-query": "warn", // @TODO: set to error and fix
-		"testing-library/no-container": "warn", // @TODO: set to error and fix
+		"testing-library/no-container": "error",
 		"testing-library/no-debugging-utils": "error",
 		"testing-library/no-dom-import": "warn", // @TODO: set to error and fix
 		"testing-library/no-manual-cleanup": "warn", // @TODO: set to error and fix

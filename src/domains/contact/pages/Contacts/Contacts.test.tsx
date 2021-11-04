@@ -158,7 +158,7 @@ describe("Contacts", () => {
 			expect(() => screen.getByTestId("modal__inner")).toThrow(/Unable to find an element by/);
 		});
 
-		expect(profile.contacts().findByAddress("D8rr7B1d6TL6pf14LgMz4sKp1VBMs6YUYD").length).toBe(1);
+		expect(profile.contacts().findByAddress("D8rr7B1d6TL6pf14LgMz4sKp1VBMs6YUYD")).toHaveLength(1);
 	});
 
 	it("should successfully delete contact", async () => {
@@ -199,7 +199,7 @@ describe("Contacts", () => {
 		fireEvent.click(screen.getByTestId("DeleteResource__submit-button"));
 
 		await waitFor(() => {
-			expect(() => profile.contacts().findById(newContact.id())).toThrowError("Failed to find");
+			expect(() => profile.contacts().findById(newContact.id())).toThrow("Failed to find");
 		});
 
 		contactsSpy.mockRestore();
@@ -280,7 +280,7 @@ describe("Contacts", () => {
 		fireEvent.click(screen.getByTestId("DeleteResource__submit-button"));
 
 		await waitFor(() => {
-			expect(() => profile.contacts().findById(newContact.id())).toThrowError("Failed to find");
+			expect(() => profile.contacts().findById(newContact.id())).toThrow("Failed to find");
 		});
 
 		contactsSpy.mockRestore();

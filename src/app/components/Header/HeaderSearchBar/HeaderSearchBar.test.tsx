@@ -19,7 +19,7 @@ describe("HeaderSearchBar", () => {
 		expect(screen.getByTestId("HeaderSearchBar__input")).toBeInTheDocument();
 	});
 
-	it("should limit search letters", async () => {
+	it("should limit search letters", () => {
 		render(<HeaderSearchBar maxLength={32} />);
 
 		fireEvent.click(screen.getByRole("button"));
@@ -34,8 +34,8 @@ describe("HeaderSearchBar", () => {
 		fireEvent.change(input, { target: { value: longText } });
 		fireEvent.change(input, text + "!");
 
-		await waitFor(() => expect(input.value).toBe(text.repeat(100)));
-		expect(input.value.length).toBe(1000);
+		expect(input.value).toBe(text.repeat(100));
+		expect(input.value).toHaveLength(1000);
 	});
 
 	it("should reset fields by prop", async () => {
