@@ -13,6 +13,7 @@ import { buildTransferData } from "domains/transaction/pages/SendTransfer/SendTr
 import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { assertNetwork } from "utils/assertions";
 
 export const FormStep = ({
 	networks,
@@ -21,7 +22,7 @@ export const FormStep = ({
 }: {
 	networks: Networks.Network[];
 	profile: Contracts.IProfile;
-	deeplinkProps: any;
+	deeplinkProps: Record<string, string>;
 }) => {
 	const isMounted = useRef(true);
 
@@ -37,6 +38,7 @@ export const FormStep = ({
 
 	let senderWallet: Contracts.IReadWriteWallet | undefined;
 	if (network) {
+		assertNetwork(network);
 		senderWallet = profile.wallets().findByAddressWithNetwork(senderAddress, network.id());
 	}
 
@@ -80,7 +82,7 @@ export const FormStep = ({
 	);
 
 	const getRecipients = () => {
-		if (deeplinkProps?.recipient && deeplinkProps?.amount) {
+		if (deeplinkProps.recipient && deeplinkProps.amount) {
 			return [
 				{
 					address: deeplinkProps.recipient,

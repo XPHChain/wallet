@@ -175,9 +175,9 @@ export const LedgerTabs = ({ activeIndex = Step.NetworkStep, onClickEditWalletNa
 		const importedWallet = activeProfile
 			.wallets()
 			.findByAddressWithNetwork(importedWallets[0].address, getValues("network").id());
-		assertWallet(importedWallet);
 
-		history.push(`/profiles/${activeProfile.id()}/wallets/${importedWallet?.id()}`);
+		assertWallet(importedWallet);
+		history.push(`/profiles/${activeProfile.id()}/wallets/${importedWallet.id()}`);
 	};
 
 	return (

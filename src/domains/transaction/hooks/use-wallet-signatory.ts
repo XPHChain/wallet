@@ -1,7 +1,7 @@
 import { Contracts as ProfileContracts } from "@payvo/profiles";
 import { Services, Signatories } from "@payvo/sdk";
 import { useCallback } from "react";
-import { assertString } from "utils/assertions";
+import { assertString, assertWallet } from "utils/assertions";
 
 export interface SignInput {
 	encryptionPassword?: string;
@@ -14,7 +14,7 @@ export interface SignInput {
 
 // @TODO: extract this into the SDK/Profiles
 export const useWalletSignatory = (
-	wallet: ProfileContracts.IReadWriteWallet,
+	wallet: ProfileContracts.IReadWriteWallet | undefined,
 ): {
 	sign: ({
 		mnemonic,
@@ -27,6 +27,8 @@ export const useWalletSignatory = (
 } => ({
 	sign: useCallback(
 		async ({ mnemonic, secondMnemonic, encryptionPassword, wif, privateKey, secret }: SignInput) => {
+			assertWallet(wallet);
+
 			if (mnemonic && secondMnemonic) {
 				return wallet.signatory().confirmationMnemonic(mnemonic, secondMnemonic);
 			}
