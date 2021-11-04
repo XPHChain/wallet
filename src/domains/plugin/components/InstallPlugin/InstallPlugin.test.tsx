@@ -9,7 +9,7 @@ import { env, fireEvent, getDefaultProfileId, pluginManager, render, screen, wai
 
 import { InstallPlugin } from "./InstallPlugin";
 import { FirstStep } from "./Step1";
-import { MethodStep } from "./Step2";
+import { SecondStep } from "./Step2";
 import { ThirdStep } from "./Step3";
 
 describe("InstallPlugin", () => {
