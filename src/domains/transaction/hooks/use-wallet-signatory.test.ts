@@ -33,6 +33,17 @@ describe("useWalletSignatory", () => {
 		expect(() => signatory.confirmKey()).toThrow();
 	});
 
+	it("should sign with mnemonic and secondMnemonic", async () => {
+		const { result } = renderHook(() => useWalletSignatory(wallet));
+
+		const signatory = await result.current.sign({ mnemonic: MNEMONICS[0], secondMnemonic: MNEMONICS[1] });
+
+		expect(signatory).toBeInstanceOf(Signatories.Signatory);
+		expect(signatory.actsWithConfirmationMnemonic()).toBeTrue();
+		expect(signatory.signingKey()).toBe(MNEMONICS[0]);
+		expect(signatory.confirmKey()).toBe(MNEMONICS[1]);
+	});
+
 	it("should sign with secret", async () => {
 		const { result } = renderHook(() => useWalletSignatory(wallet));
 
@@ -46,15 +57,15 @@ describe("useWalletSignatory", () => {
 		expect(() => signatory.confirmKey()).toThrow();
 	});
 
-	it("should sign with secondMnemonic", async () => {
+	it("should sign with secret and secondSecret", async () => {
 		const { result } = renderHook(() => useWalletSignatory(wallet));
 
-		const signatory = await result.current.sign({ mnemonic: MNEMONICS[0], secondMnemonic: MNEMONICS[1] });
+		const signatory = await result.current.sign({ secret: "secret", secondSecret: "secret" });
 
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
-		expect(signatory.actsWithConfirmationMnemonic()).toBeTrue();
-		expect(signatory.signingKey()).toBe(MNEMONICS[0]);
-		expect(signatory.confirmKey()).toBe(MNEMONICS[1]);
+		expect(signatory.actsWithConfirmationSecret()).toBeTrue();
+		expect(signatory.signingKey()).toBe("secret");
+		expect(signatory.confirmKey()).toBe("secret");
 	});
 
 	it("should sign with WIF", async () => {
@@ -113,6 +124,8 @@ describe("useWalletSignatory", () => {
 			password: "password",
 			secret: "testing",
 		});
+
+		jest.spyOn(walletFromSecretWithEncryption, "isSecondSignature").mockReturnValueOnce(false);
 
 		const { result } = renderHook(() => useWalletSignatory(walletFromSecretWithEncryption));
 

@@ -218,6 +218,7 @@ export const SendVote = () => {
 			wif,
 			privateKey,
 			secret,
+			secondSecret,
 		} = getValues();
 		const abortSignal = abortReference.current?.signal;
 
@@ -228,6 +229,7 @@ export const SendVote = () => {
 				privateKey,
 				secondMnemonic,
 				secret,
+				secondSecret,
 				wif,
 			});
 

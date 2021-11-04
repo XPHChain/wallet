@@ -8,6 +8,7 @@ export interface SignInput {
 	mnemonic?: string;
 	secondMnemonic?: string;
 	secret?: string;
+	secondSecret?: string;
 	wif?: string;
 	privateKey?: string;
 }
@@ -17,16 +18,17 @@ export const useWalletSignatory = (
 	wallet: ProfileContracts.IReadWriteWallet,
 ): {
 	sign: ({
+		encryptionPassword,
 		mnemonic,
 		secondMnemonic,
-		encryptionPassword,
+		secret,
+		secondSecret,
 		wif,
 		privateKey,
-		secret,
 	}: SignInput) => Promise<Signatories.Signatory>;
 } => ({
 	sign: useCallback(
-		async ({ mnemonic, secondMnemonic, encryptionPassword, wif, privateKey, secret }: SignInput) => {
+		async ({ encryptionPassword, mnemonic, secondMnemonic, secret, secondSecret, wif, privateKey }: SignInput) => {
 			if (mnemonic && secondMnemonic) {
 				return wallet.signatory().confirmationMnemonic(mnemonic, secondMnemonic);
 			}
@@ -36,17 +38,26 @@ export const useWalletSignatory = (
 			}
 
 			if (encryptionPassword) {
-				if (wallet.actsWithSecretWithEncryption()) {
-					return wallet.signatory().secret(wallet.signingKey().get(encryptionPassword));
-				}
-
 				if (wallet.isSecondSignature()) {
+					if (wallet.actsWithSecretWithEncryption()) {
+						return wallet
+							.signatory()
+							.confirmationSecret(
+								wallet.signingKey().get(encryptionPassword),
+								wallet.confirmKey().get(encryptionPassword),
+							);
+					}
+
 					return wallet
 						.signatory()
 						.confirmationMnemonic(
 							wallet.signingKey().get(encryptionPassword),
 							wallet.confirmKey().get(encryptionPassword),
 						);
+				}
+
+				if (wallet.actsWithSecretWithEncryption()) {
+					return wallet.signatory().secret(wallet.signingKey().get(encryptionPassword));
 				}
 
 				return wallet.signatory().mnemonic(wallet.signingKey().get(encryptionPassword));
@@ -70,6 +81,10 @@ export const useWalletSignatory = (
 
 			if (privateKey) {
 				return wallet.signatory().privateKey(privateKey);
+			}
+
+			if (secret && secondSecret) {
+				return wallet.signatory().confirmationSecret(secret, secondSecret);
 			}
 
 			if (secret) {
