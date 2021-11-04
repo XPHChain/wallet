@@ -111,7 +111,8 @@ export const translations: { [key: string]: any } = {
 			},
 			ENCRYPTION: {
 				TITLE: "Use Wallet Encryption",
-				DESCRIPTION: "This will allow you to set an encryption password during creation to use instead of your mnemonic.",
+				DESCRIPTION:
+					"This will allow you to set an encryption password during creation to use instead of your mnemonic.",
 			},
 			TITLE: "Your Passphrase",
 			WARNING:
@@ -151,6 +152,12 @@ export const translations: { [key: string]: any } = {
 		},
 
 		METHOD_STEP: {
+			ENCRYPTION: {
+				TITLE: "Use Wallet Encryption",
+				DESCRIPTION:
+					"This will allow you to set an encryption password during creation to use instead of your mnemonic.",
+				NOT_AVAILABLE: "Encryption not available for this import type",
+			},
 			SUBTITLE: "Select the import method by which you want to import the address to your Profile.",
 			TITLE: "Import Wallet",
 			TYPE: "Import Type",
@@ -166,7 +173,7 @@ export const translations: { [key: string]: any } = {
 			TITLE: "Confirm your passphrase",
 		},
 
-		PROCESS_COMPLETED_STEP: {
+		SUCCESS_STEP: {
 			SUBTITLE: "Wallet import is complete. Now you can use it.",
 			TITLE: "Completed",
 		},

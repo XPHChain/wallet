@@ -466,18 +466,18 @@ exports[`WalletOverviewStep Render step should render 1`] = `
             data-testid="CreateWallet__encryption"
           >
             <label
-              class="flex"
+              class="Toggle__Wrapper-sc-6s3wfu-0 kIsRpT"
             >
               <input
-                class="Toggle__Input-sc-6s3wfu-0 lktEK"
+                class="Toggle__Input-sc-6s3wfu-1 utRNX"
                 data-testid="CreateWallet__encryption-toggle"
                 type="checkbox"
               />
               <div
-                class="Toggle__Handle-sc-6s3wfu-1 beOBjf"
+                class="Toggle__Handle-sc-6s3wfu-2 cAxMdF"
               >
                 <span
-                  class="Toggle__HandleInner-sc-6s3wfu-2 poMob"
+                  class="Toggle__HandleInner-sc-6s3wfu-3 fCjUWZ"
                 />
               </div>
             </label>
