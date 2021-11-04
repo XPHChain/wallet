@@ -127,8 +127,10 @@ describe("General Settings", () => {
 
 		act(() => screen.getByTestId("General-settings__input--name").focus());
 
-		fireEvent.input(screen.getByTestId("General-settings__input--name"), { target: { value: "t" } });
+		fireEvent.input(screen.getByTestId("General-settings__input--name"), { target: { value: "" } });
+		fireEvent.blur(screen.getByTestId("General-settings__input--name"));
 
+		fireEvent.input(screen.getByTestId("General-settings__input--name"), { target: { value: "t" } });
 		fireEvent.blur(screen.getByTestId("General-settings__input--name"));
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-identicon")).toBeInTheDocument();
