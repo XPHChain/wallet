@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "testing-library";
+import { render, screen } from "utils/testing-library";
 
 import { MnemonicList } from "./MnemonicList";
 
@@ -12,7 +12,7 @@ describe("MnemonicList", () => {
 
 		const items = screen.getAllByTestId("MnemonicList__item");
 
-		expect(items.length).toEqual(words.length);
+		expect(items).toHaveLength(words.length);
 
 		for (const [index, item] of items.entries()) {
 			expect(item).toHaveTextContent(words[index]);
@@ -30,7 +30,7 @@ describe("MnemonicList", () => {
 
 		const items = screen.getAllByTestId("MnemonicList__item");
 
-		expect(items.length).toEqual(words.length);
+		expect(items).toHaveLength(words.length);
 
 		for (const [index, item] of items.entries()) {
 			expect(item).toHaveTextContent(words[index]);

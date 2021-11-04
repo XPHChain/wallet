@@ -1,4 +1,3 @@
-import { act } from "@testing-library/react-hooks";
 import React from "react";
 import { fireEvent, render } from "utils/testing-library";
 
@@ -21,11 +20,9 @@ describe("LayoutControls", () => {
 
 		const { getByTestId } = render(<LayoutControls {...{ [callback]: function_ }} />);
 
-		act(() => {
-			fireEvent.click(getByTestId(element));
-		});
+		fireEvent.click(getByTestId(element));
 
-		expect(function_).toBeCalled();
+		expect(function_).toHaveBeenCalled();
 	});
 
 	it.each([
@@ -36,10 +33,8 @@ describe("LayoutControls", () => {
 
 		const { getByTestId } = render(<LayoutControls />);
 
-		act(() => {
-			fireEvent.click(getByTestId(element));
-		});
+		fireEvent.click(getByTestId(element));
 
-		expect(function_).not.toBeCalled();
+		expect(function_).not.toHaveBeenCalled();
 	});
 });

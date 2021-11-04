@@ -7,8 +7,16 @@ import { translations as walletTranslations } from "domains/wallet/i18n";
 import { createMemoryHistory } from "history";
 import React from "react";
 import { Route } from "react-router-dom";
-import { env, fireEvent, getDefaultProfileId, render, screen, waitFor, within } from "testing-library";
-import { getDefaultLedgerTransport } from "utils/testing-library";
+import {
+	env,
+	fireEvent,
+	getDefaultLedgerTransport,
+	getDefaultProfileId,
+	render,
+	screen,
+	waitFor,
+	within,
+} from "utils/testing-library";
 
 import { WalletHeader } from "./WalletHeader";
 
@@ -135,7 +143,7 @@ describe("WalletHeader", () => {
 		const { getByTestId, findByText } = render(<WalletHeader profile={profile} wallet={wallet} />);
 		await findByText(wallet.address());
 
-		expect(() => getByTestId("WalletHeader__currency-balance")).toThrowError(/Unable to find/);
+		expect(() => getByTestId("WalletHeader__currency-balance")).toThrow(/Unable to find/);
 
 		networkSpy.mockRestore();
 	});

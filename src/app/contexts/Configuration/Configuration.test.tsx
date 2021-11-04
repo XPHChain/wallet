@@ -1,5 +1,5 @@
 import React from "react";
-import { act, fireEvent, render, waitFor } from "utils/testing-library";
+import { fireEvent, render, waitFor } from "utils/testing-library";
 
 import { ConfigurationProvider } from ".";
 import { useConfiguration } from "./Configuration";
@@ -25,7 +25,7 @@ describe("Configuration Context", () => {
 			return <p>Configuration content</p>;
 		};
 
-		expect(() => render(<Test />, { withProviders: false })).toThrowError();
+		expect(() => render(<Test />, { withProviders: false })).toThrow();
 
 		console.error.mockRestore();
 	});
@@ -58,11 +58,9 @@ describe("Configuration Context", () => {
 
 		expect(getByTestId("Configuration__consumer")).toBeInTheDocument();
 
-		await waitFor(() => expect(() => getByTestId("Configuration__list")).toThrowError(/Unable to find/));
+		await waitFor(() => expect(() => getByTestId("Configuration__list")).toThrow(/Unable to find/));
 
-		act(() => {
-			fireEvent.click(getByTestId("Configuration__consumer"));
-		});
+		fireEvent.click(getByTestId("Configuration__consumer"));
 
 		await findByTestId("Configuration__list");
 

@@ -15,7 +15,6 @@ import React from "react";
 import { Route } from "react-router-dom";
 import walletMock from "tests/fixtures/coins/ark/devnet/wallets/D8rr7B1d6TL6pf14LgMz4sKp1VBMs6YUYD.json";
 import {
-	act,
 	defaultNetMocks,
 	env,
 	fireEvent,
@@ -207,15 +206,11 @@ describe("WalletDetails", () => {
 		const { getByTestId, findByTestId } = await renderPage();
 		await findByTestId("PendingTransactions");
 
-		act(() => {
-			fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
-		});
+		fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.click(getByTestId("modal__close-btn"));
-		});
+		fireEvent.click(getByTestId("modal__close-btn"));
 
 		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
 		jest.restoreAllMocks();
@@ -227,14 +222,10 @@ describe("WalletDetails", () => {
 		const { getByTestId, findByTestId } = await renderPage();
 		await findByTestId("PendingTransactions");
 
-		act(() => {
-			fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
-		});
+		fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
 
 		await findByTestId("TableRemoveButton");
-		act(() => {
-			fireEvent.click(getByTestId("TableRemoveButton"));
-		});
+		fireEvent.click(getByTestId("TableRemoveButton"));
 
 		await findByTestId("ConfirmRemovePendingTransaction__Transfer-Transaction");
 
@@ -247,9 +238,7 @@ describe("WalletDetails", () => {
 
 		const toastsMock = jest.spyOn(toasts, "success");
 
-		act(() => {
-			fireEvent.click(getByTestId("ConfirmRemovePendingTransaction__remove"));
-		});
+		fireEvent.click(getByTestId("ConfirmRemovePendingTransaction__remove"));
 
 		await waitFor(() => expect(() => getByTestId("PendingTransactions")).toThrow());
 
@@ -264,15 +253,11 @@ describe("WalletDetails", () => {
 		const { getByTestId, findByTestId } = await renderPage();
 		await findByTestId("PendingTransactions");
 
-		act(() => {
-			fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
-		});
+		fireEvent.click(within(getByTestId("PendingTransactions")).getAllByTestId("TableRow")[0]);
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.click(getByTestId("modal__close-btn"));
-		});
+		fireEvent.click(getByTestId("modal__close-btn"));
 
 		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
 		jest.restoreAllMocks();
@@ -286,9 +271,7 @@ describe("WalletDetails", () => {
 		await findByTestId("WalletHeader__send-button");
 		await waitFor(() => expect(getByTestId("WalletHeader__send-button")).not.toBeDisabled());
 
-		act(() => {
-			fireEvent.click(getByTestId("WalletHeader__send-button"));
-		});
+		fireEvent.click(getByTestId("WalletHeader__send-button"));
 
 		expect(historySpy).toHaveBeenCalledWith(`/profiles/${profile.id()}/wallets/${wallet.id()}/send-transfer`);
 
@@ -330,9 +313,8 @@ describe("WalletDetails", () => {
 
 		await findByText(commonTranslations.LEARN_MORE);
 		await waitFor(() => expect(getByTestId("WalletVote__button")).not.toBeDisabled());
-		act(() => {
-			fireEvent.click(getByTestId("WalletVote__button"));
-		});
+
+		fireEvent.click(getByTestId("WalletVote__button"));
 
 		expect(historySpy).toHaveBeenCalledWith(`/profiles/${profile.id()}/wallets/${wallet.id()}/votes`);
 
@@ -368,9 +350,7 @@ describe("WalletDetails", () => {
 
 		const { getByText } = await renderPage();
 
-		act(() => {
-			fireEvent.click(getByText(walletTranslations.PAGE_WALLET_DETAILS.VOTES.MULTIVOTE));
-		});
+		fireEvent.click(getByText(walletTranslations.PAGE_WALLET_DETAILS.VOTES.MULTIVOTE));
 
 		expect(historySpy).toHaveBeenCalledWith({
 			pathname: `/profiles/${profile.id()}/wallets/${wallet.id()}/votes`,
@@ -385,27 +365,19 @@ describe("WalletDetails", () => {
 	it("should update wallet name", async () => {
 		const { getByTestId, getAllByTestId, findByTestId } = await renderPage();
 
-		act(() => {
-			fireEvent.click(getAllByTestId("dropdown__toggle")[2]);
-		});
+		fireEvent.click(getAllByTestId("dropdown__toggle")[2]);
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--primary-0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--primary-0"));
 
 		await findByTestId("modal__inner");
 
 		const name = "Sample label name";
 
-		act(() => {
-			fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: name } });
-		});
+		fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: name } });
 
 		await waitFor(() => expect(getByTestId("UpdateWalletName__submit")).toBeEnabled());
 
-		act(() => {
-			fireEvent.click(getByTestId("UpdateWalletName__submit"));
-		});
+		fireEvent.click(getByTestId("UpdateWalletName__submit"));
 
 		await waitFor(() => expect(wallet.settings().get(Contracts.WalletSetting.Alias)).toEqual(name));
 	});
@@ -415,15 +387,11 @@ describe("WalletDetails", () => {
 
 		expect(wallet.isStarred()).toBe(false);
 
-		act(() => {
-			fireEvent.click(getByTestId("WalletHeader__star-button"));
-		});
+		fireEvent.click(getByTestId("WalletHeader__star-button"));
 
 		await waitFor(() => expect(wallet.isStarred()).toBe(true));
 
-		act(() => {
-			fireEvent.click(getByTestId("WalletHeader__star-button"));
-		});
+		fireEvent.click(getByTestId("WalletHeader__star-button"));
 
 		await waitFor(() => expect(wallet.isStarred()).toBe(false));
 	});
@@ -435,15 +403,11 @@ describe("WalletDetails", () => {
 			withProfileSynchronizer: true,
 		});
 
-		act(() => {
-			fireEvent.click(within(getByTestId("TransactionTable")).getAllByTestId("TableRow")[0]);
-		});
+		fireEvent.click(within(getByTestId("TransactionTable")).getAllByTestId("TableRow")[0]);
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.click(getByTestId("modal__close-btn"));
-		});
+		fireEvent.click(getByTestId("modal__close-btn"));
 
 		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
 	});
@@ -459,9 +423,7 @@ describe("WalletDetails", () => {
 
 		const fetchMoreTransactionsButton = getByTestId("transactions__fetch-more-button");
 
-		act(() => {
-			fireEvent.click(fetchMoreTransactionsButton);
-		});
+		fireEvent.click(fetchMoreTransactionsButton);
 
 		await waitFor(() => {
 			expect(within(getAllByTestId("TransactionTable")[0]).queryAllByTestId("TableRow")).toHaveLength(2);
@@ -471,15 +433,11 @@ describe("WalletDetails", () => {
 	it("should filter by type", async () => {
 		const { getByRole, getByTestId, findByTestId } = await renderPage();
 
-		act(() => {
-			fireEvent.click(getByRole("button", { name: /Type/ }));
-		});
+		fireEvent.click(getByRole("button", { name: /Type/ }));
 
 		await findByTestId("dropdown__option--core-0");
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--core-0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--core-0"));
 
 		await waitFor(
 			() => expect(within(getByTestId("TransactionTable")).queryAllByTestId("TableRow")).toHaveLength(8),
@@ -495,17 +453,13 @@ describe("WalletDetails", () => {
 
 		expect(dropdown).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(dropdown);
-		});
+		fireEvent.click(dropdown);
 
 		const openWalletOption = getByTestId("dropdown__option--secondary-0");
 
 		expect(openWalletOption).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(openWalletOption);
-		});
+		fireEvent.click(openWalletOption);
 
 		expect(ipcRendererMock).toHaveBeenCalledWith("open-external", wallet.explorerLink());
 	});
@@ -513,9 +467,7 @@ describe("WalletDetails", () => {
 	it("should manually sync wallet data", async () => {
 		const { getByTestId } = await renderPage();
 
-		act(() => {
-			fireEvent.click(getByTestId("WalletHeader__refresh"));
-		});
+		fireEvent.click(getByTestId("WalletHeader__refresh"));
 
 		expect(getByTestId("WalletHeader__refresh")).toHaveAttribute("aria-busy", "true");
 
@@ -529,28 +481,22 @@ describe("WalletDetails", () => {
 
 		expect(dropdown).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(dropdown);
-		});
+		fireEvent.click(dropdown);
 
 		const deleteWalletOption = getByTestId("dropdown__option--secondary-1");
 
 		expect(deleteWalletOption).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(deleteWalletOption);
-		});
+		fireEvent.click(deleteWalletOption);
 
-		expect(profile.wallets().count()).toEqual(4);
+		expect(profile.wallets().count()).toBe(4);
 		expect(profile.notifications().transactions().recent()).toHaveLength(2);
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.click(getByTestId("DeleteResource__submit-button"));
-		});
+		fireEvent.click(getByTestId("DeleteResource__submit-button"));
 
-		await waitFor(() => expect(profile.wallets().count()).toEqual(3));
+		await waitFor(() => expect(profile.wallets().count()).toBe(3));
 
 		expect(profile.notifications().transactions().recent()).toHaveLength(0);
 	});

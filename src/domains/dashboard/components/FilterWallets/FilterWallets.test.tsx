@@ -1,8 +1,7 @@
 import { Contracts } from "@payvo/profiles";
-import { act } from "@testing-library/react-hooks";
 import { FilterOption } from "app/components/FilterNetwork";
 import React from "react";
-import { env, fireEvent, getDefaultProfileId, render } from "testing-library";
+import { env, fireEvent, getDefaultProfileId, render } from "utils/testing-library";
 
 import { DashboardConfiguration } from "../../pages";
 import { FilterWallets } from "./FilterWallets";
@@ -62,11 +61,9 @@ describe("FilterWallets", () => {
 			/>,
 		);
 
-		act(() => {
-			fireEvent.click(getByTestId(`NetworkOption__${networkOptions[0].network.id()}`));
-		});
+		fireEvent.click(getByTestId(`NetworkOption__${networkOptions[0].network.id()}`));
 
-		expect(onChange).toBeCalledWith("selectedNetworkIds", [networkOptions[0].network.id()]);
+		expect(onChange).toHaveBeenCalledWith("selectedNetworkIds", [networkOptions[0].network.id()]);
 	});
 
 	it("should emit onChange for wallets display type change", () => {
@@ -76,15 +73,11 @@ describe("FilterWallets", () => {
 			<FilterWallets networks={networkOptions} onChange={onChange} defaultConfiguration={defaultConfiguration} />,
 		);
 
-		act(() => {
-			fireEvent.click(getByTestId("filter-wallets__wallets"));
-		});
+		fireEvent.click(getByTestId("filter-wallets__wallets"));
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--0"));
 
-		expect(onChange).toBeCalled();
+		expect(onChange).toHaveBeenCalled();
 	});
 
 	it("should not emit onChange for wallet display type change", () => {
@@ -94,14 +87,10 @@ describe("FilterWallets", () => {
 			<FilterWallets networks={networkOptions} defaultConfiguration={defaultConfiguration} />,
 		);
 
-		act(() => {
-			fireEvent.click(getByTestId("filter-wallets__wallets"));
-		});
+		fireEvent.click(getByTestId("filter-wallets__wallets"));
 
-		act(() => {
-			fireEvent.click(getByTestId("dropdown__option--0"));
-		});
+		fireEvent.click(getByTestId("dropdown__option--0"));
 
-		expect(onChange).not.toBeCalled();
+		expect(onChange).not.toHaveBeenCalled();
 	});
 });

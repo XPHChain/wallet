@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "testing-library";
+import { render } from "utils/testing-library";
 
 import { InputDefault } from "./InputDefault";
 
@@ -14,6 +14,6 @@ describe("InputDefault", () => {
 		const { getByTestId } = render(<InputDefault as="select" />);
 		const input = getByTestId("Input");
 
-		expect(input.tagName).toEqual("SELECT");
+		expect(input.tagName).toBe("SELECT");
 	});
 });

@@ -143,9 +143,7 @@ describe("Use Ledger Connection", () => {
 
 		listenSpy.mockReset();
 
-		act(() => {
-			fireEvent.click(screen.getByText("Import"));
-		});
+		fireEvent.click(screen.getByText("Import"));
 
 		await waitFor(() => {
 			expect(getAllByTestId("Wallet").length).toBeGreaterThan(0);
@@ -221,9 +219,7 @@ describe("Use Ledger Connection", () => {
 
 			render(<Component />);
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
 
 			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
 
@@ -242,18 +238,14 @@ describe("Use Ledger Connection", () => {
 
 			render(<Component />);
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
 
 			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
 
 			await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
 			await screen.findByText("Connected");
 
-			act(() => {
-				fireEvent.click(screen.getByText("Disconnect"));
-			});
+			fireEvent.click(screen.getByText("Disconnect"));
 
 			await waitFor(() => expect(screen.queryByText("Connected")).not.toBeInTheDocument());
 
@@ -267,13 +259,8 @@ describe("Use Ledger Connection", () => {
 
 			render(<Component retries={50} />);
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
-
-			act(() => {
-				fireEvent.click(screen.getByText("Abort"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
+			fireEvent.click(screen.getByText("Abort"));
 
 			await screen.findByText(walletTranslations.MODAL_LEDGER_WALLET.GENERIC_CONNECTION_ERROR);
 			await waitFor(() => expect(screen.queryByText("Waiting Device")).not.toBeInTheDocument());
@@ -292,9 +279,7 @@ describe("Use Ledger Connection", () => {
 
 			expect(screen.getByText("Connect")).toBeInTheDocument();
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
 
 			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
 
@@ -322,9 +307,7 @@ describe("Use Ledger Connection", () => {
 
 			expect(screen.getByText("Connect")).toBeInTheDocument();
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
 
 			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
 
@@ -360,9 +343,7 @@ describe("Use Ledger Connection", () => {
 
 			render(<Component userProfile={profile} userWallet={wallet} />);
 
-			act(() => {
-				fireEvent.click(screen.getByText("Connect"));
-			});
+			fireEvent.click(screen.getByText("Connect"));
 
 			expect(screen.getByText("Waiting Device")).toBeInTheDocument();
 

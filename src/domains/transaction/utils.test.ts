@@ -5,7 +5,7 @@ describe("Transaction utils", () => {
 		it("should return isNoDeviceError", () => {
 			const error = isNoDeviceError("no device found");
 
-			expect(error).toEqual(true);
+			expect(error).toBe(true);
 		});
 	});
 
@@ -13,15 +13,15 @@ describe("Transaction utils", () => {
 		it("should return isRejectionError", () => {
 			const error = isRejectionError("Condition of use not satisfied");
 
-			expect(error).toEqual(true);
+			expect(error).toBe(true);
 		});
 	});
 
 	describe("handleBroadcastError", () => {
 		it("should throw if rejected", () => {
-			expect(() =>
-				handleBroadcastError({ accepted: [], errors: { id: "ERROR" }, rejected: ["id"] }),
-			).toThrowError("ERROR");
+			expect(() => handleBroadcastError({ accepted: [], errors: { id: "ERROR" }, rejected: ["id"] })).toThrow(
+				"ERROR",
+			);
 		});
 
 		it("should not throw if accepted", () => {

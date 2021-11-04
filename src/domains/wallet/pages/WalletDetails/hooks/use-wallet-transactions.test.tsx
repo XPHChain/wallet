@@ -2,7 +2,7 @@ import { Contracts, DTO } from "@payvo/profiles";
 import { PendingTransaction } from "domains/transaction/components/TransactionTable/PendingTransactionsTable/PendingTransactionsTable.contracts";
 import nock from "nock";
 import React, { useEffect, useState } from "react";
-import { act, env, fireEvent, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
+import { env, fireEvent, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
 
 import { useWalletTransactions } from "./use-wallet-transactions";
 
@@ -141,9 +141,7 @@ describe("Wallet Transactions Hook", () => {
 
 		render(<Component />);
 
-		act(() => {
-			fireEvent.click(screen.getByRole("button"));
-		});
+		fireEvent.click(screen.getByRole("button"));
 
 		await waitFor(() => expect(screen.queryByText("Loading")).not.toBeInTheDocument());
 		await waitFor(() => expect(allPendingTransactions).toHaveLength(0));
@@ -176,9 +174,7 @@ describe("Wallet Transactions Hook", () => {
 
 		render(<Component />);
 
-		act(() => {
-			fireEvent.click(screen.getByRole("button"));
-		});
+		fireEvent.click(screen.getByRole("button"));
 
 		await waitFor(() => expect(screen.queryByText("Loading")).not.toBeInTheDocument());
 		await waitFor(() => expect(allPendingTransactions).toHaveLength(0));

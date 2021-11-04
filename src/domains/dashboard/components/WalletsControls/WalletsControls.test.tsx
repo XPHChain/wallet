@@ -1,6 +1,5 @@
 import React from "react";
-import { act } from "react-dom/test-utils";
-import { fireEvent, render } from "testing-library";
+import { fireEvent, render } from "utils/testing-library";
 
 import { WalletsControls } from "./WalletsControls";
 
@@ -33,11 +32,9 @@ describe("WalletsControls", () => {
 		);
 		const toggle = getByTestId("LayoutControls__grid--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).toBeCalled();
+		expect(function_).toHaveBeenCalled();
 	});
 
 	it("should ignore event emition for grid view if callback not provided", () => {
@@ -45,11 +42,9 @@ describe("WalletsControls", () => {
 		const { getByTestId } = render(<WalletsControls filterProperties={filterProperties as any} />);
 		const toggle = getByTestId("LayoutControls__grid--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).not.toBeCalled();
+		expect(function_).not.toHaveBeenCalled();
 	});
 
 	it("should ignore grid event if already on grid view", () => {
@@ -62,11 +57,9 @@ describe("WalletsControls", () => {
 		);
 		const toggle = getByTestId("LayoutControls__grid--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).not.toBeCalled();
+		expect(function_).not.toHaveBeenCalled();
 	});
 
 	it("should emit event for list view selection and call callback if provided", () => {
@@ -79,11 +72,9 @@ describe("WalletsControls", () => {
 		);
 		const toggle = getByTestId("LayoutControls__list--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).toBeCalled();
+		expect(function_).toHaveBeenCalled();
 	});
 
 	it("should ignore event emition for list view if callback not provided", () => {
@@ -91,11 +82,9 @@ describe("WalletsControls", () => {
 		const { getByTestId } = render(<WalletsControls filterProperties={filterProperties as any} />);
 		const toggle = getByTestId("LayoutControls__list--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).not.toBeCalled();
+		expect(function_).not.toHaveBeenCalled();
 	});
 
 	it("should ignore list event if already on grid view", () => {
@@ -103,10 +92,8 @@ describe("WalletsControls", () => {
 		const { getByTestId } = render(<WalletsControls viewType="list" filterProperties={filterProperties as any} />);
 		const toggle = getByTestId("LayoutControls__list--icon");
 
-		act(() => {
-			fireEvent.click(toggle);
-		});
+		fireEvent.click(toggle);
 
-		expect(function_).not.toBeCalled();
+		expect(function_).not.toHaveBeenCalled();
 	});
 });

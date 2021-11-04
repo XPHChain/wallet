@@ -1,5 +1,5 @@
 import React from "react";
-import { fireEvent, render } from "testing-library";
+import { fireEvent, render } from "utils/testing-library";
 
 import { MnemonicVerificationOptions } from "./MnemonicVerificationOptions";
 
@@ -21,7 +21,7 @@ describe("MnemonicVerificationOptions", () => {
 		);
 		const buttons = getAllByTestId("MnemonicVerificationOptions__button");
 
-		expect(buttons.length).toEqual(limit);
+		expect(buttons).toHaveLength(limit);
 	});
 
 	it("should call handle on click", () => {

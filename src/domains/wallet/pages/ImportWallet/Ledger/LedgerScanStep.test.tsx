@@ -4,7 +4,7 @@ import { LedgerProvider } from "app/contexts/Ledger/Ledger";
 import nock from "nock";
 import React from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { act, env, fireEvent, getDefaultLedgerTransport, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
+import { env, fireEvent, getDefaultLedgerTransport, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
 
 import { LedgerScanStep } from "./LedgerScanStep";
 
@@ -109,33 +109,25 @@ describe("LedgerScanStep", () => {
 
 		await waitFor(() => expect(screen.getAllByRole("row")).toHaveLength(6), { timeout: 5000 });
 
-		act(() => {
-			fireEvent.click(screen.getByTestId("LedgerScanStep__select-all"));
-		});
+		fireEvent.click(screen.getByTestId("LedgerScanStep__select-all"));
 
 		await waitFor(() => expect(screen.getAllByRole("checkbox", { checked: true })).toHaveLength(2));
 
 		// Unselect All
 
-		act(() => {
-			fireEvent.click(screen.getByTestId("LedgerScanStep__select-all"));
-		});
+		fireEvent.click(screen.getByTestId("LedgerScanStep__select-all"));
 
 		await waitFor(() => expect(screen.getAllByRole("checkbox", { checked: false })).toHaveLength(2));
 
 		// Select just first
 
-		act(() => {
-			fireEvent.click(screen.getAllByRole("checkbox")[1]);
-		});
+		fireEvent.click(screen.getAllByRole("checkbox")[1]);
 
-		await waitFor(() => expect(formReference.getValues("wallets").length).toBe(1));
+		await waitFor(() => expect(formReference.getValues("wallets")).toHaveLength(1));
 
-		act(() => {
-			fireEvent.click(screen.getAllByRole("checkbox")[1]);
-		});
+		fireEvent.click(screen.getAllByRole("checkbox")[1]);
 
-		await waitFor(() => expect(formReference.getValues("wallets").length).toBe(0));
+		await waitFor(() => expect(formReference.getValues("wallets")).toHaveLength(0));
 	});
 
 	it("should render", async () => {

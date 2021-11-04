@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 import React from "react";
-import { act, fireEvent, render, screen } from "testing-library";
+import { fireEvent, render, screen } from "utils/testing-library";
 
 import { Modal } from "./Modal";
 
@@ -34,11 +34,9 @@ describe("Modal", () => {
 		expect(screen.getByTestId("modal__overlay")).toBeInTheDocument();
 		expect(screen.getByTestId("modal__inner")).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(screen.getByTestId("modal__overlay"));
-		});
+		fireEvent.click(screen.getByTestId("modal__overlay"));
 
-		expect(onClose).toBeCalled();
+		expect(onClose).toHaveBeenCalled();
 	});
 
 	it("should no close by click on modal content", () => {
@@ -52,11 +50,9 @@ describe("Modal", () => {
 		expect(screen.getByTestId("modal__overlay")).toBeInTheDocument();
 		expect(screen.getByTestId("modal__inner")).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(screen.getByTestId("modal__inner"));
-		});
+		fireEvent.click(screen.getByTestId("modal__inner"));
 
-		expect(onClose).not.toBeCalled();
+		expect(onClose).not.toHaveBeenCalled();
 	});
 
 	it("should closed by the Esc key", async () => {
@@ -65,13 +61,8 @@ describe("Modal", () => {
 
 		expect(getByTestId("modal__overlay")).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.keyUp(getByTestId("modal__inner"), { code: 13, key: "Enter" });
-		});
-
-		act(() => {
-			fireEvent.keyUp(getByTestId("modal__inner"), { code: 27, key: "Escape" });
-		});
+		fireEvent.keyUp(getByTestId("modal__inner"), { code: 13, key: "Enter" });
+		fireEvent.keyUp(getByTestId("modal__inner"), { code: 27, key: "Escape" });
 
 		expect(onClose).toHaveBeenCalledTimes(1);
 		expect(asFragment()).toMatchSnapshot();

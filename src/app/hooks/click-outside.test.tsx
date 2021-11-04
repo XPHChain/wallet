@@ -1,4 +1,3 @@
-import { act } from "@testing-library/react-hooks";
 import { clickOutsideHandler } from "app/hooks/click-outside";
 import { fireEvent } from "utils/testing-library";
 
@@ -9,11 +8,9 @@ describe("ClickOutside Hook", () => {
 		const callback = jest.fn();
 		clickOutsideHandler(reference, callback);
 
-		act(() => {
-			fireEvent.mouseDown(element);
-		});
+		fireEvent.mouseDown(element);
 
-		expect(callback).not.toBeCalled();
+		expect(callback).not.toHaveBeenCalled();
 	});
 
 	it("should call callback if clicked outside target element", () => {
@@ -23,11 +20,9 @@ describe("ClickOutside Hook", () => {
 		const callback = jest.fn();
 		clickOutsideHandler(reference, callback);
 
-		act(() => {
-			fireEvent.mouseDown(document);
-		});
+		fireEvent.mouseDown(document);
 
-		expect(callback).toBeCalled();
+		expect(callback).toHaveBeenCalled();
 	});
 
 	it("should do nothing if callback is not provided", () => {
@@ -36,9 +31,7 @@ describe("ClickOutside Hook", () => {
 
 		clickOutsideHandler(reference, null);
 
-		act(() => {
-			fireEvent.mouseDown(document);
-		});
+		fireEvent.mouseDown(document);
 	});
 
 	it("should cover the removeEvent", () => {

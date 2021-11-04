@@ -10,7 +10,6 @@ import { usePluginManagerContext } from "plugins/context/PluginManagerProvider";
 import React, { useEffect } from "react";
 import { Route } from "react-router-dom";
 import {
-	act,
 	env,
 	fireEvent,
 	getDefaultProfileId,
@@ -138,9 +137,7 @@ describe("PluginManager", () => {
 			within(screen.getByTestId("PluginManager__container--all")).getByTestId("PluginList"),
 		).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.click(screen.getByTestId("LayoutControls__grid--icon"));
-		});
+		fireEvent.click(screen.getByTestId("LayoutControls__grid--icon"));
 
 		expect(
 			within(screen.getByTestId("PluginManager__container--all")).getByTestId("PluginGrid"),
@@ -599,7 +596,7 @@ describe("PluginManager", () => {
 		);
 
 		expect(history.location.pathname).toEqual(`/profiles/${fixtureProfileId}/plugins/details`);
-		expect(history.location.search).toEqual("?pluginId=@dated/delegate-calculator-wallet-plugin");
+		expect(history.location.search).toBe("?pluginId=@dated/delegate-calculator-wallet-plugin");
 	});
 
 	it("should open the plugin view page", async () => {

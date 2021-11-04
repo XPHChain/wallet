@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/await-thenable */
 /* eslint-disable @typescript-eslint/require-await */
 import { Contracts, Wallet } from "@payvo/profiles";
-import { act, renderHook } from "@testing-library/react-hooks";
 import userEvent from "@testing-library/user-event";
 import { EnvironmentProvider, LedgerProvider } from "app/contexts";
 import { translations as commonTranslations } from "app/i18n/common/i18n";
@@ -17,12 +16,12 @@ import { Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { assertNetwork } from "utils/assertions";
 import {
-	act as utilsAct,
 	env,
 	fireEvent, getDefaultLedgerTransport,
 	getDefaultProfileId,
 	MNEMONICS,
 	render,
+	renderWithForm,
 	screen,
 	waitFor,
 } from "utils/testing-library";
@@ -68,11 +67,8 @@ describe("ImportWallet", () => {
 	});
 
 	it("should render network step", async () => {
-		const { result: form } = renderHook(() => useForm());
-		const { getByTestId, asFragment } = render(
-			<FormProvider {...form.current}>
-				<NetworkStep profile={profile} title="title" subtitle="subtitle" />
-			</FormProvider>,
+		const { getByTestId, asFragment } = renderWithForm(
+			<NetworkStep profile={profile} title="title" subtitle="subtitle" />,
 		);
 
 		expect(getByTestId("NetworkStep")).toBeInTheDocument();
@@ -82,13 +78,9 @@ describe("ImportWallet", () => {
 
 		expect(selectNetworkInput).toBeInTheDocument();
 
-		await act(async () => {
-			fireEvent.change(selectNetworkInput, { target: { value: "ARK D" } });
-		});
+		fireEvent.change(selectNetworkInput, { target: { value: "ARK D" } });
 
-		await act(async () => {
-			fireEvent.keyDown(selectNetworkInput, { code: 13, key: "Enter" });
-		});
+		fireEvent.keyDown(selectNetworkInput, { code: 13, key: "Enter" });
 
 		expect(selectNetworkInput).toHaveValue("ARK Devnet");
 	});
@@ -96,11 +88,8 @@ describe("ImportWallet", () => {
 	it("should render network step without test networks", async () => {
 		profile.settings().set(Contracts.ProfileSetting.UseTestNetworks, false);
 
-		const { result: form } = renderHook(() => useForm());
-		const { getByTestId, asFragment, queryByTestId } = render(
-			<FormProvider {...form.current}>
-				<NetworkStep profile={profile} title="title" subtitle="subtitle" />
-			</FormProvider>,
+		const { getByTestId, asFragment, queryByTestId } = renderWithForm(
+			<NetworkStep profile={profile} title="title" subtitle="subtitle" />,
 		);
 
 		expect(getByTestId("NetworkStep")).toBeInTheDocument();
@@ -109,9 +98,7 @@ describe("ImportWallet", () => {
 
 		expect(selectNetworkInput).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.focus(selectNetworkInput);
-		});
+		fireEvent.focus(selectNetworkInput);
 
 		expect(queryByTestId("NetworkIcon-ARK-ark.mainnet")).toBeInTheDocument();
 		expect(queryByTestId("NetworkIcon-ARK-ark.devnet")).toBeNull();
@@ -232,9 +219,7 @@ describe("ImportWallet", () => {
 
 		await screen.findByTestId("SelectDropdown__option--0");
 
-		act(() => {
-			fireEvent.mouseDown(screen.getByTestId("SelectDropdown__option--0"));
-		});
+		fireEvent.mouseDown(screen.getByTestId("SelectDropdown__option--0"));
 
 		expect(screen.getByTestId("select-list__input")).toHaveValue("address");
 
@@ -268,9 +253,7 @@ describe("ImportWallet", () => {
 		expect(getByText("ARK Devnet")).toBeInTheDocument();
 		expect(getByText(importedWallet.address())).toBeInTheDocument();
 
-		await act(async () => {
-			fireEvent.click(getByTestId("ImportWallet__edit-alias"));
-		});
+		fireEvent.click(getByTestId("ImportWallet__edit-alias"));
 
 		expect(onClickEditAlias).toHaveBeenCalled();
 	});
@@ -385,15 +368,11 @@ describe("ImportWallet", () => {
 			expect(getByTestId("ImportWallet__third-step")).toBeInTheDocument();
 		});
 
-		act(() => {
-			fireEvent.click(getByTestId("ImportWallet__edit-alias"));
-		});
+		fireEvent.click(getByTestId("ImportWallet__edit-alias"));
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: "test alias" } });
-		});
+		fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: "test alias" } });
 
 		await waitFor(() => expect(getByTestId("UpdateWalletName__submit")).not.toBeDisabled());
 
@@ -463,21 +442,15 @@ describe("ImportWallet", () => {
 			expect(getByTestId("ImportWallet__third-step")).toBeInTheDocument();
 		});
 
-		act(() => {
-			fireEvent.click(getByTestId("ImportWallet__edit-alias"));
-		});
+		fireEvent.click(getByTestId("ImportWallet__edit-alias"));
 
 		await findByTestId("modal__inner");
 
-		act(() => {
-			fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: "Test" } });
-		});
+		fireEvent.input(getByTestId("UpdateWalletName__input"), { target: { value: "Test" } });
 
 		await waitFor(() => expect(getByTestId("UpdateWalletName__submit")).toBeDisabled());
 
-		act(() => {
-			fireEvent.click(getByTestId("UpdateWalletName__cancel"));
-		});
+		fireEvent.click(getByTestId("UpdateWalletName__cancel"));
 
 		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
 
@@ -531,13 +504,9 @@ describe("ImportWallet", () => {
 			expect(getByTestId("EncryptPassword")).toBeInTheDocument();
 		});
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
 
 		await waitFor(() => expect(getByTestId("ImportWallet__continue-button")).not.toBeDisabled());
 		fireEvent.click(getByTestId("ImportWallet__continue-button"));
@@ -599,13 +568,9 @@ describe("ImportWallet", () => {
 			expect(getByTestId("EncryptPassword")).toBeInTheDocument();
 		});
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
 
 		await waitFor(() => expect(getByTestId("ImportWallet__continue-button")).not.toBeDisabled());
 		fireEvent.click(getByTestId("ImportWallet__continue-button"));
@@ -866,13 +831,9 @@ describe("ImportWallet", () => {
 			expect(getByTestId("EncryptPassword")).toBeInTheDocument();
 		});
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[0], { target: { value: "S3cUrePa$sword" } });
 
-		await utilsAct(async () => {
-			fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
-		});
+		fireEvent.input(getAllByTestId("InputPassword")[1], { target: { value: "S3cUrePa$sword" } });
 
 		await waitFor(() => expect(getByTestId("ImportWallet__continue-button")).not.toBeDisabled());
 		fireEvent.click(getByTestId("ImportWallet__continue-button"));
@@ -1273,10 +1234,8 @@ describe("ImportWallet", () => {
 
 		const selectNetworkInput = getByTestId("SelectNetworkInput__input");
 
-		act(() => {
-			fireEvent.change(selectNetworkInput, { target: { value: "ARK D" } });
-			fireEvent.keyDown(selectNetworkInput, { code: 13, key: "Enter" });
-		});
+		fireEvent.change(selectNetworkInput, { target: { value: "ARK D" } });
+		fireEvent.keyDown(selectNetworkInput, { code: 13, key: "Enter" });
 
 		expect(selectNetworkInput).toHaveValue("ARK Devnet");
 
@@ -1286,16 +1245,12 @@ describe("ImportWallet", () => {
 		});
 
 		await waitFor(() => expect(getByTestId("ImportWallet__continue-button")).not.toBeDisabled());
-		act(() => {
-			fireEvent.click(getByTestId("ImportWallet__continue-button"));
-		});
+		fireEvent.click(getByTestId("ImportWallet__continue-button"));
 
 		await findByTestId("SyncErrorMessage__retry");
 
 		const toastDismissMock = jest.spyOn(toasts, "dismiss").mockResolvedValue(undefined);
-		act(() => {
-			fireEvent.click(getByTestId("SyncErrorMessage__retry"));
-		});
+		fireEvent.click(getByTestId("SyncErrorMessage__retry"));
 
 		await findByTestId("SyncErrorMessage__retry");
 
@@ -1355,9 +1310,7 @@ describe("ImportWallet", () => {
 
 		expect(passphraseInput).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.input(passphraseInput, { target: { value: wif } });
-		});
+		fireEvent.input(passphraseInput, { target: { value: wif } });
 
 		await waitFor(() => {
 			expect(form.getValues()).toMatchObject({ type: OptionsValue.WIF, value: wif });
@@ -1419,9 +1372,7 @@ describe("ImportWallet", () => {
 
 		expect(passphraseInput).toBeInTheDocument();
 
-		act(() => {
-			fireEvent.input(passphraseInput, { target: { value: wif } });
-		});
+		fireEvent.input(passphraseInput, { target: { value: wif } });
 
 		await waitFor(() => {
 			expect(getByTestId("ImportWallet__encryptedWif-input")).toHaveValue(wif);

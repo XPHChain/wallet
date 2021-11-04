@@ -1,7 +1,7 @@
 import { Contracts } from "@payvo/profiles";
 import nock from "nock";
 import React from "react";
-import { act, env, fireEvent, getDefaultLedgerTransport, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
+import { env, fireEvent, getDefaultLedgerTransport, getDefaultProfileId, render, screen, waitFor } from "utils/testing-library";
 
 import { LedgerProvider, useLedgerContext } from "../Ledger";
 import { useLedgerScanner } from "./scanner";
@@ -108,9 +108,7 @@ describe("Use Ledger Scanner", () => {
 			</LedgerProvider>,
 		);
 
-		act(() => {
-			fireEvent.click(screen.getByRole("button"));
-		});
+		fireEvent.click(screen.getByRole("button"));
 
 		await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(1));
 		await waitFor(() => expect(screen.queryAllByText("Balance: Loading")).toHaveLength(0));
@@ -156,16 +154,12 @@ describe("Use Ledger Scanner", () => {
 			</LedgerProvider>,
 		);
 
-		act(() => {
-			fireEvent.click(getByTestId("scan"));
-		});
+		fireEvent.click(getByTestId("scan"));
 
 		await waitFor(() => expect(screen.queryAllByRole("listitem")).toHaveLength(1));
 		await waitFor(() => expect(screen.queryAllByText("Balance: Loading")).toHaveLength(0));
 
-		act(() => {
-			fireEvent.click(getByTestId("input--0"));
-		});
+		fireEvent.click(getByTestId("input--0"));
 
 		await waitFor(() => expect(screen.queryAllByText("Selected: false")).toHaveLength(1));
 
@@ -207,15 +201,11 @@ describe("Use Ledger Scanner", () => {
 			</LedgerProvider>,
 		);
 
-		act(() => {
-			fireEvent.click(screen.getByText("Scan"));
-		});
+		fireEvent.click(screen.getByText("Scan"));
 
 		await waitFor(() => expect(screen.queryAllByText("Selected: true")).toHaveLength(1));
 
-		act(() => {
-			fireEvent.click(screen.getByText("Toggle All"));
-		});
+		fireEvent.click(screen.getByText("Toggle All"));
 
 		await waitFor(() => expect(screen.queryAllByText("Selected: false")).toHaveLength(1));
 
@@ -254,9 +244,7 @@ describe("Use Ledger Scanner", () => {
 			</LedgerProvider>,
 		);
 
-		act(() => {
-			fireEvent.click(screen.getByText("Scan"));
-		});
+		fireEvent.click(screen.getByText("Scan"));
 
 		await screen.findByText("Retry");
 

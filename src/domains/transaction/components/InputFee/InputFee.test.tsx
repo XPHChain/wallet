@@ -1,6 +1,6 @@
 import { Contracts } from "@payvo/profiles";
 import { Networks } from "@payvo/sdk";
-import { act, fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { translations } from "domains/transaction/i18n";
 import { describe } from "jest-circus";
@@ -89,8 +89,8 @@ describe("InputFee", () => {
 		// go to advanced mode and check value changes
 		userEvent.click(screen.getByText(translations.INPUT_FEE_VIEW_TYPE.ADVANCED));
 
-		expect(defaultProps.onChangeViewType).toBeCalledWith(InputFeeViewType.Advanced);
-		expect(defaultProps.onChange).toBeCalledWith(defaultProps.value);
+		expect(defaultProps.onChangeViewType).toHaveBeenCalledWith(InputFeeViewType.Advanced);
+		expect(defaultProps.onChange).toHaveBeenCalledWith(defaultProps.value);
 
 		expect(screen.getByTestId("InputCurrency")).toBeInTheDocument();
 		expect(screen.queryByTestId("ButtonGroup")).not.toBeInTheDocument();
@@ -99,8 +99,8 @@ describe("InputFee", () => {
 		// go to simple mode
 		userEvent.click(screen.getByText(translations.INPUT_FEE_VIEW_TYPE.SIMPLE));
 
-		expect(defaultProps.onChangeViewType).toBeCalledWith(InputFeeViewType.Simple);
-		expect(defaultProps.onChange).toBeCalledWith(defaultProps.avg.toString());
+		expect(defaultProps.onChangeViewType).toHaveBeenCalledWith(InputFeeViewType.Simple);
+		expect(defaultProps.onChange).toHaveBeenCalledWith(defaultProps.avg.toString());
 
 		expect(screen.queryByTestId("InputCurrency")).not.toBeInTheDocument();
 		expect(screen.getByTestId("ButtonGroup")).toBeInTheDocument();
@@ -109,8 +109,8 @@ describe("InputFee", () => {
 		// go back to advanced mode and repeat checks
 		userEvent.click(screen.getByText(translations.INPUT_FEE_VIEW_TYPE.ADVANCED));
 
-		expect(defaultProps.onChangeViewType).toBeCalledWith(InputFeeViewType.Advanced);
-		expect(defaultProps.onChange).toBeCalledWith(defaultProps.value);
+		expect(defaultProps.onChangeViewType).toHaveBeenCalledWith(InputFeeViewType.Advanced);
+		expect(defaultProps.onChange).toHaveBeenCalledWith(defaultProps.value);
 	});
 
 	it("should switch to simple and advanced type when value is number", () => {
@@ -171,9 +171,7 @@ describe("InputFee", () => {
 
 			expect(inputElement).toBeInTheDocument();
 
-			act(() => {
-				fireEvent.input(inputElement, { target: { value: "0.447" } });
-			});
+			fireEvent.input(inputElement, { target: { value: "0.447" } });
 
 			expect(defaultProps.onChange).toHaveBeenCalledWith("0.447");
 			expect(inputElement).toHaveValue("0.447");
@@ -233,9 +231,7 @@ describe("InputFee", () => {
 
 			render(<InputFee {...defaultProps} />);
 
-			act(() => {
-				fireEvent.input(screen.getByTestId("InputCurrency"), { target: { value: "-1.4" } });
-			});
+			fireEvent.input(screen.getByTestId("InputCurrency"), { target: { value: "-1.4" } });
 
 			expect(screen.getByTestId("InputCurrency")).toHaveValue("1.4");
 		});
