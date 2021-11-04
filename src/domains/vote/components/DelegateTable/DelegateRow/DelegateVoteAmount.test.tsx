@@ -162,6 +162,33 @@ describe("DelegateVoteAmount", () => {
 		await waitFor(() => expect(amountField).toHaveClass("text-left"), { timeout: 4000 });
 	});
 
+	it("should not focus on the input by clicking on ticker if it is selected unvote", async () => {
+		render(
+			<Wrapper>
+				<DelegateVoteAmount
+					isSelectedVote={true}
+					isSelectedUnvote={true}
+					selectedWallet={wallet}
+					selectedUnvotes={[]}
+					selectedVotes={[]}
+					toggleUnvotesSelected={jest.fn()}
+					toggleVotesSelected={jest.fn()}
+					delegateAddress={delegate.address()}
+					availableBalance={wallet.balance()}
+					setAvailableBalance={jest.fn()}
+				/>
+			</Wrapper>,
+		);
+
+		const amountField = screen.getByTestId("InputCurrency");
+
+		expect(amountField).toHaveClass("text-right");
+
+		fireEvent.click(screen.getByTestId("DelegateVoteAmount__ticker"));
+
+		await waitFor(() => expect(amountField).not.toHaveClass("text-left"), { timeout: 4000 });
+	});
+
 	describe("Validations", () => {
 		it("should show error if value is below minimum", async () => {
 			const {

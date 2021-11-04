@@ -63,6 +63,7 @@ module.exports = {
 		"@typescript-eslint/no-unsafe-call": "warn",
 		"@typescript-eslint/no-unsafe-member-access": "warn",
 		"@typescript-eslint/no-unsafe-return": "warn",
+		"@typescript-eslint/no-unsafe-argument": "warn", // @TODO: set to error and resolve issues
 		"@typescript-eslint/no-unused-expressions": "warn",
 		"@typescript-eslint/no-unused-vars": ["error"],
 		"@typescript-eslint/no-var-requires": "warn",

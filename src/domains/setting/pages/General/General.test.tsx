@@ -129,7 +129,7 @@ describe("General Settings", () => {
 
 		fireEvent.input(screen.getByTestId("General-settings__input--name"), { target: { value: "t" } });
 
-		act(() => screen.getByTestId("General-settings__submit-button").focus());
+		fireEvent.blur(screen.getByTestId("General-settings__input--name"));
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-identicon")).toBeInTheDocument();
 
@@ -215,7 +215,7 @@ describe("General Settings", () => {
 			expect(screen.getByTestId("General-settings__input--name")).toHaveValue("");
 		});
 
-		act(() => screen.getByTestId("General-settings__submit-button").focus());
+		fireEvent.blur(screen.getByTestId("General-settings__input--name"));
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-image")).toBeInTheDocument();
 
@@ -227,7 +227,7 @@ describe("General Settings", () => {
 			expect(screen.getByTestId("General-settings__input--name")).toHaveValue("t");
 		});
 
-		act(() => screen.getByTestId("General-settings__submit-button").focus());
+		fireEvent.blur(screen.getByTestId("General-settings__input--name"));
 
 		expect(screen.getByTestId("SelectProfileImage__avatar-image")).toBeInTheDocument();
 

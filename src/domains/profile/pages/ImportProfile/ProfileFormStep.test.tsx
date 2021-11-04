@@ -212,6 +212,7 @@ describe("Import Profile - Profile Form Step", () => {
 		await waitFor(() => expect(getByTestId("CreateProfile__submit-button")).toHaveAttribute("disabled"));
 
 		act(() => getAllByTestId("Input")[0].focus());
+		fireEvent.blur(getAllByTestId("Input")[0]);
 
 		fireEvent.input(getAllByTestId("Input")[0], { target: { value: "t" } });
 
