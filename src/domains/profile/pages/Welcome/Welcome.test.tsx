@@ -181,7 +181,7 @@ describe("Welcome", () => {
 
 		expect(getByText(translations.PAGE_WELCOME.WITH_PROFILES.TITLE)).toBeInTheDocument();
 
-		await waitFor(() => expect(getAllByTestId("Card").length).toBe(3));
+		await waitFor(() => expect(getAllByTestId("Card")).toHaveLength(3));
 
 		fireEvent.click(getAllByTestId("dropdown__toggle")[0]);
 
@@ -195,7 +195,7 @@ describe("Welcome", () => {
 
 		fireEvent.click(getByTestId("DeleteResource__submit-button"));
 
-		await waitFor(() => expect(getAllByTestId("Card").length).toBe(2));
+		await waitFor(() => expect(getAllByTestId("Card")).toHaveLength(2));
 	});
 
 	it("should not restart the timeout when closing the modal to retry the profile password", async () => {
@@ -267,7 +267,7 @@ describe("Welcome", () => {
 
 		fireEvent.click(getByText(translations.CREATE_PROFILE));
 
-		expect(history.location.pathname).toEqual("/profiles/create");
+		expect(history.location.pathname).toBe("/profiles/create");
 		expect(asFragment()).toMatchSnapshot();
 	});
 
