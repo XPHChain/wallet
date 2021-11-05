@@ -776,7 +776,7 @@ describe("ImportWallet", () => {
 		);
 	});
 
-	it("should import by mnemonic with second signature and use password to encrypt both", async () => {
+	it("should import by secret with second signature and use password to encrypt both", async () => {
 		const history = createMemoryHistory();
 		history.push(route);
 
