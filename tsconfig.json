@@ -18,5 +18,5 @@
 		"useUnknownInCatchVariables": false,
 		"noFallthroughCasesInSwitch": true
 	},
-	"include": ["src", "public", "custom.d.ts"]
+	"include": ["src", "public", "custom.d.ts", "global.d.ts"]
 }
