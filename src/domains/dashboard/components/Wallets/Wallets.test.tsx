@@ -412,7 +412,7 @@ describe("Wallets", () => {
 
 		fireEvent.click(screen.getByTestId("DeleteResource__submit-button"));
 
-		await waitFor(() => expect(profile.wallets().count()).toEqual(count - 1));
+		await waitFor(() => expect(profile.wallets().count()).toStrictEqual(count - 1));
 	});
 
 	it("should render empty profile wallets", async () => {

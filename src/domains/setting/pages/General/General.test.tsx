@@ -338,7 +338,7 @@ describe("General Settings", () => {
 			expect(showOpenDialogMock).toHaveBeenCalledWith(showOpenDialogParameters);
 		});
 
-		expect(env.profiles().count()).toEqual(profilesCount);
+		expect(env.profiles().count()).toStrictEqual(profilesCount);
 		expect(asFragment()).toMatchSnapshot();
 
 		toastSpy.mockRestore();

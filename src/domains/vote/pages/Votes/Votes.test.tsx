@@ -306,7 +306,7 @@ describe("Votes", () => {
 
 		fireEvent.click(screen.getByRole("button", { name: /Create/ }));
 
-		expect(history.location.pathname).toEqual(`/profiles/${emptyProfile.id()}/wallets/create`);
+		expect(history.location.pathname).toStrictEqual(`/profiles/${emptyProfile.id()}/wallets/create`);
 		expect(asFragment()).toMatchSnapshot();
 	});
 
@@ -319,7 +319,7 @@ describe("Votes", () => {
 
 		fireEvent.click(screen.getByRole("button", { name: /Import/ }));
 
-		expect(history.location.pathname).toEqual(`/profiles/${emptyProfile.id()}/wallets/import`);
+		expect(history.location.pathname).toStrictEqual(`/profiles/${emptyProfile.id()}/wallets/import`);
 		expect(asFragment()).toMatchSnapshot();
 	});
 

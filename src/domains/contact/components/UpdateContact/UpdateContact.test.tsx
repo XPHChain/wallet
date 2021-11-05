@@ -116,7 +116,7 @@ describe("UpdateContact", () => {
 		fireEvent.click(screen.getByTestId("contact-form__delete-btn"));
 
 		await waitFor(() => {
-			expect(onDelete).toHaveBeenCalled();
+			expect(onDelete).toHaveBeenCalledCalled();
 		});
 
 		deleteSpy.mockRestore();
@@ -186,7 +186,7 @@ describe("UpdateContact", () => {
 
 		const savedContact = profile.contacts().findById(contact.id());
 
-		expect(savedContact.name()).toEqual(newName);
+		expect(savedContact.name()).toStrictEqual(newName);
 		expect(savedContact.addresses().findByAddress(newAddress.address).length).toBeGreaterThan(0);
 	});
 });

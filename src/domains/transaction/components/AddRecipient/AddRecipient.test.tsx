@@ -281,8 +281,8 @@ describe("AddRecipient", () => {
 		});
 
 		await waitFor(() => {
-			expect(form.getValues("amount")).toEqual(values.amount);
-			expect(form.getValues("displayAmount")).toEqual(values.displayAmount);
+			expect(form.getValues("amount")).toStrictEqual(values.amount);
+			expect(form.getValues("displayAmount")).toStrictEqual(values.displayAmount);
 			expect(screen.getByTestId("AddRecipient__add-button")).toBeInTheDocument();
 			expect(screen.getByTestId("AddRecipient__add-button")).toBeDisabled();
 		});

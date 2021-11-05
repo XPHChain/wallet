@@ -389,7 +389,7 @@ describe("WalletDetails", () => {
 
 		fireEvent.click(getByTestId("UpdateWalletName__submit"));
 
-		await waitFor(() => expect(wallet.settings().get(Contracts.WalletSetting.Alias)).toEqual(name));
+		await waitFor(() => expect(wallet.settings().get(Contracts.WalletSetting.Alias)).toStrictEqual(name));
 	});
 
 	it("should star and unstar a wallet", async () => {
