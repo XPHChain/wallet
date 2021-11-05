@@ -5,7 +5,6 @@ import { ExchangeProvider, useExchangeContext } from "domains/exchange/contexts/
 import { createMemoryHistory, MemoryHistory } from "history";
 import nock from "nock";
 import React, { useEffect } from "react";
-import { act } from "react-dom/test-utils";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Route } from "react-router-dom";
