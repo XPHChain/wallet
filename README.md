@@ -1,7 +1,5 @@
 # PhantomChain Wallet
 
-![PhantomChain Wallet](./banner.png)
-
 
 > Contributor: [PhantomChain](https://github.com/xphchain)
 > Lead Maintainer: [Brian Faust](https://github.com/faustbrian)
