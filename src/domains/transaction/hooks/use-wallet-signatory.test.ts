@@ -30,7 +30,7 @@ describe("useWalletSignatory", () => {
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithMnemonic()).toBeTrue();
 		expect(signatory.signingKey()).toBe(MNEMONICS[0]);
-		expect(() => signatory.confirmKey()).toThrow();
+		expect(() => signatory.confirmKey()).toThrow("Method Signatory#confirmKey cannot be called.");
 	});
 
 	it("should sign with mnemonic and secondMnemonic", async () => {
@@ -54,7 +54,7 @@ describe("useWalletSignatory", () => {
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithSecret()).toBeTrue();
 		expect(signatory.signingKey()).toBe("secret");
-		expect(() => signatory.confirmKey()).toThrow();
+		expect(() => signatory.confirmKey()).toThrow("Method Signatory#confirmKey cannot be called.");
 	});
 
 	it("should sign with secret and secondSecret", async () => {
@@ -76,7 +76,7 @@ describe("useWalletSignatory", () => {
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithWIF()).toBeTrue();
 		expect(signatory.signingKey()).toBe("SGq4xLgZKCGxs7bjmwnBrWcT4C1ADFEermj846KC97FSv1WFD1dA");
-		expect(() => signatory.confirmKey()).toThrow();
+		expect(() => signatory.confirmKey()).toThrow("Method Signatory#confirmKey cannot be called.");
 	});
 
 	it("should sign with private key", async () => {
@@ -89,7 +89,7 @@ describe("useWalletSignatory", () => {
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithPrivateKey()).toBeTrue();
 		expect(signatory.signingKey()).toBe("d8839c2432bfd0a67ef10a804ba991eabba19f154a3d707917681d45822a5712");
-		expect(() => signatory.confirmKey()).toThrow();
+		expect(() => signatory.confirmKey()).toThrow("Method Signatory#confirmKey cannot be called.");
 	});
 
 	it("should throw error if no input is provided", async () => {
@@ -154,7 +154,7 @@ describe("useWalletSignatory", () => {
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithLedger()).toBeTrue();
 		expect(signatory.signingKey()).toBe("m/44'/0'/0'/0/0");
-		expect(() => signatory.confirmKey()).toThrow();
+		expect(() => signatory.confirmKey()).toThrow("Method Signatory#confirmKey cannot be called");
 
 		jest.clearAllMocks();
 	});

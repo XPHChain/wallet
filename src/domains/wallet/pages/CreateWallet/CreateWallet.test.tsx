@@ -140,7 +140,7 @@ describe("CreateWallet", () => {
 
 		fireEvent.click(screen.getByTestId("UpdateWalletName__submit"));
 
-		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
+		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/));
 
 		fireEvent.click(screen.getByTestId("CreateWallet__finish-button"));
 
@@ -478,6 +478,6 @@ describe("CreateWallet", () => {
 
 		fireEvent.click(screen.getByTestId("UpdateWalletName__cancel"));
 
-		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
+		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/));
 	});
 });
