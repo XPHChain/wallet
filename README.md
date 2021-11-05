@@ -1,40 +1,15 @@
-# Payvo Wallet
+# PhantomChain Wallet
 
-![Payvo Wallet](./banner.png)
+![PhantomChain Wallet](./banner.png)
 
-[![Build Status](https://badgen.now.sh/github/status/PayvoHQ/wallet)](https://github.com/PayvoHQ/wallet/actions?query=branch%3Adevelop)
-[![Latest Version](https://badgen.now.sh/github/release/PayvoHQ/wallet)](https://github.com/PayvoHQ/wallet/releases)
-[![License: MIT](https://badgen.now.sh/badge/license/MIT/green)](https://opensource.org/licenses/MIT)
 
+> Contributor: [PhantomChain](https://github.com/xphchain)
 > Lead Maintainer: [Brian Faust](https://github.com/faustbrian)
 
 ## Download
 
-[Latest Release](https://github.com/PayvoHQ/wallet/releases/latest)
+[Latest Release](https://github.com/xphchain/wallet/releases/latest)
 
-## Installing via Package Managers
-
-### Arch Linux
-
-Install via [AUR](https://aur.archlinux.org/packages/payvo-wallet):
-
-> Manjaro
-
-```shell
-pamac build payvo-wallet
-```
-
-### Mac OS X
-
-Install via [Homebrew](https://brew.sh/):
-
-```shell
-brew install --cask payvo-wallet
-```
-
-## Translations
-
-Translations are no longer accepted for the Desktop Wallet. We are using plugins to provide languages.
 
 ## Development
 
