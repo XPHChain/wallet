@@ -123,7 +123,7 @@ cucumber(
 		"And sees the generated mnemonic": async (t: TestController) => {
 			await t.expect(Selector("h1").withExactText(translations.COMMON.YOUR_PASSPHRASE).exists).ok();
 		},
-		"And enables the encryption toggle": async (t: TestController) => {
+		"And chooses to encrypt the created wallet": async (t: TestController) => {
 			await t.click(Selector('[data-testid="CreateWallet__encryption-toggle"]').parent());
 		},
 		"And confirms the generated mnemonic": async (t: TestController) => {

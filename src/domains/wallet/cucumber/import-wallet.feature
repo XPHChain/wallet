@@ -33,7 +33,7 @@ Feature: Import Wallet
     @importWallet-mnemonic-withEncryption
     Scenario: Successfully Import Wallet via Mnemonic with encryption
         Given Alice is on the import wallet page
-        When she enables the encryption toggle
+        When she chooses to encrypt the imported wallet
         And enters a valid mnemonic to import
         And enters the encryption passwords
         And completes the import wallet steps for mnemonic
@@ -43,7 +43,7 @@ Feature: Import Wallet
     Scenario: Successfully Import Wallet via Secret with second signature and encryption
         Given Alice is on the import wallet page
         When she changes the import type to secret
-        And enables the encryption toggle
+        And chooses to encrypt the imported wallet
         And enters a valid secret to import
         And enters the second secret
         And enters the encryption passwords
