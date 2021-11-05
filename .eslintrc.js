@@ -101,6 +101,8 @@ module.exports = {
 		"jest/no-done-callback": "off",
 		"jest/no-identical-title": "error",
 		"jest/prefer-called-with": "error",
+		"jest/require-top-level-describe": "error",
+		"jest/require-to-throw-message": "error",
 		"jest/prefer-to-be": "error",
 		"jest/prefer-spy-on": "error",
 		"jest/prefer-to-have-length": "error",
