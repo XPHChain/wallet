@@ -212,7 +212,7 @@ describe("WalletDetails", () => {
 
 		fireEvent.click(getByTestId("modal__close-btn"));
 
-		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
+		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/));
 		jest.restoreAllMocks();
 	});
 
@@ -240,7 +240,7 @@ describe("WalletDetails", () => {
 
 		fireEvent.click(getByTestId("ConfirmRemovePendingTransaction__remove"));
 
-		await waitFor(() => expect(() => getByTestId("PendingTransactions")).toThrow());
+		await waitFor(() => expect(() => getByTestId("PendingTransactions")).toThrow(/Unable to find an element by/));
 
 		expect(toastsMock).toHaveBeenCalled();
 
@@ -259,7 +259,7 @@ describe("WalletDetails", () => {
 
 		fireEvent.click(getByTestId("modal__close-btn"));
 
-		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
+		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/));
 		jest.restoreAllMocks();
 	});
 
@@ -409,7 +409,7 @@ describe("WalletDetails", () => {
 
 		fireEvent.click(getByTestId("modal__close-btn"));
 
-		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow());
+		await waitFor(() => expect(() => getByTestId("modal__inner")).toThrow(/Unable to find an element by/));
 	});
 
 	it("should fetch more transactions", async () => {
