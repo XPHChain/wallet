@@ -47,16 +47,12 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
 
 jest.setTimeout(10_000);
 
-beforeAll(() => {
-	profile = env.profiles().findById(getDefaultProfileId());
-});
-
-afterEach(() => {
-	profile.exchangeTransactions().flush();
-});
-
 describe("ExchangeForm", () => {
-	beforeAll(() => nock.disableNetConnect());
+	beforeAll(() => {
+		nock.disableNetConnect();
+
+		profile = env.profiles().findById(getDefaultProfileId());
+	});
 
 	beforeEach(() => {
 		history = createMemoryHistory();
@@ -64,6 +60,8 @@ describe("ExchangeForm", () => {
 	});
 
 	afterEach(() => {
+		profile.exchangeTransactions().flush();
+
 		httpClient.clearCache();
 		jest.clearAllTimers();
 		jest.useRealTimers();
@@ -335,7 +333,7 @@ describe("ExchangeForm", () => {
 		fireEvent.click(screen.getByTestId("ExchangeForm__remove-refund-address"));
 
 		await waitFor(() => {
-			expect(() => screen.getByTestId("ExchangeForm__refund-address")).toThrow();
+			expect(() => screen.getByTestId("ExchangeForm__refund-address")).toThrow(/Unable to find an element by/);
 		});
 	});
 
@@ -757,7 +755,7 @@ describe("ExchangeForm", () => {
 		await waitFor(() => {
 			expect(() =>
 				within(screen.getByTestId("ExchangeForm__recipient-address")).getAllByTestId("Input__error"),
-			).toThrow();
+			).toThrow(/Unable to find an element by/);
 		});
 	});
 
@@ -810,7 +808,7 @@ describe("ExchangeForm", () => {
 		await waitFor(() => {
 			expect(() =>
 				within(screen.getByTestId("ExchangeForm__refund-address")).getAllByTestId("Input__error"),
-			).toThrow();
+			).toThrow(/Unable to find an element by/);
 		});
 	});
 
@@ -1199,7 +1197,7 @@ describe("ExchangeForm", () => {
 
 		// status: awaiting confirmation
 		await waitFor(() => {
-			expect(() => screen.getAllByTestId("StatusIcon__check-mark")).toThrow();
+			expect(() => screen.getAllByTestId("StatusIcon__check-mark")).toThrow(/Unable to find an element by/);
 		});
 
 		expect(screen.getAllByTestId("StatusIcon__spinner")).toHaveLength(1);
@@ -1213,8 +1211,8 @@ describe("ExchangeForm", () => {
 			{ timeout: 5000 },
 		);
 
-		expect(() => screen.getAllByTestId("StatusIcon__spinner")).toThrow();
-		expect(() => screen.getAllByTestId("StatusIcon__empty")).toThrow();
+		expect(() => screen.getAllByTestId("StatusIcon__spinner")).toThrow(/Unable to find an element by/);
+		expect(() => screen.getAllByTestId("StatusIcon__empty")).toThrow(/Unable to find an element by/);
 
 		await waitFor(() => {
 			expect(screen.getByTestId("ExchangeForm__confirmation-step")).toBeInTheDocument();
@@ -1232,6 +1230,14 @@ describe("ExchangeForm", () => {
 });
 
 describe("FormStep", () => {
+	beforeAll(() => {
+		profile = env.profiles().findById(getDefaultProfileId());
+	});
+
+	afterEach(() => {
+		profile.exchangeTransactions().flush();
+	});
+
 	it("should render", async () => {
 		const Component = () => {
 			const form = useForm({
@@ -1262,6 +1268,14 @@ describe("FormStep", () => {
 });
 
 describe("ReviewStep", () => {
+	beforeAll(() => {
+		profile = env.profiles().findById(getDefaultProfileId());
+	});
+
+	afterEach(() => {
+		profile.exchangeTransactions().flush();
+	});
+
 	it("should render", async () => {
 		const { result: form } = renderHook(() =>
 			useForm({
@@ -1310,7 +1324,13 @@ describe("ReviewStep", () => {
 });
 
 describe("StatusStep", () => {
+	beforeAll(() => {
+		profile = env.profiles().findById(getDefaultProfileId());
+	});
+
 	afterEach(() => {
+		profile.exchangeTransactions().flush();
+
 		jest.clearAllTimers();
 		jest.useRealTimers();
 	});
@@ -1394,7 +1414,7 @@ describe("StatusStep", () => {
 
 		// status: awaiting confirmation
 		await waitFor(() => {
-			expect(() => screen.getAllByTestId("StatusIcon__check-mark")).toThrow();
+			expect(() => screen.getAllByTestId("StatusIcon__check-mark")).toThrow(/Unable to find an element by/);
 		});
 
 		expect(screen.getAllByTestId("StatusIcon__spinner")).toHaveLength(1);
@@ -1407,6 +1427,14 @@ describe("StatusStep", () => {
 });
 
 describe("ConfirmationStep", () => {
+	beforeAll(() => {
+		profile = env.profiles().findById(getDefaultProfileId());
+	});
+
+	afterEach(() => {
+		profile.exchangeTransactions().flush();
+	});
+
 	it("should render", async () => {
 		const { result: form } = renderHook(() =>
 			useForm({
