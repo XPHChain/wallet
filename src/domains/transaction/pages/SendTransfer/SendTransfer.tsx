@@ -419,20 +419,19 @@ export const SendTransfer = () => {
 							</TabPanel>
 
 							<TabPanel tabId={Step.SummaryStep}>
-								{!!transaction && (
-									<SummaryStep
-										transaction={transaction}
-										senderWallet={wallet!}
-										profile={activeProfile}
-									/>
-								)}
+								<SummaryStep
+									transaction={transaction!}
+									senderWallet={wallet!}
+									profile={activeProfile}
+								/>
 							</TabPanel>
 
 							<TabPanel tabId={Step.ErrorStep}>
 								<ErrorStep
-									onBack={() =>
-										history.push(`/profiles/${activeProfile.id()}/wallets/${wallet!.id()}`)
-									}
+									onBack={() => {
+										assertWallet(wallet);
+										history.push(`/profiles/${activeProfile.id()}/wallets/${wallet.id()}`);
+									}}
 									isRepeatDisabled={isSubmitting}
 									onRepeat={handleSubmit(submitForm as any)}
 									errorMessage={errorMessage}
@@ -442,9 +441,10 @@ export const SendTransfer = () => {
 							{!hideStepNavigation && (
 								<StepNavigation
 									onBackClick={handleBack}
-									onBackToWalletClick={() =>
-										history.push(`/profiles/${activeProfile.id()}/wallets/${wallet?.id()}`)
-									}
+									onBackToWalletClick={() => {
+										assertWallet(wallet);
+										history.push(`/profiles/${activeProfile.id()}/wallets/${wallet.id()}`);
+									}}
 									onContinueClick={async () => await handleNext()}
 									isLoading={isSubmitting}
 									isNextDisabled={isNextDisabled}
