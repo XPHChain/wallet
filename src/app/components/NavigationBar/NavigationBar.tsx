@@ -93,13 +93,13 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 	};
 
 	const userInitials = useMemo(() => {
-		if (!profile) {
+		if (!profile || !profile.status().isRestored()) {
 			return undefined;
 		}
 
 		const name = profile.settings().get(Contracts.ProfileSetting.Name);
-		assertString(name);
 
+		assertString(name);
 		return name.slice(0, 2).toUpperCase();
 	}, [profile]);
 
@@ -125,7 +125,7 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 		setSelectedWallet(wallet);
 	};
 
-	const handleCloseRecieveFunds = useCallback(() => setSelectedWallet(undefined), [setSelectedWallet]);
+	const handleCloseReceiveFunds = useCallback(() => setSelectedWallet(undefined), [setSelectedWallet]);
 
 	const renderLogo = () => (
 		<div className="flex items-center my-auto">
@@ -157,6 +157,7 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 								size="icon"
 								variant="transparent"
 								onClick={() => {
+									assertProfile(profile);
 									const sendTransferPath = `/profiles/${profile.id()}/send-transfer`;
 
 									// add query param reset = 1 if already on send transfer page
@@ -199,17 +200,18 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 					userInitials={userInitials}
 					avatarImage={profile?.avatar()}
 					onUserAction={(action: DropdownOption) => {
-						if (action?.isExternal) {
+						if (action.isExternal) {
 							return openExternal(action.mountPath());
 						}
 
-						if (action?.value === "sign-out") {
+						if (action.value === "sign-out") {
 							assertProfile(profile);
 							profile.status().reset();
 
 							setTheme("system");
 						}
 
+						assertProfile(profile);
 						return history.push(action.mountPath(profile.id()));
 					}}
 				/>
@@ -247,7 +249,7 @@ export const NavigationBar: FC<NavigationBarProperties> = ({ title, isBackDisabl
 							address={selectedWallet.address}
 							name={selectedWallet.name}
 							network={selectedWallet.network}
-							onClose={handleCloseRecieveFunds}
+							onClose={handleCloseReceiveFunds}
 						/>
 					)}
 				</>

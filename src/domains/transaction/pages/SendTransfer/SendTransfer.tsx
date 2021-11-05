@@ -92,7 +92,7 @@ export const SendTransfer = () => {
 		() => ({
 			amount: 0,
 			recipients: [],
-			remainingBalance: wallet?.balance?.(),
+			remainingBalance: wallet?.balance(),
 		}),
 		[wallet],
 	);

@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { MultiSignatureSuccessful } from ".";
 
 interface TransactionSuccessfulProperties {
-	transaction?: DTO.ExtendedSignedTransactionData;
+	transaction: DTO.ExtendedSignedTransactionData;
 	senderWallet: Contracts.IReadWriteWallet;
 	title?: string;
 	description?: string;
@@ -29,7 +29,7 @@ export const TransactionSuccessful = ({
 }: TransactionSuccessfulProperties) => {
 	const { t } = useTranslation();
 
-	if (transaction?.isMultiSignatureRegistration() || transaction?.usesMultiSignature()) {
+	if (transaction.isMultiSignatureRegistration() || transaction.usesMultiSignature()) {
 		return (
 			<MultiSignatureSuccessful transaction={transaction} senderWallet={senderWallet}>
 				{children}

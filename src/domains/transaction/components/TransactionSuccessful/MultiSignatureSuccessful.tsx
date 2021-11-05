@@ -23,7 +23,7 @@ import { assertString } from "utils/assertions";
 interface TransactionSuccessfulProperties {
 	children?: React.ReactNode;
 	transaction?: ExtendedSignedTransactionData;
-	senderWallet?: Contracts.IReadWriteWallet;
+	senderWallet: Contracts.IReadWriteWallet;
 }
 
 export const MultiSignatureSuccessful = ({ children, transaction, senderWallet }: TransactionSuccessfulProperties) => {
@@ -36,7 +36,7 @@ export const MultiSignatureSuccessful = ({ children, transaction, senderWallet }
 
 	useEffect(() => {
 		const fetchData = async () => {
-			if (!transaction || !senderWallet) {
+			if (!transaction) {
 				return;
 			}
 
