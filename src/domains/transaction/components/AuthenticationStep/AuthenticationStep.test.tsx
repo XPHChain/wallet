@@ -110,7 +110,7 @@ describe("AuthenticationStep", () => {
 			network: "ark.devnet",
 		});
 
-		jest.spyOn(wallet, "isSecondSignature").mockReturnValueOnce(false);
+		const isSecondSignatureMock = jest.spyOn(wallet, "isSecondSignature").mockReturnValue(false);
 
 		const { form, asFragment } = renderWithForm(<AuthenticationStep wallet={wallet} />, {
 			withProviders: true,
@@ -129,6 +129,8 @@ describe("AuthenticationStep", () => {
 		await waitFor(() => expect(form()?.getValues()).toEqual({ mnemonic: MNEMONICS[0] }));
 
 		expect(asFragment()).toMatchSnapshot();
+
+		isSecondSignatureMock.mockRestore();
 	});
 
 	it("should request secret if wallet was imported using secret", async () => {
@@ -138,7 +140,7 @@ describe("AuthenticationStep", () => {
 			secret: "secret",
 		});
 
-		jest.spyOn(wallet, "isSecondSignature").mockReturnValueOnce(false);
+		const isSecondSignatureMock = jest.spyOn(wallet, "isSecondSignature").mockReturnValue(false);
 
 		const { form, asFragment } = renderWithForm(<AuthenticationStep wallet={wallet} />, {
 			withProviders: true,
@@ -157,6 +159,8 @@ describe("AuthenticationStep", () => {
 		await waitFor(() => expect(form()?.getValues()).toEqual({ secret: "secret" }));
 
 		expect(asFragment()).toMatchSnapshot();
+
+		isSecondSignatureMock.mockRestore();
 	});
 
 	it("should request mnemonic if wallet was imported using address", async () => {
@@ -166,7 +170,7 @@ describe("AuthenticationStep", () => {
 			network: "ark.devnet",
 		});
 
-		jest.spyOn(wallet, "isSecondSignature").mockReturnValueOnce(false);
+		const isSecondSignatureMock = jest.spyOn(wallet, "isSecondSignature").mockReturnValue(false);
 
 		const { form, asFragment } = renderWithForm(<AuthenticationStep wallet={wallet} />, {
 			withProviders: true,
@@ -185,6 +189,8 @@ describe("AuthenticationStep", () => {
 		await waitFor(() => expect(form()?.getValues()).toEqual({ mnemonic: MNEMONICS[0] }));
 
 		expect(asFragment()).toMatchSnapshot();
+
+		isSecondSignatureMock.mockRestore();
 	});
 
 	it("should request private key if wallet was imported using private key", async () => {
