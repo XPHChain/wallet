@@ -110,9 +110,9 @@ export const translations = {
 				TITLE: "Copy or Download Mnemonic Passphrase",
 			},
 			ENCRYPTION: {
-				TITLE: "Use Wallet Encryption",
 				DESCRIPTION:
 					"This will allow you to set an encryption password during creation to use instead of your mnemonic.",
+				TITLE: "Use Wallet Encryption",
 			},
 			TITLE: "Your Passphrase",
 			WARNING:
@@ -153,10 +153,10 @@ export const translations = {
 
 		METHOD_STEP: {
 			ENCRYPTION: {
-				TITLE: "Use Wallet Encryption",
 				DESCRIPTION:
 					"This will allow you to set an encryption password during creation to use instead of your mnemonic.",
 				NOT_AVAILABLE: "Encryption not available for this import type",
+				TITLE: "Use Wallet Encryption",
 			},
 			SUBTITLE: "Select the import method by which you want to import the address to your Profile.",
 			TITLE: "Import Wallet",

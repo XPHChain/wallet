@@ -227,8 +227,8 @@ export const SendVote = () => {
 				mnemonic,
 				privateKey,
 				secondMnemonic,
-				secret,
 				secondSecret,
+				secret,
 				wif,
 			});
 

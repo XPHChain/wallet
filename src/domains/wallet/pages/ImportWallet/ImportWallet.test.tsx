@@ -26,7 +26,6 @@ import {
 	renderWithForm,
 	screen,
 	waitFor,
-	within,
 } from "utils/testing-library";
 
 import { ImportWallet } from "./ImportWallet";

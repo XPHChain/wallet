@@ -94,24 +94,6 @@ export const authentication = (t: any) => {
 				},
 			},
 		}),
-		secret: (wallet: Contracts.IReadWriteWallet) => ({
-			required: t("COMMON.VALIDATION.FIELD_REQUIRED", {
-				field: t("COMMON.SECRET"),
-			}),
-			validate: async (secret: string) => {
-				try {
-					const { address } = await wallet.coin().address().fromSecret(secret);
-
-					if (address === wallet.address()) {
-						return true;
-					}
-
-					return t("COMMON.INPUT_PASSPHRASE.VALIDATION.SECRET_NOT_MATCH_WALLET");
-				} catch {
-					return t("COMMON.INPUT_PASSPHRASE.VALIDATION.SECRET_NOT_MATCH_WALLET");
-				}
-			},
-		}),
 		secondSecret: (coin: Coins.Coin, secondPublicKey: string) => ({
 			required: t("COMMON.VALIDATION.FIELD_REQUIRED", {
 				field: t("COMMON.SECOND_SECRET"),
@@ -130,6 +112,24 @@ export const authentication = (t: any) => {
 						return t("COMMON.INPUT_PASSPHRASE.VALIDATION.SECRET_NOT_MATCH_WALLET");
 					}
 				},
+			},
+		}),
+		secret: (wallet: Contracts.IReadWriteWallet) => ({
+			required: t("COMMON.VALIDATION.FIELD_REQUIRED", {
+				field: t("COMMON.SECRET"),
+			}),
+			validate: async (secret: string) => {
+				try {
+					const { address } = await wallet.coin().address().fromSecret(secret);
+
+					if (address === wallet.address()) {
+						return true;
+					}
+
+					return t("COMMON.INPUT_PASSPHRASE.VALIDATION.SECRET_NOT_MATCH_WALLET");
+				} catch {
+					return t("COMMON.INPUT_PASSPHRASE.VALIDATION.SECRET_NOT_MATCH_WALLET");
+				}
 			},
 		}),
 		wif: (wallet: Contracts.IReadWriteWallet) => ({

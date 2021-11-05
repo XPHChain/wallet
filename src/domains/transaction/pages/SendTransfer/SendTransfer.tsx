@@ -280,8 +280,8 @@ export const SendTransfer = () => {
 				mnemonic,
 				privateKey,
 				secondMnemonic,
-				secret,
 				secondSecret,
+				secret,
 				wif,
 			});
 

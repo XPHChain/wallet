@@ -60,7 +60,7 @@ describe("useWalletSignatory", () => {
 	it("should sign with secret and secondSecret", async () => {
 		const { result } = renderHook(() => useWalletSignatory(wallet));
 
-		const signatory = await result.current.sign({ secret: "secret", secondSecret: "secret" });
+		const signatory = await result.current.sign({ secondSecret: "secret", secret: "secret" });
 
 		expect(signatory).toBeInstanceOf(Signatories.Signatory);
 		expect(signatory.actsWithConfirmationSecret()).toBeTrue();
