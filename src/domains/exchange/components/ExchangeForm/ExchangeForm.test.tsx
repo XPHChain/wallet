@@ -5,6 +5,7 @@ import { ExchangeProvider, useExchangeContext } from "domains/exchange/contexts/
 import { createMemoryHistory, MemoryHistory } from "history";
 import nock from "nock";
 import React, { useEffect } from "react";
+import { act } from "react-dom/test-utils";
 import { FormProvider, useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { Route } from "react-router-dom";
@@ -39,13 +40,11 @@ const Wrapper = ({ children }: { children: React.ReactNode }) => {
 	}, [exchangeProviders, exchangeService, provider]);
 
 	if (provider) {
-		return children;
+		return <>{children}</>;
 	}
 
 	return null;
 };
-
-jest.setTimeout(10_000);
 
 describe("ExchangeForm", () => {
 	beforeAll(() => {
@@ -87,7 +86,10 @@ describe("ExchangeForm", () => {
 				expect(screen.getAllByTestId("SelectDropdown__input")[0]).not.toBeDisabled();
 			});
 
+			await waitFor(() => expect(screen.getAllByTestId("SelectDropdown__input")[0]).toBeInTheDocument());
 			fireEvent.change(screen.getAllByTestId("SelectDropdown__input")[0], { target: { value: from.name } });
+
+			await waitFor(() => expect(screen.getAllByTestId("SelectDropdown__option--0")[0]).toBeInTheDocument());
 			fireEvent.click(screen.getAllByTestId("SelectDropdown__option--0")[0]);
 
 			await waitFor(() => {
@@ -104,8 +106,11 @@ describe("ExchangeForm", () => {
 				expect(screen.getAllByTestId("SelectDropdown__input")[1]).not.toBeDisabled();
 			});
 
+			await waitFor(() => expect(screen.getAllByTestId("SelectDropdown__input")[1]).toBeInTheDocument());
 			fireEvent.change(screen.getAllByTestId("SelectDropdown__input")[1], { target: { value: to.name } });
-			fireEvent.click(screen.getAllByTestId("SelectDropdown__option--0")[1]);
+
+			await waitFor(() => expect(screen.getAllByTestId("SelectDropdown__option--0")[0]).toBeInTheDocument());
+			fireEvent.click(screen.getAllByTestId("SelectDropdown__option--0")[0]);
 
 			await waitFor(() => {
 				expect(screen.getAllByTestId("SelectDropdown__input")[1]).toHaveValue(to.name);
@@ -242,6 +247,7 @@ describe("ExchangeForm", () => {
 			expect(screen.getByTestId("ExchangeForm")).toBeInTheDocument();
 		});
 
+		await waitFor(() => expect(screen.getAllByTestId("SelectDropdown__input")).toHaveLength(3));
 		const fromCurrencyDropdown = screen.getAllByTestId("SelectDropdown__input")[0];
 		const toCurrencyDropdown = screen.getAllByTestId("SelectDropdown__input")[1];
 
@@ -1093,7 +1099,7 @@ describe("ExchangeForm", () => {
 
 		nock("https://exchanges.payvo.com")
 			.post("/api/changenow/orders")
-			.reply(200, require("tests/fixtures/exchange/changenow/order.json"))
+			.reply(200, () => require("tests/fixtures/exchange/changenow/order.json"))
 			.get("/api/changenow/orders/182b657b2c259b")
 			.query(true)
 			.reply(200, { data: baseStatus })
@@ -1191,6 +1197,7 @@ describe("ExchangeForm", () => {
 
 		// submit form
 		fireEvent.click(screen.getByTestId("ExchangeForm__continue-button"));
+
 		await waitFor(() => {
 			expect(screen.getByTestId("ExchangeForm__status-step")).toBeInTheDocument();
 		});
@@ -1204,12 +1211,9 @@ describe("ExchangeForm", () => {
 		expect(screen.getAllByTestId("StatusIcon__empty")).toHaveLength(2);
 
 		// status: finished
-		await waitFor(
-			() => {
-				expect(screen.getAllByTestId("StatusIcon__check-mark")).toHaveLength(3);
-			},
-			{ timeout: 5000 },
-		);
+		await waitFor(() => {
+			expect(screen.getAllByTestId("StatusIcon__check-mark")).toHaveLength(3);
+		});
 
 		expect(() => screen.getAllByTestId("StatusIcon__spinner")).toThrow(/Unable to find an element by/);
 		expect(() => screen.getAllByTestId("StatusIcon__empty")).toThrow(/Unable to find an element by/);
@@ -1330,9 +1334,6 @@ describe("StatusStep", () => {
 
 	afterEach(() => {
 		profile.exchangeTransactions().flush();
-
-		jest.clearAllTimers();
-		jest.useRealTimers();
 	});
 
 	it("should render", async () => {
@@ -1374,8 +1375,6 @@ describe("StatusStep", () => {
 	});
 
 	it("should execute onUpdate callback on status change", async () => {
-		jest.useFakeTimers();
-
 		const onUpdate = jest.fn();
 
 		const exchangeTransaction = profile.exchangeTransactions().create({
