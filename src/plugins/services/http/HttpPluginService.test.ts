@@ -71,7 +71,6 @@ describe("HttpPluginService", () => {
 
 	it("should fail to get a unknown url", async () => {
 		let response: any;
-		const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => void 0);
 
 		const fixture = (api: PluginAPI) => {
 			api.http()
@@ -83,12 +82,9 @@ describe("HttpPluginService", () => {
 		ctrl = new PluginController(config, fixture);
 		ctrl.enable(profile);
 
-		manager.plugins().push(ctrl);
-		manager.plugins().runAllEnabled(profile);
+		expect(() => ctrl.run(profile)).toThrow();
 
 		await waitFor(() => expect(response).toBeUndefined());
-
-		expect(consoleSpy).toHaveBeenCalled();
 
 		jest.clearAllMocks();
 	});
